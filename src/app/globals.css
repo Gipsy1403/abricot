@@ -1,33 +1,49 @@
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f9fafb;
+  --primary:#d3590b;
+  --secondary:#ffe8d9;
+  --third:#ffffff;
+  --tagGreen:#f1fff7;
+  --tagRed:#ffe0e0;
+  --tagYellow:#fff0d7;
+  --tagBlue:#e0ecff;
+  --tagOrange:#ffe8d9;       
+  --tagGrey:#e5e7eb;
+  --textGreen:#27ae60;
+  --textRed:#ef4444;
+  --textYellow:#e08d00;
+  --textBlue:#3b82f6;
+  --textOrange:#d3590b;
+  --textGrey:#6b7280;
+  --btnBackground: #1f1f1f;
+  --btnFocus: #0f0f0f
+
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 html,
 body {
   max-width: 100vw;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 body {
-  color: var(--foreground);
+  /* color: var(--foreground); */
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
 }
 
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+
 }
 
 a {
@@ -35,8 +51,31 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+} */
+@layer base{
+	h1,h2,h3,h4,h5{
+		font-family: manrope;
+	}
+	p{
+		font-family: inter;
+	}
+	h1{
+		font-size: 40px;
+	}
+	h2{
+		font-size: 32px;
+	}
+	h3{
+		font-size: 28px;
+	}
+	h4{
+		font-size: 24px;
+	}
+	h5{
+		font-size: 18px;
+	}
 }

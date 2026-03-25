@@ -30,7 +30,7 @@ export default function Header() {
 					</li>
 				</ul>
 				<div>
-					<Link href="/authentification/profile/page">avatar</Link>
+					<Link href="/auth/profile">avatar</Link>
 				</div>
 			</nav>
 		</header>

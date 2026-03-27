@@ -3,8 +3,12 @@ import { faFolderOpen } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image"
 import Link from "next/link"
 import style from "@/app/styles/headerAndFooter.module.css"
+import * as Avatar from "@radix-ui/react-avatar";
+import { initialAvatar } from "@/utils/initialAvatar";
+
 
 export default function Header() {
+	
 	return (
 		<header>
 			<nav className={style.nav}>
@@ -30,7 +34,13 @@ export default function Header() {
 					</li>
 				</ul>
 				<div>
-					<Link href="/auth/profile">avatar</Link>
+					<Link href="/auth/profile">
+						{/* <Avatar.Root key={index} className={style.avatar}>	
+							<Avatar.Fallback>
+								{initialAvatar(user?.name)}
+							</Avatar.Fallback>
+						</Avatar.Root> */}
+					</Link>
 				</div>
 			</nav>
 		</header>

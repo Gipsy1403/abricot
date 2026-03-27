@@ -1,0 +1,59 @@
+/* CARD */
+.container_card{
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 10px;
+}
+.card {
+	width: 100%;
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.progressRoot {
+  background: #eee;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressIndicator {
+  background: green;
+  height: 100%;
+  transition: transform 0.3s;
+}
+
+.team {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.avatar {
+  /* width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden; */
+  	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	overflow: hidden;
+	user-select: none;
+	width: 27px;
+	height: 27px;
+	border-radius: 100%;
+
+}
+.name_avatar{
+	width: 100%;
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--secondary);
+	font-size: 10px;
+	line-height: 1;
+}

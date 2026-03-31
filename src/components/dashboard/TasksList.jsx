@@ -5,6 +5,7 @@ import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import style from "@/app/styles/dashboard/dashboard.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 
 export default function TasksList() {
@@ -36,6 +37,8 @@ export default function TasksList() {
 
 	return (
 		<section>
+			<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
+			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
 			<div>
 				<div>
 					<h5>Mes tâches assignées</h5>
@@ -69,7 +72,9 @@ export default function TasksList() {
 					</div>
 					<div className={style.right_side_task}>
 						{statusLabels[t.status]}
-						<button>Voir</button>
+						{/* <Link href={`/dashboard/projects-with-tasks/${t.projet?.id}`}><button>Voir</button></Link> */}
+						<Link href="/dashboard/projects-with-tasks"><button>Voir</button></Link>
+
 					</div>
 				</div>
 

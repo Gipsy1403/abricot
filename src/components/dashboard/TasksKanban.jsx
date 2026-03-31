@@ -5,6 +5,7 @@ import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import style from "@/app/styles/dashboard/dashboard.module.css"
 import { useState,useEffect } from "react";
 import axios from "axios";
+import Link from "next/link";
 
 export default function TasksKanban() {
 	const [tasks, setTasks]=useState([]);
@@ -42,6 +43,9 @@ export default function TasksKanban() {
 	return (
 		<>
 		<section>
+			<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
+			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
+
 			<h5>A faire</h5>
 			{todoTasks.length}
 			{todoTasks.map((t)=>(
@@ -67,7 +71,7 @@ export default function TasksKanban() {
 							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
 						</p>
 					</div>
-					<button>Voir</button>
+					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
 				</div>
 			))}
 		</section>
@@ -92,7 +96,8 @@ export default function TasksKanban() {
 							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
 						</p>
 					</div>
-					<button>Voir</button>
+					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
+
 				</div>
 			))}
 		</section>
@@ -117,7 +122,8 @@ export default function TasksKanban() {
 							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
 						</p>
 					</div>
-					<button>Voir</button>
+					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
+
 				</div>
 			))}
 		</section>

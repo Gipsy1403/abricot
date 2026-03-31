@@ -8,9 +8,11 @@ import style from "@/app/styles/projects/projects.module.css"
 import axios from "axios";
 import { initialAvatar } from "@/utils/initialAvatar";
 import Link from "next/link";
+import CreateProject from "@/components/public/modals/projects/createproject";
 
-export default function Projects({}) {
+export default function Projects() {
 	const [project, setProject]=useState([]);
+	const [openModal, setOpenModal]=useState(false)
 
 	useEffect(()=>{
 		const getProjects = async () => {
@@ -38,7 +40,12 @@ export default function Projects({}) {
 					<h4>Mes projets</h4>
 					<p>Gérez vos projet</p>
 				</div>
-				<button>+ Créer un projet</button>
+				<button onClick={()=>setOpenModal(true)}>+ Créer un projet</button>
+				{/* MODAL */}
+				{openModal && (
+					<CreateProject onClose={()=>setOpenModal(false)}/>
+
+				)}
 			</div>
 			<div  className={style.container_card}>
 				{project.map((p) => (
@@ -48,10 +55,10 @@ export default function Projects({}) {
 						<p>{p.description}</p>
 						{/* 📊 Progression */}
 						<Progress.Root className={style.progressRoot}>
-						<Progress.Indicator
-							className={style.progressIndicator}
-							style={{ transform: `translateX(-${100 - (p.progress || 0)}%)` }}
-						/>
+							<Progress.Indicator
+								className={style.progressIndicator}
+								style={{ transform: `translateX(-${100 - (p.progress || 0)}%)` }}
+							/>
 						</Progress.Root>
 						{/* 👥 Équipe */}
 						<div className={style.team}>

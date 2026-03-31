@@ -7,6 +7,12 @@ import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
 import * as Avatar from "@radix-ui/react-avatar";
 import { initialAvatar } from "@/utils/initialAvatar";
+import * as Accordion from "@radix-ui/react-accordion";
+import style from "@/app/styles/projects/projects.module.css"
+// import useDebounce from "@/utils/hooks/UseDebounce";
+import * as Select from "@radix-ui/react-select";
+
+
 
 
 export default function TasksProject({projectId}) {
@@ -32,8 +38,57 @@ export default function TasksProject({projectId}) {
 		getTasksByProject();
 	}, [projectId]);
 
+	// const[value, setValue]=useState("");
+	// const debouncedValue=useDebounce(value,400)
+	// const isWaiting=value !==debouncedValue
+
+	// useEffect(()=>{
+	// 	onSearch(debouncedValue);
+	// },[debouncedValue]);
+
 	return (
 		<>
+			<section>
+				<div>
+					<h5>Tâches</h5> 
+					<p>Par ordre de priorité</p>
+				</div>
+				<div>
+					<button><FontAwesomeIcon icon={faListCheck}/>Liste</button>
+					<button>Calendrier</button>
+					<Select.Root>
+						<Select.Trigger className={style.trigger} aria-label="statut">
+							<Select.Value placeholder="Statut" />
+							<Select.Icon className={style.icon}>
+								<FontAwesomeIcon icon={faChevronDown}/>
+							</Select.Icon>
+						</Select.Trigger>
+						<Select.Portal>
+							<Select.Content className={style.content}>
+								<Select.ScrollUpButton className={style.scrollButton}>
+									<FontAwesomeIcon icon={faChevronUp}/>
+								</Select.ScrollUpButton>
+								<Select.Viewport className={style.viewport}>
+									<Select.Group>
+										<Select.Label className={style.label}>Statut</Select.Label>
+										<Select.Item value="apple">A faire</Select.Item>
+										<Select.Item value="banana">En cours</Select.Item>
+										<Select.Item value="blueberry">Terminé</Select.Item>
+									</Select.Group>
+								</Select.Viewport>
+								<Select.ScrollDownButton className={style.scrollButton}>
+									<FontAwesomeIcon icon={faChevronDown}/>
+								</Select.ScrollDownButton>
+							</Select.Content>
+						</Select.Portal>
+					</Select.Root>
+					{/* <label htmlFor={id}>rechercher une tâche</label>
+					<input type="search" value={value} onChange={(e)=>setValue(e.target.value)}/>
+					{isWaiting && <p>Loading...</p>} */}
+					<FontAwesomeIcon icon={faMagnifyingGlass}/>
+				</div>
+			</section>
+
 
 			<section>
 				{tasksByproject.map((tp)=>(
@@ -63,8 +118,28 @@ export default function TasksProject({projectId}) {
 						)}
 						</p>
 						<div>
-							<p>Commentaires({tp.comments.length})</p>
-							<FontAwesomeIcon icon={faChevronUp}/>
+						<Accordion.Root className={style.accordionRoot} type="single" collapsible>
+							<Accordion.Item className={style.accordionItem} value={tp.id}>
+								<Accordion.Header className={style.accordionHeader}>
+									<Accordion.Trigger className={style.accordionTrigger}>
+										<p>{tp.comments.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments.length})</p>
+										<FontAwesomeIcon className={style.accordionChevron} icon={faChevronUp} aria-hidden/>
+									</Accordion.Trigger>
+								</Accordion.Header>
+								<Accordion.Content className={style.accordionContent}>
+									{tp.comments.length > 0 ? (
+										tp.comments.map((c) => (
+											<div key={c.id} className={style.accordionContentText}>
+												<p>{c.content}</p>
+												<small>{c.author.name}</small>
+											</div>
+										))
+									) : (
+									<p className={style.accordionContentText}>Aucun commentaire</p>
+									)}
+								</Accordion.Content>
+							</Accordion.Item>
+						</Accordion.Root>
 						</div>
 					</div>
 				</Link>

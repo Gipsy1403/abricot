@@ -26,7 +26,8 @@ export default function Header() {
 							width={24}
 							height={24}
 						/>
-						Tableau de Bord</Link>
+						Tableau de Bord
+						</Link>
 					</li>
 					<li><Link href="/projects">
 						<FontAwesomeIcon icon={faFolderOpen}/>

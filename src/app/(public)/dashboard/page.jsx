@@ -1,14 +1,10 @@
 "use client"
 import TasksKanban from "@/components/dashboard/TasksKanban";
 import TasksList from "@/components/dashboard/TasksList";
-import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
-import { faListCheck, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function Dashboard() {
-	 const [view, setView] = useState("list");
-
 	return (
 		<>
 			<div>
@@ -18,12 +14,9 @@ export default function Dashboard() {
 				</div>
 				<button>+ Créer un projet</button>
 			</div>
-			<div>
-				<button onClick={()=>setView("list")}><FontAwesomeIcon icon={faListCheck}/>Liste</button>
-				<button onClick={()=>setView("kanban")}><FontAwesomeIcon icon={faCalendarDays}/>Kanban</button>
-			</div>
-
-			{view === "kanban" ? <TasksKanban /> : <TasksList />}
+			<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
+			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
+			
 			
 		</>
 	)

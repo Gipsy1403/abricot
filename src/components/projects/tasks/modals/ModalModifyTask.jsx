@@ -6,7 +6,7 @@ import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 
-export default function ModifyProject({onClose}) {
+export default function ModalModifyTask({onClose}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [contributors, setContributors] = useState([]);

@@ -8,11 +8,12 @@ import style from "@/app/styles/projects/projects.module.css"
 import axios from "axios";
 import { initialAvatar } from "@/utils/initialAvatar";
 import Link from "next/link";
-import CreateProject from "@/components/public/modals/projects/createproject";
+import ModalCreateProject from "@/components/projects/modals/ModalCreateProject";
 
 export default function Projects() {
-	const [project, setProject]=useState([]);
 	const [openModal, setOpenModal]=useState(false)
+	const [projects, setProjects]=useState([]);
+
 
 	useEffect(()=>{
 		const getProjects = async () => {
@@ -23,7 +24,7 @@ export default function Projects() {
 				);
 
 				// récupération des projets
-				setProject(response.data.data.projects);
+				setProjects(response.data.data.projects);
 
 			} catch (error) {
 				console.error("Erreur :", error);
@@ -32,7 +33,10 @@ export default function Projects() {
 		getProjects();
 	}, []);
 
-
+	const handleProjectCreated=(newProject)=>{
+		console.log("NEW PROJECT :", newProject);
+		setProjects((prev)=>[...prev, newProject])
+	}
 	return (
 		<>
 			<div>
@@ -41,14 +45,13 @@ export default function Projects() {
 					<p>Gérez vos projet</p>
 				</div>
 				<button onClick={()=>setOpenModal(true)}>+ Créer un projet</button>
-				{/* MODAL */}
+				{/* MODAL POUR CREER UN PROJET*/}
 				{openModal && (
-					<CreateProject onClose={()=>setOpenModal(false)}/>
-
+					<ModalCreateProject onClose={()=>setOpenModal(false)} onProjectCreated={handleProjectCreated}/>
 				)}
 			</div>
 			<div  className={style.container_card}>
-				{project.map((p) => (
+				{projects.map((p) => (
 				<Link key={p.id} href={`/projects/${p.id}`}>
 					<div  className={style.card}>
 						<h2>{p.name}</h2>

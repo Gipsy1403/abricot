@@ -9,33 +9,35 @@ import style from "@/app/styles/projects/projects.module.css"
 import { useState,useEffect } from "react";
 import axios from "axios";
 import { initialAvatar } from "@/utils/initialAvatar";
-import ModifyProject from "@/components/public/modals/projects/modifyproject";
-
-
+import ModalModifyProject from "@/components/projects/modals/ModalModifyProject";
+import ModalCreateTask from "@/components/projects/tasks/modals/ModalCreateTask";
 
 
 export default function ViewProject() {
-	const params = useParams();
-	const id = params.id;
-
-	console.log("params :", params);
-	console.log("id :", id);
+	const {projectId} = useParams();
 
 	const [project, setProject] = useState(null); //stocke le projet
 	const [loading, setLoading] = useState(true); // affiche un chargement
+	const [tasks, setTasks] = useState(true); // affiche toutes les taches du projet
+
 
 	const[openModal, setOpenModal]=useState(false);
 	
-	console.log("project state :", project);
+
 
 	useEffect(() => {
 		const fetchProject = async () => {
 			try {
-			console.log("Appel API avec id :", id);
-			const response = await axios.get(`http://localhost:8000/projects/${id}`, {
+
+			const response = await axios.get(`http://localhost:8000/projects/${projectId}`, {
 				withCredentials: true,
 			});
-			setProject(response.data.data.project);
+			setProject({
+				...response.data.data.project,
+				tasks: response.data.data.project.tasks || [],
+			});
+			// setProject(response.data.data.project);
+			// setTasks(response.data.data.project.tasks || []) // initialise les taches
 			} catch (error) {
 				console.error("Erreur lors de la récupération du projet :", error);
 			}finally {
@@ -43,7 +45,16 @@ export default function ViewProject() {
 			}
 		};
 		fetchProject();
-	}, [id]);
+	}, [projectId]);
+
+	  // Fonction pour ajouter une tâche créée
+	const handleTaskCreated = (newTask) => {
+		setProject((prevProject) => ({
+			...prevProject,
+			tasks: [...prevProject.tasks, newTask], // ajoute la nouvelle tâche
+		}));
+		
+	};
 
 	if (loading) {
 		return <p>Chargement...</p>;
@@ -57,13 +68,18 @@ export default function ViewProject() {
 			<div>
 				<h4>{project?.name}</h4>
 				<p onClick={()=>setOpenModal(true)}>modifier</p>
+				{/* MODAL POUR MODIFIER UN PROJET */}
 				{openModal && (
-					<ModifyProject onClose={()=>setOpenModal(false)}/>
+					<ModalModifyProject onClose={()=>setOpenModal(false)}/>
 				)}
 			</div>
 			<div>
 				<p>{project?.description}</p>
-				<button>Créer une tâche</button>
+				<button onClick={()=>setOpenModal(true)}>Créer une tâche</button>
+				{/* MODAL POUR CREER UNE TACHE */}
+				{openModal && (
+					<ModalCreateTask onClose={()=>setOpenModal(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
+				)}
 				<p><FontAwesomeIcon icon={faDiamond}/>IA</p>
 			</div>
 			<div>
@@ -81,7 +97,7 @@ export default function ViewProject() {
 					))}
 				</div>
 			</div>
-			<TasksProject projectId={id}/>
+			<TasksProject tasks={project.tasks}/>
 
 		</>
 	)

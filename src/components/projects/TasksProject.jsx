@@ -9,42 +9,33 @@ import * as Avatar from "@radix-ui/react-avatar";
 import { initialAvatar } from "@/utils/initialAvatar";
 import * as Accordion from "@radix-ui/react-accordion";
 import style from "@/app/styles/projects/projects.module.css"
-// import useDebounce from "@/utils/hooks/UseDebounce";
 import * as Select from "@radix-ui/react-select";
 
 
 
 
-export default function TasksProject({projectId}) {
-	const [tasksByproject, setTasksByProject]=useState([]);
-	console.log("projectId reçu :", projectId);
+export default function TasksProject({tasks}) {
 
-	useEffect(()=>{
-		if (!projectId)return;
-		const getTasksByProject = async () => {
-			try {
-				const response = await axios.get(
-					`http://localhost:8000/projects/${projectId}/tasks`,
-					{withCredentials:true}
-				);
-
-				// récupération des tâches par projet
-				setTasksByProject(response.data.data.tasks);
-
-			} catch (error) {
-				console.error("Erreur :", error);
-			}
-		};
-		getTasksByProject();
-	}, [projectId]);
-
-	// const[value, setValue]=useState("");
-	// const debouncedValue=useDebounce(value,400)
-	// const isWaiting=value !==debouncedValue
-
+	if (!tasks || tasks?.length === 0) return <p>Aucune tâche pour ce projet.</p>;
 	// useEffect(()=>{
-	// 	onSearch(debouncedValue);
-	// },[debouncedValue]);
+	// 	if (!projectId)return;
+	// 	const getTasksByProject = async () => {
+	// 		try {
+	// 			const response = await axios.get(
+	// 				`http://localhost:8000/projects/${projectId}/tasks`,
+	// 				{withCredentials:true}
+	// 			);
+
+	// 			// récupération des tâches par projet
+	// 			setTasksByProject(response.data.data.tasks);
+
+	// 		} catch (error) {
+	// 			console.error("Erreur :", error);
+	// 		}
+	// 	};
+	// 	getTasksByProject();
+	// }, [projectId]);
+
 
 	return (
 		<>
@@ -91,7 +82,7 @@ export default function TasksProject({projectId}) {
 
 
 			<section>
-				{tasksByproject.map((tp)=>(
+				{tasks.map((tp)=>(
 				<Link key={tp.id} href="">
 					<div >
 						<div>
@@ -104,7 +95,7 @@ export default function TasksProject({projectId}) {
 					
 						<p>
 						Assigné à :{" "}
-						{tp.assignees.length > 0 ? (
+						{tp.assignees?.length > 0 ? (
 						tp.assignees.map((a) => (
 							<span key={a.user.id}>
 							<Avatar.Root>
@@ -122,16 +113,16 @@ export default function TasksProject({projectId}) {
 							<Accordion.Item className={style.accordionItem} value={tp.id}>
 								<Accordion.Header className={style.accordionHeader}>
 									<Accordion.Trigger className={style.accordionTrigger}>
-										<p>{tp.comments.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments.length})</p>
+										<p>{tp.comments?.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments?.length})</p>
 										<FontAwesomeIcon className={style.accordionChevron} icon={faChevronUp} aria-hidden/>
 									</Accordion.Trigger>
 								</Accordion.Header>
 								<Accordion.Content className={style.accordionContent}>
-									{tp.comments.length > 0 ? (
+									{tp.comments?.length > 0 ? (
 										tp.comments.map((c) => (
 											<div key={c.id} className={style.accordionContentText}>
 												<p>{c.content}</p>
-												<small>{c.author.name}</small>
+												<small>{c.author?.name}</small>
 											</div>
 										))
 									) : (

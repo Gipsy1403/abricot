@@ -6,7 +6,7 @@ import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 
-export default function CreateProject({onClose}) {
+export default function ModalCreateProject({onClose, onProjectCreated}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [contributors, setContributors] = useState([]);
@@ -19,15 +19,16 @@ export default function CreateProject({onClose}) {
     setError("");
 
     try {
-     //  const contributorsArray = contributors.split(",").map(c => c.trim());
       const response = await axios.post("http://localhost:8000/projects", {
         name:title,
         description,
         contributors,
       }, { withCredentials: true });
 
+	 onProjectCreated(response.data.data.project)
+
       console.log("Projet créé :", response.data);
-      // Ici, tu peux reset le formulaire
+      //reset du formulaire
       setTitle("");
       setDescription("");
       setContributors([]);
@@ -80,6 +81,8 @@ export default function CreateProject({onClose}) {
 						id="description"
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
+						required
+
 					/>
 				</div>
 

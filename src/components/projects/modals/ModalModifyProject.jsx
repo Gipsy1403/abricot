@@ -1,17 +1,25 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 
-export default function ModalModifyProject({onClose}) {
+export default function ModalModifyProject({onClose, project, onProjectUpdated}) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+  if (project) {
+    setTitle(project.name || "");
+    setDescription(project.description || "");
+    setContributors(project.members?.map((m) => ({ id: m.user.id, name: m.user.name })) || []);
+  }
+}, [project]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,17 +28,17 @@ export default function ModalModifyProject({onClose}) {
 
     try {
 
-      const response = await axios.put(`http://localhost:8000/projects/${id}`, {
+      const response = await axios.put(`http://localhost:8000/projects/${project.id}`, {
         name:title,
         description,
         contributors,
       }, { withCredentials: true });
 
-      console.log("Projet créé :", response.data);
-      // Ici, tu peux reset le formulaire
-      setTitle("");
-      setDescription("");
-      setContributors([]);
+      console.log("Projet modifié :", response.data);
+	//  Mise à jour du projet dans le parent
+      if (onProjectUpdated) {
+        onProjectUpdated(response.data.data.project);
+      }
      onClose();
 
     } catch (err) {
@@ -56,7 +64,7 @@ export default function ModalModifyProject({onClose}) {
 		<Dialog.Portal>
 		<Dialog.Overlay className={style.overlay} onClick={onClose} />
 		<Dialog.Content className={style.content}>
-			<Dialog.Title>Créer un projet</Dialog.Title>
+			<Dialog.Title>Modifier le projet</Dialog.Title>
 
 			{error && <p style={{ color: "red" }}>{error}</p>}
 

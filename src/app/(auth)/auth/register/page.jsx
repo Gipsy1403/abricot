@@ -49,7 +49,14 @@ export default function Register() {
   return (
 	<div className={style.background_register}>
 		<form className={style.form} onSubmit={handleRegister}>
-			<h2>Inscription</h2>
+			<Image
+				src={"/images/Union.png"}
+				alt="Logo Abricot - Page Accueil"
+				className={style.logo}
+				width={252}
+				height={32}
+			/>
+			<h1>Inscription</h1>
 				{/* <div className={style.name}>
 					<label htmlFor="name">Nom Prénom</label>
 					<input
@@ -76,7 +83,7 @@ export default function Register() {
 				</div>
 				<button type="submit">S'inscrire</button>
 		
-				<p>Déjà inscrit ? <Link href="/authentification/login">Se connecter</Link></p>
+				<p>Déjà inscrit ? <Link href="/">Se connecter</Link></p>
 		
 				{message && <p>{message}</p>}
 		</form>

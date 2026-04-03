@@ -24,7 +24,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <body suppressHydrationWarning className={`${inter.variable} ${manrope.variable}`}>
-		<div>RootLayout</div>
         {children}
       </body>
     </html>

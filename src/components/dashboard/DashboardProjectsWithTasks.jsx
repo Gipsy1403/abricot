@@ -42,8 +42,8 @@ export default function DashboardProjectsWithTasks() {
 		<>
 
 			<section>
-				<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
-				<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
+				{/* <Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
+				<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link> */}
 				<div>
 					<h5>Mes projets assignés</h5>
 					<p>Par ordre de priorité</p>

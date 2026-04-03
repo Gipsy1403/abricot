@@ -56,7 +56,8 @@ export default function ContributorsSelect({ value, onChange }) {
 
 			>
 			{users.map((user) => (
-				<option key={user.id} value={user.email}>
+				<option key={user.id} value={user.id}>
+				{/* <option key={user.id} value={user.email}> */}
 				{user.name} {user.email} 
 				</option>
 			))}

@@ -50,7 +50,14 @@ export default function Login() {
   return (
 	<div className={style.background_login}>
 		<form className={style.form} onSubmit={handleLogin}>
-				<h2>Connexion</h2>
+				<Image
+					src={"/images/Union.png"}
+					alt="Logo Abricot - Page Accueil"
+					className={style.logo}
+					width={252}
+					height={32}
+				/>
+				<h1>Connexion</h1>
 				<div className={style.email}>
 					<label htmlFor="email" id="email">Email</label>
 					<input

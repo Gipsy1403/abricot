@@ -6,6 +6,7 @@ import style from "@/app/styles/dashboard/dashboard.module.css"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import Tag from "@/utils/tags";
 
 
 export default function TasksList() {
@@ -36,19 +37,17 @@ export default function TasksList() {
 	};
 
 	return (
-		<section>
-			<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
-			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
-			<div>
+		<section className={style.sectionTasks}>
+			<div className={style.tasksHeader}>
 				<div>
 					<h5>Mes tâches assignées</h5>
 					<p>Par ordre de priorité</p>
 				</div>
-				<div>rechercher une tâche <FontAwesomeIcon icon={faMagnifyingGlass}/></div>
+				<div className={style.taskSearch}>rechercher une tâche <FontAwesomeIcon icon={faMagnifyingGlass}/></div>
 			</div>
 			{tasks.map((t)=>(
-				<div key={t.id}>
-					<div className={style.letf_side_task}>
+				<div key={t.id} className={style.taskCard}>
+					<div className={style.taskLeft}>
 						<div className={style.designation}>
 							<h5>{t.title}</h5>
 							<p>{t.description}</p>
@@ -70,8 +69,11 @@ export default function TasksList() {
 							</p>
 						</div>
 					</div>
-					<div className={style.right_side_task}>
-						{statusLabels[t.status]}
+					<div className={style.taskRight}>
+
+  						<Tag type={statusLabels[t.status]} />
+
+						{/* <span className={style.taskStatus}>{statusLabels[t.status]}</span> */}
 						{/* <Link href={`/dashboard/projects-with-tasks/${t.projet?.id}`}><button>Voir</button></Link> */}
 						<Link href="/dashboard/projects-with-tasks"><button>Voir</button></Link>
 

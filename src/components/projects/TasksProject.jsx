@@ -1,7 +1,7 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp, faListCheck, faMagnifyingGlass, faCalendarDays, faArrowLeftLong, faDiamond} from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import axios from "axios";
 import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
@@ -10,6 +10,7 @@ import { initialAvatar } from "@/utils/initialAvatar";
 import * as Accordion from "@radix-ui/react-accordion";
 import style from "@/app/styles/projects/projects.module.css"
 import * as Select from "@radix-ui/react-select";
+import ContributorsSelect from "@/utils/contributorsSelect";
 
 
 
@@ -113,7 +114,7 @@ export default function TasksProject({tasks}) {
 							<Accordion.Item className={style.accordionItem} value={tp.id}>
 								<Accordion.Header className={style.accordionHeader}>
 									<Accordion.Trigger className={style.accordionTrigger}>
-										<p>{tp.comments?.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments?.length})</p>
+										<p>{tp.comments?.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments?.length || 0})</p>
 										<FontAwesomeIcon className={style.accordionChevron} icon={faChevronUp} aria-hidden/>
 									</Accordion.Trigger>
 								</Accordion.Header>

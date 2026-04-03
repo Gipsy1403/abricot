@@ -1,0 +1,132 @@
+/* CONNEXION */
+
+
+/* Conteneur principal */
+.background_login {
+  height: 100vh;
+  width: 100%;
+  display: flex; 
+  background-image: url('/images/log-in.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.background_register {
+  height: 100vh;
+  width: 100%;
+  display: flex; 
+  background-image: url('/images/sign-in.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Logo */
+.logo{
+  	margin: auto;
+}
+
+/* Formulaire */
+.form {
+  width: 562px;
+  height: 100vh;
+  background-color: var(--background);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  
+}
+
+
+/* Titre */
+.form h1 {
+  color:var(--primary);
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+
+/* Email */
+.email {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding: 0 8rem;
+}
+
+
+/* Password */
+.password {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  padding: 0 8rem;
+
+}
+
+/* Labels */
+.form label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+
+/* Inputs */
+.form input {
+  padding: 10px;
+  border: 1px solid var(--tagGrey);
+  border-radius: 4px;
+}
+
+
+/* Bouton */
+.form button {
+  margin-top: 15px;
+  padding: 12px;
+  background-color:var(--btnBackground);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  margin: 0 9rem;
+  cursor: pointer;
+
+
+}
+
+.form button:hover {
+  background-color: var(--btnFocus);
+}
+
+
+/* Liens */
+.form a {
+  margin-top: 10px;
+  font-size: 14px;
+  color:var(--primary);
+  text-align: center;
+  text-decoration: underline;
+}
+.form a:focus {
+  color:var(--btnBackground);
+}
+
+/* Texte */
+.form p {
+  margin-top: 8rem;
+  font-size: 14px;
+  text-align: center;
+
+}
+
+.form p a {
+  color:var(--primary);
+  text-decoration: underline;
+
+}
+
+.form p a:focus {
+  color:var(--btnBackground);
+}

@@ -1,0 +1,167 @@
+/* --- Container principal du header --- */
+.dashboardHeader {
+  display: flex;
+  justify-content: space-between; /* titre à gauche, bouton à droite */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.dashboardHeader h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.dashboardHeader p {
+  font-size: 0.95rem;
+  color: #555;
+}
+
+/* --- Bouton + Créer un projet --- */
+.dashboardHeader button {
+  background-color: #000; /* noir */
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.dashboardHeader button:hover {
+  background-color: #333;
+}
+
+/* --- Boutons Liste / Kanban --- */
+.viewButtons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.viewButtons button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid #f3c7b0; /* couleur orange clair */
+  background-color: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  color: #ff9f6d;
+}
+
+.viewButtons button.active {
+  background-color: #ffeddc; /* couleur sélectionnée */
+  border-color: #ff9f6d;
+}
+
+/* --- Section Mes tâches --- */
+.sectionTasks{
+  background-color: white;
+  padding: 2rem;
+
+}
+.tasksHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+
+}
+
+.tasksHeader h5 {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 3px;
+}
+
+.tasksHeader p {
+  font-size: 0.85rem;
+  color: #777;
+}
+
+/* --- Barre de recherche --- */
+.taskSearch {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #ddd;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* --- Carte de tâche --- */
+.taskCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-radius: 10px;
+  padding: 25px 40px;
+  margin-bottom: 15px;
+  border: solid 1px var(--tagGrey);
+}
+
+/* --- Partie gauche de la tâche --- */
+.taskLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.taskLeft .designation h5 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.taskLeft .designation p {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Détails du projet, date, commentaires */
+.taskLeft .detail {
+  display: flex;
+  gap: 30px;
+
+
+}
+.taskLeft .detail p {
+  font-size: 0.8rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+/* --- Partie droite de la tâche (status + bouton) --- */
+.taskRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.taskRight button {
+  background-color: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.taskStatus {
+  background-color: #ffecec; /* rouge clair pour "À faire" */
+  color: #ff6b6b;
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 4px 8px;
+  border-radius: 8px;
+}

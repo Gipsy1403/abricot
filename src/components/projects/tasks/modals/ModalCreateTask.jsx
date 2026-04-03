@@ -16,8 +16,10 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 	const [dueDate, setDueDate] = useState("");
 	const [contributors, setContributors] = useState([]);
 	const [status, setStatus] = useState("");
+
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	
 	const statuses = ["A faire","En cours","Terminée"];
 
 	
@@ -28,16 +30,35 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 
 		try {
 			const dueDateISO=formatDateToISO(dueDate); 
-			console.log("Données envoyées :", { title, description, dueDate: dueDateISO, contributors, status });
-			const response = await axios.post(`http://localhost:8000/projects/${projectId}/tasks`, {
+			const infoNewTask={
 				title,
 				description,
-				dueDate:dueDateISO,
-				contributors,
+				dueDate: dueDateISO,
 				status,
-				}, { withCredentials: true });
+				assignees: contributors.map((id) => ({ userId: id })), // <-- CORRECTION
+			};
+			const response = await axios.post(`http://localhost:8000/projects/${projectId}/tasks`,
+				infoNewTask,
+				{ withCredentials: true }
+			);
+			// -----------------------------------------------------
+// BLOC MIS POUR AVOIR LES PERSONNES ASSIGNEES DANS LES TACHES OR PROBLEME COTE BACK !! A VOIR
+			// récupère le nouvel ID de la tâche
+			const taskId = response.data?.data?.task?.id || response.data?.task?.id;
+			if (!taskId) throw new Error("Impossible de récupérer l'ID de la tâche");
 
-			onTaskCreated(response.data.data.task)
+			// Re-fetch de la tâche complète avec assignees
+			const fullTaskResponse = await axios.get(`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
+				{ withCredentials: true }
+			);
+			console.log("Réponse GET tâche :", fullTaskResponse);
+			const allTask = fullTaskResponse.data?.data?.task || fullTaskResponse.data?.task || fullTaskResponse.data;
+			// const allTask = fullTaskResponse.data.data.task;
+
+			console.log("Tâche complète avec assignés :", allTask);
+			onTaskCreated(allTask)
+			// ------------------------------------------------------------
+			// onTaskCreated(response.data.data.task)
 
 			// reset du formulaire
 			setTitle("");

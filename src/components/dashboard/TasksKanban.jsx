@@ -43,8 +43,8 @@ export default function TasksKanban() {
 	return (
 		<>
 		<section>
-			<Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
-			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link>
+			{/* <Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
+			<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link> */}
 
 			<h5>A faire</h5>
 			{todoTasks.length}

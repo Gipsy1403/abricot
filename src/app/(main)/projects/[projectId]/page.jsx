@@ -21,7 +21,8 @@ export default function ViewProject() {
 	const [tasks, setTasks] = useState(true); // affiche toutes les taches du projet
 
 
-	const[openModal, setOpenModal]=useState(false);
+	const [openModalModify, setOpenModalModify] = useState(false);
+	const [openModalCreate, setOpenModalCreate] = useState(false);
 	
 
 
@@ -67,24 +68,28 @@ export default function ViewProject() {
 			</Link>
 			<div>
 				<h4>{project?.name}</h4>
-				<p onClick={()=>setOpenModal(true)}>modifier</p>
+				<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>modifier</a>
 				{/* MODAL POUR MODIFIER UN PROJET */}
-				{openModal && (
-					<ModalModifyProject onClose={()=>setOpenModal(false)}/>
+				{openModalModify && (
+					<ModalModifyProject onClose={()=>setOpenModalModify(false)} project={project} onProjectUpdated={(updatedProject) => setProject(updatedProject)}/>
 				)}
 			</div>
 			<div>
 				<p>{project?.description}</p>
-				<button onClick={()=>setOpenModal(true)}>Créer une tâche</button>
+				<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
 				{/* MODAL POUR CREER UNE TACHE */}
-				{openModal && (
-					<ModalCreateTask onClose={()=>setOpenModal(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
+				{openModalCreate && (
+					<ModalCreateTask onClose={()=>setOpenModalCreate(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
 				)}
 				<p><FontAwesomeIcon icon={faDiamond}/>IA</p>
 			</div>
 			<div>
 				<h5>Contributeurs</h5>
-				<p>{project?.members?.length || 0} personnes</p>
+				<p>{project?.members?.length || 0} {project?.members?.length === 0 
+					?"aucune personne"
+					: project?.members?.length >1 
+					? "personnes" 
+					: "personne"}</p>
 				<div className={style.team}>
 					{project?.members?.map((m) => (
 					// Conteneur pour 1 contributeur

@@ -5,17 +5,18 @@ import { useState } from "react";
 import { faCalendarDays } from "@fortawesome/free-regular-svg-icons";
 import { faListCheck, faMagnifyingGlass} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import style from "@/app/styles/dashboard/dashboard.module.css"
 
 
-export default function AssignedTasks() {
+export default function DashboardAssignedTasks() {
 		 const [view, setView] = useState("list");
 	return (
 		<>
-			<div>
+			<div className={style.viewButtons}>
 				<button onClick={()=>setView("list")}><FontAwesomeIcon icon={faListCheck}/>Liste</button>
 				<button onClick={()=>setView("kanban")}><FontAwesomeIcon icon={faCalendarDays}/>Kanban</button>
-			</div>
 
+			</div>
 			{view === "kanban" ? <TasksKanban /> : <TasksList />}
 
 		</>

@@ -1,11 +1,21 @@
 .button{
-	padding: 13px 10px;
+	padding: 13px 74px;
 	background-color: var(--btnBackground);
 	border-radius: 10px;
 	height: 50px;
 	width: auto;
 	color: var(--third);
+	font-size: 16px;
 }
-.button:focus{
+.button:hover{
 	background-color: var(--btnFocus);
 } 
+.button:disabled{
+	background-color: var(--tagGrey);
+	color: var(--textGrey);
+}
+.outlineOrange{
+	background-color: var(--third);
+	color: var(--primary);
+	border: 1px solid var(--primary);
+}

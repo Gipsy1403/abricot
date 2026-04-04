@@ -2,9 +2,12 @@
 	display: flex;
 	justify-content: space-around;
 	align-items: center;
+	height: 5.5rem;
 }
 .nav ul{
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	gap : 60px;
 
 }
@@ -12,8 +15,20 @@
 	list-style: none;
 	font-size: 16px;
 	color: var(--primary);
+	padding-right: 1rem;
 }
 
+.icon{
+	font-size: 24px;
+	padding-right: 1rem;
+
+}
+.nav a.active{
+	background-color: var(--btnBackground);
+	color: white;
+	padding: 27px 62px;
+	border-radius: 10px;
+}
 .nav div{
 	background-color: var(--secondary);
 	border-radius: 50%;

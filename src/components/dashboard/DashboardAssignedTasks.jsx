@@ -13,8 +13,8 @@ export default function DashboardAssignedTasks() {
 	return (
 		<>
 			<div className={style.viewButtons}>
-				<button onClick={()=>setView("list")}><FontAwesomeIcon icon={faListCheck}/>Liste</button>
-				<button onClick={()=>setView("kanban")}><FontAwesomeIcon icon={faCalendarDays}/>Kanban</button>
+				<button onClick={()=>setView("list")} className={view === "list" ? style.active : ""}><FontAwesomeIcon icon={faListCheck}/>Liste</button>
+				<button onClick={()=>setView("kanban")} className={view === "kanban" ? style.active : ""}><FontAwesomeIcon icon={faCalendarDays}/>Kanban</button>
 
 			</div>
 			{view === "kanban" ? <TasksKanban /> : <TasksList />}

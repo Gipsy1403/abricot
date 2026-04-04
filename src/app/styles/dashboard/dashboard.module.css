@@ -3,7 +3,8 @@
   display: flex;
   justify-content: space-between; /* titre à gauche, bouton à droite */
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 2rem;
+  margin-top: 5rem;
 }
 
 .dashboardHeader h4 {
@@ -45,22 +46,24 @@
   gap: 5px;
   padding: 8px 14px;
   border-radius: 8px;
-  border: 1px solid #f3c7b0; /* couleur orange clair */
-  background-color: #fff;
+  background-color: var(--third);
   cursor: pointer;
   font-weight: 500;
-  color: #ff9f6d;
+  color: var(--primary);
+  border: none;
 }
 
 .viewButtons button.active {
-  background-color: #ffeddc; /* couleur sélectionnée */
-  border-color: #ff9f6d;
+  background-color: var(--tagOrange); 
+  color: var(--textOrange);
 }
 
 /* --- Section Mes tâches --- */
 .sectionTasks{
   background-color: white;
   padding: 2rem;
+  border-radius:10px ;
+  border: solid 1px var(--tagGrey);
 
 }
 .tasksHeader {
@@ -79,19 +82,22 @@
 
 .tasksHeader p {
   font-size: 0.85rem;
-  color: #777;
+  color:var(--textGrey);
 }
 
 /* --- Barre de recherche --- */
 .taskSearch {
   display: flex;
+  justify-content: space-between;
   align-items: center;
   gap: 5px;
-  border: 1px solid #ddd;
-  padding: 6px 10px;
+  border: 1px solid var(--tagGrey);
+  padding: 23px 32px;
   border-radius: 8px;
-  font-size: 0.9rem;
-  color: #555;
+  font-size: 14px;
+  color:var(--textGrey);
+  width: 357px;
+  margin-bottom: 2rem;
 }
 
 /* --- Carte de tâche --- */
@@ -113,55 +119,153 @@
 }
 
 .taskLeft .designation h5 {
-  font-size: 1rem;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 600;
   margin-bottom: 4px;
 }
 
 .taskLeft .designation p {
-  font-size: 0.85rem;
-  color: #666;
+  font-size: 14px;
+  color:var(--textGrey);
 }
 
 /* Détails du projet, date, commentaires */
 .taskLeft .detail {
   display: flex;
-  gap: 30px;
-
-
+  gap: 10px;
+  
+  
 }
 .taskLeft .detail p {
+  border-right: 1px solid #9ca3af;
   font-size: 0.8rem;
   color: #888;
   display: flex;
   align-items: center;
   gap: 5px;
   margin-bottom: 2px;
+  padding-right: 10px;
 }
 
+.taskLeft .detail p:last-child {
+  border-right: none;
+
+}
 /* --- Partie droite de la tâche (status + bouton) --- */
 .taskRight {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 10px;
+  gap: 30px;
 }
 
 .taskRight button {
-  background-color: #000;
-  color: #fff;
+  background-color: var(--btnBackground);
+  color:white;
   border: none;
-  padding: 6px 12px;
-  border-radius: 8px;
+  padding: 13px 74px;
+  border-radius: 10px;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 16px;
+
 }
 
 .taskStatus {
-  background-color: #ffecec; /* rouge clair pour "À faire" */
-  color: #ff6b6b;
-  font-size: 0.75rem;
-  font-weight: 500;
-  padding: 4px 8px;
-  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 4px 16px;
+  border-radius: 50px;
+}
+
+/* ************************** */
+/* Liste des taches KANBAN */
+/* ************************** */
+
+.kanbanContainer {
+  display: flex;
+  gap: 20px;
+  /* padding: 20px; */
+  min-height: 100vh;
+}
+
+/* COLONNES */
+.column {
+  flex: 1;
+  background-color: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ffe0e0;
+
+}
+
+.columnTitle {
+  margin-bottom: 15px;
+}
+.columnTitle span{
+  background-color: var(--tagGrey);
+  color: var(--textGrey);
+  padding: 4px 16px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+/* CARTES */
+.card {
+  border-radius: 10px;
+  border: 1px solid var(--tagGrey);
+  padding: 12px;
+  margin-bottom: 15px;
+  transition: transform 0.2s ease;
+
+}
+
+/* HEADER */
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+
+}
+
+.cardTitle {
+  font-size: 1.12rem;
+  font-weight: 600;
+}
+
+
+/* DESCRIPTION */
+.description {
+  margin: 10px 0;
+  font-size: 14px;
+  color: var(--textGrey);
+}
+
+/* DETAILS */
+.detail {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 12px;
+  margin-top: 10px;
+  color: var(--textGrey);
+  margin: 1.5rem 0;
+
+}
+
+.detail p {
+  border-right: 1px solid #9ca3af;
+  font-size: 0.8rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.detail p:last-child {
+  border-right: none;
+
+}
+.detail p:first-child {
+  padding-left: 0;
+
 }

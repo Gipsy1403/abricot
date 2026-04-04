@@ -6,6 +6,7 @@ import TasksList from "@/components/dashboard/TasksList";
 import Link from "next/link";
 import { useState } from "react";
 import style from "@/app/styles/dashboard/dashboard.module.css"
+import Button from "@/components/public/Button";
 
 export default function Dashboard() {
 	 const [page, setPage] = useState('assigned'); 
@@ -16,7 +17,7 @@ export default function Dashboard() {
 					<h4>Tableau de bord</h4>
 					<p>Bonjour (prénom Nom), voici un aperçu de vos projets et tâches</p>
 				</div>
-				<button>+ Créer un projet</button>
+				<Button text="+ Créer un projet" disabled={false}/>
 			</div>
 			<DashboardAssignedTasks/>
 			<DashboardProjectsWithTasks/>

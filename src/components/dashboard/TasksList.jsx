@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Tag from "@/utils/tags";
+import Button from "../public/Button";
 
 
 export default function TasksList() {
@@ -75,7 +76,7 @@ export default function TasksList() {
 
 						{/* <span className={style.taskStatus}>{statusLabels[t.status]}</span> */}
 						{/* <Link href={`/dashboard/projects-with-tasks/${t.projet?.id}`}><button>Voir</button></Link> */}
-						<Link href="/dashboard/projects-with-tasks"><button>Voir</button></Link>
+						<Link href="/"><Button text="Voir" disabled={false}/></Link>
 
 					</div>
 				</div>

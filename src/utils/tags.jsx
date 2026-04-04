@@ -15,7 +15,7 @@ export default function Tag({ type }) {
         padding: "0.25rem 1rem",
         borderRadius: "3.125rem",
         fontWeight: "500",
-        fontSize: "0.875rem",
+        fontSize: "0.85rem",
       }}
     >
       {type}

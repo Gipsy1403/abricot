@@ -7,6 +7,7 @@ import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 import { useParams } from "next/navigation";
 import { formatDateToISO } from "@/utils/formatDateToIso";
+import Button from "@/components/public/Button";
 
 
 export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
@@ -15,13 +16,9 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 	const [description, setDescription] = useState("");
 	const [dueDate, setDueDate] = useState("");
 	const [contributors, setContributors] = useState([]);
-	const [status, setStatus] = useState("");
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
-	
-	const statuses = ["A faire","En cours","Terminée"];
-
 	
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -34,8 +31,7 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 				title,
 				description,
 				dueDate: dueDateISO,
-				status,
-				assignees: contributors.map((id) => ({ userId: id })), // <-- CORRECTION
+				assigneeIds:contributors, // <-- CORRECTION
 			};
 			const response = await axios.post(`http://localhost:8000/projects/${projectId}/tasks`,
 				infoNewTask,
@@ -65,24 +61,30 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 			setDescription("");
 			setDueDate("");
 			setContributors([]);
-			setStatus("");
 			onClose();
 
 		} catch (err) {
-			setError(
-				err.response.data.data.errors[0]?.message ||
-				"Erreur serveur"
-			);
+  console.log("Erreur complète :", err);
+
+  const message =
+    err?.response?.data?.details?.[0]?.message || // validation backend
+    err?.response?.data?.message ||               // message simple backend
+    err?.message ||                               // erreur JS
+    "Erreur serveur";
+
+  setError(message);
+
 		}finally {
 			setLoading(false);
 		}
 	};
-
+const formInvalid = title.trim() === "" || description.trim() === "" || dueDate==="";
 	return (
 		<Dialog.Root open={true}>
 			<Dialog.Portal>
 			<Dialog.Overlay className={style.overlay} onClick={onClose} />
 			<Dialog.Content className={style.content}>
+				<p className={style.closeButton} aria-label="Close" onClick={onClose}>X</p>
 				<Dialog.Title>Créer une tâche</Dialog.Title>
 
 				{error && <p style={{ color: "red" }}>{error}</p>}
@@ -101,7 +103,7 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 					</div>
 
 					<div className={style.field}>
-						<label className={style.label} htmlFor="description">Description</label>
+						<label className={style.label} htmlFor="description">Description*</label>
 						<textarea
 							className={style.input}
 							id="description"
@@ -113,7 +115,7 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 					</div>
 
 					<div className={style.field}>
-						<label className={style.label} htmlFor="dueDate">Echéance</label>
+						<label className={style.label} htmlFor="dueDate">Echéance*</label>
 						<input
 							className={style.input}
 							type="date"
@@ -150,14 +152,11 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 							</button>
 						))}
 					</div> */}
-					<button type="submit" disabled={loading}>
-						{loading ? "Création..." : "Ajouter une tâche"}
-					</button>
+					<Button text="+ Ajouter une tâche" type="submit" disabled={loading || formInvalid}
+					/>
 				</form>
 
-				<Dialog.Close asChild>
-				<button className={style.closeButton} aria-label="Close" onClick={onClose}>X</button>
-				</Dialog.Close>
+				<Dialog.Close asChild></Dialog.Close>
 			</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>

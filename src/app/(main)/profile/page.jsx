@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import style from "@/app/styles/auth/profile.module.css"
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import Button from "@/components/public/Button";
 
 export default function Profile() {
 	const router=useRouter()
@@ -68,43 +69,45 @@ export default function Profile() {
 	};
 	return (
 		<>
-			<h5>Mon compte</h5>
-			<p>{firstName} {name}</p>
-			<form onSubmit={handleProfile} >
-				<div className={style.firstname}>
-					<label htmlFor="firstname" id="firstname">Prénom</label>
-					<input
-						type="text"
-						value={firstName}
-						onChange={(e) => setFirstName(e.target.value)}
-					/>
-				</div>
-				<div className={style.name}>
-					<label htmlFor="name" id="name">Nom</label>
-					<input
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-				</div>
-				<div className={style.email}>
-					<label htmlFor="email" id="email">Email</label>
-					<input
-						type="email"
-						value={email}
-						onChange={(e) => setEmail(e.target.value)}
-					/>
-				</div>
-				<div className={style.password}>
-					<label htmlFor="password" id="password">Mot de passe</label>
-					<input
-						type="password"
-						value={password}
-						onChange={(e) => setPassword(e.target.value)}
-					/>
-				</div>
-				<button type="submit">Modifier les informations</button>
-			</form>
+			<section className={style.containerProfile}>
+				<h5>Mon compte</h5>
+				<p>{firstName} {name}</p>
+				<form onSubmit={handleProfile} >
+					<div className={style.field}>
+						<label htmlFor="firstname" id="firstname">Prénom</label>
+						<input
+							type="text"
+							value={firstName}
+							onChange={(e) => setFirstName(e.target.value)}
+						/>
+					</div>
+					<div className={style.field}>
+						<label htmlFor="name" id="name">Nom</label>
+						<input
+							type="text"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
+					</div>
+					<div className={style.field}>
+						<label htmlFor="email" id="email">Email</label>
+						<input
+							type="email"
+							value={email}
+							onChange={(e) => setEmail(e.target.value)}
+						/>
+					</div>
+					<div className={style.field}>
+						<label htmlFor="password" id="password">Mot de passe</label>
+						<input
+							type="password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
+						/>
+					</div>
+					<Button text="Modifier les informations" disabled={false}/>
+				</form>
+			</section>
 		</>
 	)
 }

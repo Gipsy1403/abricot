@@ -1,4 +1,6 @@
-/* CARD */
+/* MES PROJETS - CARTES */
+/* ********************* */
+
 .container_card{
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
@@ -185,3 +187,392 @@
 	transform: rotate(180deg);
 }
 
+/* VUE D UN PROJET AVEC SES TACHES */
+/* ******************************* */
+.container{
+	display: flex;
+	align-items: center;
+	width: 100%;
+	margin-top: 3rem;
+
+}
+.containerTitle p{
+	color: var(--textGrey);
+	margin-top: 0.8rem;
+}
+.iconReturn{
+	padding: 25px;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid var(--tagGrey);
+	margin-left: -80px;
+}
+.titleProject{
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	gap: 10px;
+
+}
+.titleProject a{
+	color: var(--primary);
+	text-decoration: underline;
+	font-size: 14px;
+}
+.containerBtns{
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 20px;
+	margin-left: auto;
+
+}
+.containerBtns button{
+	padding: 10px 15px;
+	background-color: var(--btnBackground);
+	border-radius: 10px;
+	height: 50px;
+	width: auto;
+	color: var(--third);
+	font-size: 16px;
+	cursor: pointer;
+}
+.containerBtns button:hover{
+	background-color: var(--btnFocus);
+}
+.containerBtns p{
+	padding: 10px 15px;
+	background-color: var(--primary);
+	border-radius: 10px;
+	height: 50px;
+	width: auto;
+	color: white;
+	font-size: 16px;
+	cursor: pointer;
+}
+.containerBtns p:hover{
+	background-color: var(--btnFocus);
+} 
+
+.containerContributors{
+	display: flex;
+	align-items: center;
+	margin-top: 2rem;
+	background-color: #f3f4f6;
+	border-radius: 10px;
+	padding: 1rem 2rem;
+}
+.leftSide{
+	display: flex;
+	gap: 10px;
+}
+.leftSide p{
+	color: var(--textGrey);
+}
+.team{
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	margin-left: auto;
+}
+.member{
+	gap: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+/* Avatar propriétaire */
+.ownerAvatar, .ownerName {
+	background-color:var(--secondary);
+}
+.ownerAvatar{
+	font-size: 10px;
+}
+.ownerName {
+	padding: 3px 10px ;
+	border-radius: 50px;
+	color: var(--primary);
+	font-size: 14px;
+}
+/* Autres avatars des contributeurs */
+.memberAvatar {
+	background-color:var(--tagGrey);
+	font-size: 10px;
+
+}
+.memberName {
+	color:var(--textGrey);
+	background-color:var(--tagGrey);
+	font-size: 14px;
+	padding: 3px 10px ;
+	border-radius: 50px;
+
+}
+
+/* BARRE DES TACHES */
+/* .containerTasks{
+	padding: 2rem;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid var(--tagGrey);
+	margin: 2rem 0;
+
+}
+.containerBarTasks{
+	display: flex;
+	
+}
+.tasks p{
+	color: var(--textGrey);
+}
+.bar{
+	margin-left: auto;
+
+}
+.bar button{
+	color: var(--primary);
+	border: none;
+	background-color: none;
+}
+.taskSearch {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid var(--tagGrey);
+  padding: 23px 25px;
+  border-radius: 8px;
+  font-size: 14px;
+  color:var(--textGrey);
+  width: 250px;
+  margin-bottom: 2rem;
+} */
+
+.containerTasks {
+ 	padding: 2rem;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid var(--tagGrey);
+	margin: 2rem 0;
+}
+
+/* =========================
+   BARRE DU HAUT
+========================= */
+
+.containerBarTasks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+/* .tasks h5 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+} */
+
+.tasks p {
+	color: var(--textGrey)
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.bar button {
+  color: var(--primary);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.bar button:hover {
+  /* background: #e7d4c8; */
+}
+
+/* SELECT */
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--tagGrey);
+  background: white;
+  cursor: pointer;
+  color: black;
+}
+
+.icon {
+  font-size: 12px;
+}
+
+.content {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.label {
+  font-size: 12px;
+  color: #999;
+}
+
+.scrollButton {
+  text-align: center;
+  padding: 5px;
+}
+
+.viewport {
+  padding: 5px;
+}
+
+/* SEARCH */
+
+.taskSearch {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--tagGrey);
+  font-size: 14px;
+  color: var(--textGrey);
+}
+
+/* =========================
+   CARTE TACHE
+========================= */
+
+.card {
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: auto;
+  border: 1px solid var(--tagGrey);
+  transition: 0.2s;
+  width: 90%;
+  margin-bottom: 1rem;
+}
+
+/* HEADER */
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* TEXTE */
+
+.description {
+  color:var(--textGrey);
+  margin-bottom: 1rem;
+  font-size: 14px;
+
+}
+
+.date {
+  color:var(--textGrey);
+  margin-bottom: 1rem;
+  font-size: 12px;
+
+
+}
+
+/* ASSIGNEES */
+
+.assignees {
+  color:var(--textGrey);
+  font-size: 12px;
+
+}
+
+.assignee {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  background-color: var(--tagGrey);
+  color: var(--textGrey);
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  background:var(--tagGrey);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* =========================
+   ACCORDION
+========================= */
+
+.accordionWrapper {
+  margin-top: 1rem;
+}
+
+.accordionRoot {
+  border-top: 1px solid var(--tagGrey);
+  width: 100%;
+}
+
+.accordionItem {
+  padding-top: 10px;
+}
+
+.accordionHeader {
+  display: flex;
+}
+
+.accordionTrigger {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+.accordionChevron {
+  transition: transform 0.2s;
+
+}
+
+/* .progressHeader {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.progressRoot {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progressIndicator {
+  height: 100%;
+  background-color: #3b82f6;
+  transition: transform 0.3s ease;
+}
+
+.progressText {
+  font-size: 12px;
+  color: #6b7280;
+  margin-top: 4px;
+} */

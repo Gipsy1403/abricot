@@ -15,24 +15,81 @@ export default function Projects() {
 	const [projects, setProjects]=useState([]);
 
 
-	useEffect(()=>{
+	// useEffect(()=>{
+	// 	const getProjects = async () => {
+	// 		try {
+	// 			const response = await axios.get(
+	// 				"http://localhost:8000/projects",
+	// 				{withCredentials:true}
+	// 			);
+
+	// 			// récupération des projets
+	// 			setProjects(response.data.data.projects);
+
+	// 		} catch (error) {
+	// 			console.error("Erreur :", error);
+	// 		}
+	// 	};
+	// 	getProjects();
+	// }, []);
+
+	useEffect(() => {
+
 		const getProjects = async () => {
-			try {
-				const response = await axios.get(
-					"http://localhost:8000/projects",
-					{withCredentials:true}
+		try {
+
+			// 1️⃣ récupérer les projets
+			const response = await axios.get(
+			"http://localhost:8000/projects",
+			{ withCredentials: true }
+			);
+
+			const projectsData = response.data.data.projects;
+
+			// 2️⃣ pour chaque projet → récupérer ses tâches
+			const projectsWithProgress = await Promise.all(
+
+			projectsData.map(async (p) => {
+
+				// 🔥 appel API pour les tâches du projet
+				const resTasks = await axios.get(
+				`http://localhost:8000/projects/${p.id}/tasks`,
+				{ withCredentials: true }
 				);
 
-				// récupération des projets
-				setProjects(response.data.data.projects);
+				const tasks = resTasks.data.data.tasks;
 
-			} catch (error) {
-				console.error("Erreur :", error);
-			}
+				// 3️⃣ calcul progression
+
+				const total = tasks.length;
+
+				const done = tasks.filter(
+				(t) => t.status === "DONE"
+				).length;
+
+				const progress = total > 0
+				? Math.round((done / total) * 100)
+				: 0;
+
+				// 4️⃣ on retourne le projet enrichi
+				return {
+				...p,
+				progress
+				};
+			})
+			);
+
+			// 5️⃣ on stocke
+			setProjects(projectsWithProgress);
+
+		} catch (error) {
+			console.error("Erreur :", error);
+		}
 		};
-		getProjects();
-	}, []);
 
+		getProjects();
+
+	}, []);
 	const handleProjectCreated=(newProject)=>{
 		console.log("NEW PROJECT :", newProject);
 		setProjects((prev)=>[...prev, newProject])
@@ -42,7 +99,7 @@ export default function Projects() {
 			<div>
 				<div>
 					<h4>Mes projets</h4>
-					<p>Gérez vos projet</p>
+					<p>Gérez vos projets</p>
 				</div>
 				<button onClick={()=>setOpenModal(true)}>+ Créer un projet</button>
 				{/* MODAL POUR CREER UN PROJET*/}
@@ -56,14 +113,12 @@ export default function Projects() {
 					<div  className={style.card}>
 						<h2>{p.name}</h2>
 						<p>{p.description}</p>
-						{/* 📊 Progression */}
 						<Progress.Root className={style.progressRoot}>
 							<Progress.Indicator
 								className={style.progressIndicator}
 								style={{ transform: `translateX(-${100 - (p.progress || 0)}%)` }}
 							/>
 						</Progress.Root>
-						{/* 👥 Équipe */}
 						<div className={style.team}>
 						{p.members?.map((m, index) => (
 							<Avatar.Root key={index} className={style.avatar}>

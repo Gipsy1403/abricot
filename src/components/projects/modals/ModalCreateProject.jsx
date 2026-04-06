@@ -5,6 +5,7 @@ import { useState } from "react";
 import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
+import Button from "@/components/public/Button";
 
 export default function ModalCreateProject({onClose, onProjectCreated}) {
   const [title, setTitle] = useState("");
@@ -51,13 +52,15 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
       setLoading(false);
     }
   };
-
+const formInvalid = title.trim() === "" || description.trim() === "";
   return (
 	<Dialog.Root open={true}>
 		<Dialog.Portal>
 		<Dialog.Overlay className={style.overlay} onClick={onClose} />
 		<Dialog.Content className={style.content}>
-			<Dialog.Title>Créer un projet</Dialog.Title>
+			<p className={style.closeButton} aria-label="Close" onClick={onClose}>X</p>
+
+			<Dialog.Title className={style.title}>Créer un projet</Dialog.Title>
 
 			{error && <p style={{ color: "red" }}>{error}</p>}
 
@@ -75,7 +78,7 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
 				</div>
 
 				<div className={style.field}>
-					<label className={style.label} htmlFor="description">Description</label>
+					<label className={style.label} htmlFor="description">Description*</label>
 					<textarea
 						className={style.input}
 						id="description"
@@ -93,14 +96,10 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
 						onChange={setContributors}
 					/>
 				</div>
-				<button type="submit" disabled={loading}>
-					{loading ? "Création..." : "Ajouter un projet"}
-				</button>
+				<Button text="Ajouter un projet" disabled={loading|| formInvalid}
+				/>
 			</form>
-
-			<Dialog.Close asChild>
-			<button className={style.closeButton} aria-label="Close" onClick={onClose}>X</button>
-			</Dialog.Close>
+			<Dialog.Close asChild></Dialog.Close>
 		</Dialog.Content>
 		</Dialog.Portal>
 	</Dialog.Root>

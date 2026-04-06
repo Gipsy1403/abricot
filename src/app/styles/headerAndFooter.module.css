@@ -29,7 +29,7 @@
 	padding: 27px 62px;
 	border-radius: 10px;
 }
-.nav div{
+.avatar{
 	background-color: var(--secondary);
 	border-radius: 50%;
 	aspect-ratio: 1/1;
@@ -39,6 +39,11 @@
 	justify-content: center;
 	align-items: center;
 
+}
+
+.activeAvatar{
+  background-color: var(--primary);
+  color: white;
 }
 
 /* FOOTER */

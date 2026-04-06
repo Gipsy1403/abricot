@@ -1,22 +1,50 @@
 /* Arrière-plan de la modale */
 .overlay {
-  position: fixed; /* toujours au même endroit à l'écran */
-  inset: 0; /* top, right, bottom, left = 0 */
-  background-color: rgba(0, 0, 0, 0.5); /* noir semi-transparent */
+  position: fixed;
+  inset: 0; 
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 100; /* s'assure que ça passe au-dessus du contenu */
 }
 
-/* Contenu de la modale */
 .content {
   position: fixed;
-  top: 50%; /* centre verticalement */
-  left: 50%; /* centre horizontalement */
-  transform: translate(-50%, -50%); /* ajuste le centre exact */
-  background-color: white; /* fond blanc pour la modale */
-  padding: 2rem; /* espace intérieur */
-  border-radius: 10px; /* coins arrondis */
-  max-width: 500px; /* largeur max */
-  width: 90%; /* largeur responsive */
-  z-index: 101; /* au-dessus de l'overlay */
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* légère ombre */
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 3rem; 
+  border-radius: 10px;
+  max-width: 600px;
+  width: 90%;
+  z-index: 101;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+.closeButton{
+	font-size: 25px;
+	color: var(--textGrey);
+	display: flex;
+	justify-content: flex-end;
+	align-items: start;
+	cursor: pointer;
+}
+.title{
+	margin-bottom: 2rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.5rem;
+}
+
+.field label {
+  margin-bottom: 0.5rem;
+
+}
+.field input {
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  color: var(--textGrey);
+  border: 1px solid var(--tagGrey);
+  border-radius: 4px;
 }

@@ -13,12 +13,13 @@ import ModalModifyProject from "@/components/projects/modals/ModalModifyProject"
 import ModalCreateTask from "@/components/projects/tasks/modals/ModalCreateTask";
 
 
+
 export default function ViewProject() {
 	const {projectId} = useParams();
 
 	const [project, setProject] = useState(null); //stocke le projet
 	const [loading, setLoading] = useState(true); // affiche un chargement
-	const [tasks, setTasks] = useState(true); // affiche toutes les taches du projet
+	const [tasks, setTasks] = useState([]); // affiche toutes les taches du projet
 
 
 	const [openModalModify, setOpenModalModify] = useState(false);
@@ -63,43 +64,61 @@ export default function ViewProject() {
 
 	return (
 		<>
-			<Link href="/projects">
-				<FontAwesomeIcon icon={faArrowLeftLong}/>
-			</Link>
-			<div>
-				<h4>{project?.name}</h4>
-				<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>modifier</a>
-				{/* MODAL POUR MODIFIER UN PROJET */}
-				{openModalModify && (
-					<ModalModifyProject onClose={()=>setOpenModalModify(false)} project={project} onProjectUpdated={(updatedProject) => setProject(updatedProject)}/>
-				)}
-			</div>
-			<div>
-				<p>{project?.description}</p>
-				<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
-				{/* MODAL POUR CREER UNE TACHE */}
-				{openModalCreate && (
-					<ModalCreateTask onClose={()=>setOpenModalCreate(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
-				)}
-				<p><FontAwesomeIcon icon={faDiamond}/>IA</p>
-			</div>
-			<div>
-				<h5>Contributeurs</h5>
-				<p>{project?.members?.length || 0} {project?.members?.length === 0 
-					?"aucune personne"
-					: project?.members?.length >1 
-					? "personnes" 
-					: "personne"}</p>
-				<div className={style.team}>
-					{project?.members?.map((m) => (
-					// Conteneur pour 1 contributeur
-					<div key={m.user?.id} className={style.member}>
-						<div className={style.avatar}>
-							<p>{initialAvatar(m.user?.name)}</p>
-						</div>
-						<p className={style.name}>{m.user?.name}</p>
+			<div className={style.container}>
+				<Link  href="/projects">
+					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}/>
+				</Link>
+				<div className={style.containerTitle}>
+					<div className={style.titleProject}>
+						<h4>{project?.name}</h4>
+						<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
+						{/* MODAL POUR MODIFIER UN PROJET */}
+						{openModalModify && (
+							<ModalModifyProject onClose={()=>setOpenModalModify(false)} project={project} onProjectUpdated={(updatedProject) => setProject(updatedProject)}/>
+						)}
 					</div>
-					))}
+					<p>{project?.description}</p>
+				</div>
+				<div className={style.containerBtns}>
+					<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
+					{/* MODAL POUR CREER UNE TACHE */}
+					{openModalCreate && (
+						<ModalCreateTask onClose={()=>setOpenModalCreate(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
+					)}
+					<p><FontAwesomeIcon icon={faDiamond}/> IA</p>
+				</div>
+			</div>
+			<div className={style.containerContributors}>
+				<div className={style.leftSide}>
+					<h5>Contributeurs</h5>
+					<p>{project?.members?.length || 0} {project?.members?.length === 0
+						?"aucune personne"
+						: project?.members?.length >1
+						? "personnes"
+						: "personne"}</p>
+				</div>
+				<div className={style.team}>
+				{/* Afficher le propriétaire en premier */}
+				{project?.owner && (
+				<div key={project.owner.id} className={style.member}>
+					<div className={`${style.avatar} ${style.ownerAvatar}`}>
+					<p>{initialAvatar(project.owner.name)}</p>
+					</div>
+					<p className={`${style.name} ${style.ownerName}`}>Propriétaire</p>
+				</div>
+				)}
+
+				{/* Afficher les autres contributeurs */}
+				{project?.members?.map((m) => {
+				return (
+					<div key={m.user.id} className={style.member}>
+					<div className={`${style.avatar} ${style.memberAvatar}`}>
+						<p>{initialAvatar(m.user.name)}</p>
+					</div>
+					<p className={`${style.name} ${style.memberName}`}>{m.user.name}</p>
+					</div>
+				);
+				})}
 				</div>
 			</div>
 			<TasksProject tasks={project.tasks}/>

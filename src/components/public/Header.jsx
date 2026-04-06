@@ -6,14 +6,36 @@ import Link from "next/link"
 import style from "@/app/styles/headerAndFooter.module.css"
 import * as Avatar from "@radix-ui/react-avatar";
 import { initialAvatar } from "@/utils/initialAvatar";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Dashboard from "@/app/(main)/dashboard/page";
 import Projects from "@/app/(main)/projects/page";
 import { usePathname } from "next/navigation";
+import axios from "axios";
 
 
 export default function Header() {
 	 const pathname=usePathname();
+	const [user, setUser] = useState(); 
+	const pageProfile=pathname==="/profile";
+
+
+	 useEffect(()=>{
+			const getUser = async () => {
+				try {
+					const response = await axios.get(
+						"http://localhost:8000/auth/profile",
+						{withCredentials:true}
+					);
+	 
+					// récupération des projets
+					setUser(response.data.data.user);
+	 
+				} catch (error) {
+					console.error("Erreur :", error);
+				}
+			};
+			getUser();
+		}, []);
 	return (
 		<header>
 			<nav className={style.nav}>
@@ -34,13 +56,13 @@ export default function Header() {
 						Projets</Link>
 					</li>
 				</ul>
-				<div>
-					<Link href="/auth/profile">
-						{/* <Avatar.Root key={index} className={style.avatar}>	
+				<div className={style.avatar}>
+					<Link href="/profile">
+						<Avatar.Root key={user?.id} className={`${style.avatar} ${pageProfile ? style.activeAvatar : ""}`}>	
 							<Avatar.Fallback>
 								{initialAvatar(user?.name)}
 							</Avatar.Fallback>
-						</Avatar.Root> */}
+						</Avatar.Root>
 					</Link>
 				</div>
 			</nav>

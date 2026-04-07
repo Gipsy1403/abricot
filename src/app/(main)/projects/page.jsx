@@ -9,6 +9,8 @@ import axios from "axios";
 import { initialAvatar } from "@/utils/initialAvatar";
 import Link from "next/link";
 import ModalCreateProject from "@/components/projects/modals/ModalCreateProject";
+import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
+import Button from "@/components/public/Button";
 
 export default function Projects() {
 	const [openModal, setOpenModal]=useState(false)
@@ -74,7 +76,9 @@ export default function Projects() {
 				// 4️⃣ on retourne le projet enrichi
 				return {
 				...p,
-				progress
+				progress,
+				done,
+				total
 				};
 			})
 			);
@@ -94,14 +98,16 @@ export default function Projects() {
 		console.log("NEW PROJECT :", newProject);
 		setProjects((prev)=>[...prev, newProject])
 	}
+
+	
 	return (
 		<>
-			<div>
+			<div className={style.projectsHeader}>
 				<div>
 					<h4>Mes projets</h4>
 					<p>Gérez vos projets</p>
 				</div>
-				<button onClick={()=>setOpenModal(true)}>+ Créer un projet</button>
+				<Button onClick={()=>setOpenModal(true)} text="+ Créer un projet" disabled={false}/>
 				{/* MODAL POUR CREER UN PROJET*/}
 				{openModal && (
 					<ModalCreateProject onClose={()=>setOpenModal(false)} onProjectCreated={handleProjectCreated}/>
@@ -112,21 +118,37 @@ export default function Projects() {
 				<Link key={p.id} href={`/projects/${p.id}`}>
 					<div  className={style.card}>
 						<h2>{p.name}</h2>
-						<p>{p.description}</p>
-						<Progress.Root className={style.progressRoot}>
-							<Progress.Indicator
-								className={style.progressIndicator}
-								style={{ transform: `translateX(-${100 - (p.progress || 0)}%)` }}
-							/>
-						</Progress.Root>
-						<div className={style.team}>
-						{p.members?.map((m, index) => (
-							<Avatar.Root key={index} className={style.avatar}>
-								<Avatar.Fallback className={style.name_avatar}>
-									{initialAvatar(m.user?.name)}
-								</Avatar.Fallback>
-							</Avatar.Root>
-						))}
+						<p className={style.descriptionCard}>{p.description}</p>
+						<div className={style.barProgress}>
+							<div className={style.progressHeader}>
+								<span >Progression</span>
+								<span className={style.score}>{p.progress}%</span>
+							</div>
+							<Progress.Root className={style.progressRoot} value={p.progress}>
+								<Progress.Indicator
+									className={style.progressIndicator}
+									style={{ transform: `translateX(-${100 - (p.progress)}%)` }}
+									/>
+							</Progress.Root>
+							<p className={style.progressText}> {p.done}/{p.total} {p.done >1 ? "tâches terminées" : "tâche terminée"}</p>
+						</div>
+						<p className={style.iconTeam} ><FontAwesomeIcon icon={faUserGroup}/> Equipes ({p.members?.length})</p>
+						<div className={style.teams} >
+							{p?.owner && (
+								<div key={p.owner.id} className={style.ownerProject}>
+									<p className={style.ownerAvatarProject}>{initialAvatar(p.owner.name)}</p>
+									<p className={style.ownerNameProject}>Propriétaire</p>
+								</div>
+							)}
+							
+								{p.members?.filter((m) => m.user?.id !== p.owner?.id).map((m, index) => (
+									<Avatar.Root key={index} className={style.avatarGroupProject}>
+										<Avatar.Fallback className={style.nameAvatarProject}>
+											{initialAvatar(m.user?.name)}
+										</Avatar.Fallback>
+									</Avatar.Root>
+								))}
+						
 						</div>
 					</div>
 				</Link>

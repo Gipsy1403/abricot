@@ -62,6 +62,8 @@ export default function ViewProject() {
 		return <p>Chargement...</p>;
 	}
 
+	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
+
 	return (
 		<>
 			<div className={style.container}>
@@ -92,7 +94,7 @@ export default function ViewProject() {
 				<div className={style.leftSide}>
 					<h5>Contributeurs</h5>
 					<p>{project?.members?.length || 0} {project?.members?.length === 0
-						?"aucune personne"
+			       			?"aucune personne"
 						: project?.members?.length >1
 						? "personnes"
 						: "personne"}</p>
@@ -109,7 +111,8 @@ export default function ViewProject() {
 				)}
 
 				{/* Afficher les autres contributeurs */}
-				{project?.members?.map((m) => {
+				{filteredMembers?.map((m) => {
+
 				return (
 					<div key={m.user.id} className={style.member}>
 					<div className={`${style.avatar} ${style.memberAvatar}`}>
@@ -121,7 +124,7 @@ export default function ViewProject() {
 				})}
 				</div>
 			</div>
-			<TasksProject tasks={project.tasks}/>
+			<TasksProject tasks={project.tasks} projectId={projectId}/>
 
 		</>
 	)

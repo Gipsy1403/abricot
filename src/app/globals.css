@@ -78,6 +78,7 @@ a {
     font-family: var(--font-inter), sans-serif;
     line-height: 1.6; /* lisibilité */
     margin-bottom: 1rem;
+    font-size: 14px;
   }
 
   /* Tailles des titres */

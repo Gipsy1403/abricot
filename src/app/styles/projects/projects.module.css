@@ -1,5 +1,25 @@
-/* MES PROJETS - CARTES */
+/* MES PROJETS - CARTES PROJET*/
 /* ********************* */
+.projectsHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  margin-top: 4rem;
+}
+
+.projectsHeader h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.projectsHeader p {
+  font-size: 1.125rem;
+}
+
+/* CARTES */
+/* ****** */
 
 .container_card{
 	display: grid;
@@ -7,11 +27,29 @@
 	gap: 10px;
 }
 .card {
-	width: 100%;
+  width: 380px;
   background: white;
   padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  border: 1px solid var(--tagGrey);
+}
+.descriptionCard{
+	color: var(--textGrey);
+	margin-top: 0.5rem;
+	margin-bottom: 2rem;
+}
+/* barre de progression */
+.barProgress{
+	color: var(--textGrey);
+}
+.progressHeader{
+	display: flex;
+	justify-content: space-between;
+	font-size: 12px;
+	margin-bottom: 0.52rem;
+}
+.score{
+	color: black;
 }
 
 .progressRoot {
@@ -26,169 +64,82 @@
   height: 100%;
   transition: transform 0.3s;
 }
-
-.team {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
+.progressText{
+	font-size: 10px;
+	margin-top: 0.3rem;
+	margin-bottom: 2rem;
 }
 
-.avatar {
-  /* width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  overflow: hidden; */
-  	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	vertical-align: middle;
-	overflow: hidden;
-	user-select: none;
+/* équipes */
+
+.iconTeam{
+	font-size: 10px;
+	color: var(--textGrey);
+	margin-bottom: 0.5rem;
+}
+.teams {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+}
+.ownerProject{
+	display: flex;
+	gap: 5px;
+	margin-right: 5px;
+}
+.ownerAvatarProject{
+	background-color: var(--secondary);
 	width: 27px;
 	height: 27px;
-	border-radius: 100%;
-
-}
-.name_avatar{
-	width: 100%;
-	height: 100%;
+	border-radius: 50%;
+	font-size: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+
+}
+.ownerNameProject{
 	background-color: var(--secondary);
+	padding: 1px 10px;
+	border-radius: 25px;
+	color: var(--primary);
+	font-size: 14px;
+
+
+}
+.avatarGroupProject{
+	margin-left: -10px;
+
+}
+.ownerProject + .avatarGroupProject {
+	margin-left: 3px; 
+}
+.nameAvatarProject {
+	width: 27px;
+	height: 27px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--tagGrey);
 	font-size: 10px;
 	line-height: 1;
-}
-
-/* selection du statut */
-
-.trigger {
-	all: unset;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 4px;
-	padding: 0 15px;
-	font-size: 13px;
-	line-height: 1;
-	height: 35px;
-	gap: 5px;
+	border-radius: 50%;
+	border: 1px solid white;
 
 }
 
-
-.content {
-	overflow: hidden;
-	background-color: white;
-	border-radius: 6px;
-	box-shadow:
-		0px 10px 38px -10px rgba(22, 23, 24, 0.35),
-		0px 10px 20px -15px rgba(22, 23, 24, 0.2);
-}
-
-.viewport {
-	padding: 5px;
-}
-
-.item {
-	font-size: 13px;
-	line-height: 1;
-	border-radius: 3px;
-	display: flex;
-	align-items: center;
-	height: 25px;
-	padding: 0 35px 0 25px;
-	position: relative;
-	user-select: none;
-
-}
-
-.label {
-	padding: 0 25px;
-	font-size: 12px;
-	line-height: 25px;
-}
-
-
-
-.itemIndicator {
-	position: absolute;
-	left: 0;
-	width: 25px;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.scrollButton {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 25px;
-	cursor: default;
-}
-
-
-/* menu accordeon des commentaires */
-
-.accordionRoot {
-	border-radius: 6px;
-	width: 300px;
-}
-
-.accordionItem {
-	overflow: hidden;
-	margin-top: 1px;
-}
-
-.accordionItem:first-child {
-	margin-top: 0;
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-}
-
-.accordionItem:last-child {
-	border-bottom-left-radius: 4px;
-	border-bottom-right-radius: 4px;
-}
-
-.accordionItem:focus-within {
-	position: relative;
-	z-index: 1;
-
-}
-
-.accordionHeader {
-	display: flex;
-}
-
-.accordionTrigger {
-	font-family: inherit;
-	background-color: transparent;
-	padding: 0 20px;
-	height: 45px;
-	flex: 1;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	font-size: 15px;
-	line-height: 1;
-}
-
-.accordionContentText {
-	padding: 15px 20px;
-}
-
-.accordionChevron {
-
-	transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
-}
-.accordionTrigger[data-state="open"] > .accordionChevron {
-	transform: rotate(180deg);
-}
-
+/* ******************************* */
 /* VUE D UN PROJET AVEC SES TACHES */
 /* ******************************* */
+
+.iconReturn{
+	padding: 25px;
+	background-color: white;
+	border-radius: 10px;
+	border: 1px solid var(--tagGrey);
+	margin-left: -80px;
+}
 .container{
 	display: flex;
 	align-items: center;
@@ -199,13 +150,6 @@
 .containerTitle p{
 	color: var(--textGrey);
 	margin-top: 0.8rem;
-}
-.iconReturn{
-	padding: 25px;
-	background-color: white;
-	border-radius: 10px;
-	border: 1px solid var(--tagGrey);
-	margin-left: -80px;
 }
 .titleProject{
 	display: flex;
@@ -254,6 +198,8 @@
 	background-color: var(--btnFocus);
 } 
 
+/* Contributeurs */
+
 .containerContributors{
 	display: flex;
 	align-items: center;
@@ -276,27 +222,31 @@
 	margin-left: auto;
 }
 .member{
-	gap: 10px;
+	gap: 5px;
 	display: flex;
 	flex-direction: row;
 	align-items: center;
+	margin-right: 10px;
 }
 
 /* Avatar propriétaire */
 .ownerAvatar, .ownerName {
 	background-color:var(--secondary);
 }
-.ownerAvatar{
+.ownerAvatar p{
 	font-size: 10px;
+	
 }
 .ownerName {
 	padding: 3px 10px ;
 	border-radius: 50px;
 	color: var(--primary);
 	font-size: 14px;
+
+
 }
 /* Autres avatars des contributeurs */
-.memberAvatar {
+.memberAvatar p{
 	background-color:var(--tagGrey);
 	font-size: 10px;
 
@@ -309,6 +259,369 @@
 	border-radius: 50px;
 
 }
+
+
+/* ***************************************** */
+/* SELECTION/BARRE DES TACHES dans un projet */
+/* ***************************************** */
+
+.containerBarTasks {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+.activeButton {
+  background-color:var(--secondary);
+  color:var(--primary);
+  border: none;
+  border-radius: 5px;
+}
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+} 
+
+.bar p{
+  color: var(--primary);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+
+}
+/* Menu déroulant statut */
+
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--tagGrey);
+  background: white;
+  cursor: pointer;
+  color: var(--textGrey);
+  font-size: 14px;
+}
+
+.icon {
+  font-size: 16px;
+}
+
+.content {
+  border-radius: 10px;
+  padding: 8px 10px;
+  background-color: white;
+  border: 1px solid var(--tagGrey);
+
+
+}
+.label {
+  font-size: 12px;
+  color:var(--textGrey);
+}
+.item {
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border: none;
+}
+
+.item:hover {
+  background-color: var(--secondary);
+  color: var(--primary);
+}
+
+.item[data-state="checked"] {
+background-color: var(--secondary);
+  color: var(--primary);
+}
+.scrollButton {
+  text-align: center;
+  padding: 5px;
+}
+
+.viewport {
+  padding: 5px;
+}
+
+/* Barre de recherche */
+
+.taskSearch {
+  padding: 10px 15px;
+  border-radius: 10px;
+  border: 1px solid var(--tagGrey);
+  font-size: 14px;
+  color: var(--textGrey);
+}
+
+/* ************************** */
+/* CARTE TACHE dans un projet */
+/* ************************** */
+
+.card {
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin: auto;
+  border: 1px solid var(--tagGrey);
+  transition: 0.2s;
+  width: 90%;
+  margin-bottom: 1rem;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.description {
+  color:var(--textGrey);
+  margin-bottom: 1rem;
+  font-size: 14px;
+
+}
+.date {
+  color:var(--textGrey);
+  margin-bottom: 1rem;
+  font-size: 12px;
+}
+
+/* Personnes assignées */
+
+.assignees {
+  color:var(--textGrey);
+  font-size: 12px;
+
+}
+
+.assignee {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 10px;
+  background-color: var(--tagGrey);
+  color: var(--textGrey);
+  padding: 4px 8px;
+  border-radius: 20px;
+}
+
+.avatar {
+  width: 24px;
+  height: 24px;
+  background:var(--tagGrey);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Commentaires */
+
+.accordionWrapper {
+  margin-top: 1rem;
+  width: 100%;
+  height: auto;
+}
+.accordionRoot {
+  border-top: 1px solid var(--tagGrey);
+}
+
+.accordionItem {
+	overflow: hidden;
+	margin-top: 1px;
+}
+
+.accordionItem:first-child {
+	margin-top: 0;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.accordionItem:last-child {
+	border-bottom-left-radius: 4px;
+	border-bottom-right-radius: 4px;
+}
+
+.accordionItem:focus-within {
+	position: relative;
+	z-index: 1;
+
+}
+
+.accordionHeader {
+	display: flex;
+}
+
+.accordionTrigger {
+	font-family: inherit;
+	background-color: transparent;
+	padding: 0 20px;
+	height: 45px;
+	flex: 1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 15px;
+	line-height: 1;
+}
+.accordionAvatarText{
+	width: 27px;
+	height: 27px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--tagGrey);
+	border-radius: 50%;
+	font-size: 10px;
+	margin-right: 1rem;
+}
+.accordionContentText{
+	display: flex;
+}
+.accordionAuthorText, .accordionInputText{
+	background-color: var(--tagGrey);
+	border-radius: 10px ;
+	padding: 1.2rem;
+	margin-bottom: 10px;
+	width: 100%;
+
+}
+.accordionAuthorText p{
+	margin-top: 1rem;
+
+}
+.accordionUserText{
+	display: flex;
+}
+.accordionUserText p{
+	width: 27px;
+	height: 27px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: var(--secondary);
+	border-radius: 50%;
+	font-size: 10px;
+	margin-right: 1rem;
+
+}
+.accordionInputText{
+	border: none;
+}
+.accordionBtnSend{
+	display: flex;
+	justify-content: flex-end;
+}
+.accordionChevron {
+
+	transition: transform 300ms cubic-bezier(0.87, 0, 0.13, 1);
+}
+.accordionTrigger[data-state="open"] > .accordionChevron {
+	transform: rotate(180deg);
+}
+
+
+
+/*
+
+.accordionItem {
+  padding-top: 10px;
+  width: 100%;
+
+}
+
+.accordionHeader {
+  display: flex;
+}
+
+.accordionTrigger {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+
+}
+
+.accordionChevron {
+  transition: transform 0.2s;
+
+} */
+/* ******************************************** */
+
+
+/* selection du statut */
+
+/* .trigger {
+	all: unset;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	padding: 0 15px;
+	font-size: 13px;
+	line-height: 1;
+	height: 35px;
+	gap: 5px;
+
+}
+
+
+.content {
+	overflow: hidden;
+	background-color: white;
+	border-radius: 6px;
+	box-shadow:
+		0px 10px 38px -10px rgba(22, 23, 24, 0.35),
+		0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+}
+
+.viewport {
+	padding: 5px;
+}
+
+.item {
+	font-size: 13px;
+	line-height: 1;
+	border-radius: 3px;
+	display: flex;
+	align-items: center;
+	height: 25px;
+	padding: 0 35px 0 25px;
+	position: relative;
+	user-select: none;
+
+}
+
+.label {
+	padding: 0 25px;
+	font-size: 12px;
+	line-height: 25px;
+}
+
+.scrollButton {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 25px;
+	cursor: default;
+} */
+
+/* ********************************************
+
+/* ********************************************
+ */
+/* menu accordeon des commentaires */
+
+
 
 /* BARRE DES TACHES */
 /* .containerTasks{
@@ -357,197 +670,13 @@
 	margin: 2rem 0;
 }
 
-/* =========================
-   BARRE DU HAUT
-========================= */
-
-.containerBarTasks {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 25px;
-}
-
-/* .tasks h5 {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-} */
-
-.tasks p {
-	color: var(--textGrey)
-}
-
-.bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.bar button {
-  color: var(--primary);
-  border: none;
-  padding: 8px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.bar button:hover {
-  /* background: #e7d4c8; */
-}
-
-/* SELECT */
-
-.trigger {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--tagGrey);
-  background: white;
-  cursor: pointer;
-  color: black;
-}
-
-.icon {
-  font-size: 12px;
-}
-
-.content {
-  background: white;
-  border-radius: 10px;
-  padding: 10px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-}
-
-.label {
-  font-size: 12px;
-  color: #999;
-}
-
-.scrollButton {
-  text-align: center;
-  padding: 5px;
-}
-
-.viewport {
-  padding: 5px;
-}
-
-/* SEARCH */
-
-.taskSearch {
-  padding: 10px 15px;
-  border-radius: 10px;
-  border: 1px solid var(--tagGrey);
-  font-size: 14px;
-  color: var(--textGrey);
-}
-
-/* =========================
-   CARTE TACHE
-========================= */
-
-.card {
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin: auto;
-  border: 1px solid var(--tagGrey);
-  transition: 0.2s;
-  width: 90%;
-  margin-bottom: 1rem;
-}
-
-/* HEADER */
-
-.cardHeader {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* TEXTE */
-
-.description {
-  color:var(--textGrey);
-  margin-bottom: 1rem;
-  font-size: 14px;
-
-}
-
-.date {
-  color:var(--textGrey);
-  margin-bottom: 1rem;
-  font-size: 12px;
 
 
-}
+/* SELECTION/*/
 
-/* ASSIGNEES */
 
-.assignees {
-  color:var(--textGrey);
-  font-size: 12px;
 
-}
 
-.assignee {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-right: 10px;
-  background-color: var(--tagGrey);
-  color: var(--textGrey);
-  padding: 4px 8px;
-  border-radius: 20px;
-}
-
-.avatar {
-  width: 24px;
-  height: 24px;
-  background:var(--tagGrey);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* =========================
-   ACCORDION
-========================= */
-
-.accordionWrapper {
-  margin-top: 1rem;
-}
-
-.accordionRoot {
-  border-top: 1px solid var(--tagGrey);
-  width: 100%;
-}
-
-.accordionItem {
-  padding-top: 10px;
-}
-
-.accordionHeader {
-  display: flex;
-}
-
-.accordionTrigger {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  cursor: pointer;
-  background: none;
-  border: none;
-}
-
-.accordionChevron {
-  transition: transform 0.2s;
-
-}
 
 /* .progressHeader {
   display: flex;

@@ -16,25 +16,6 @@ export default function Projects() {
 	const [openModal, setOpenModal]=useState(false)
 	const [projects, setProjects]=useState([]);
 
-
-	// useEffect(()=>{
-	// 	const getProjects = async () => {
-	// 		try {
-	// 			const response = await axios.get(
-	// 				"http://localhost:8000/projects",
-	// 				{withCredentials:true}
-	// 			);
-
-	// 			// récupération des projets
-	// 			setProjects(response.data.data.projects);
-
-	// 		} catch (error) {
-	// 			console.error("Erreur :", error);
-	// 		}
-	// 	};
-	// 	getProjects();
-	// }, []);
-
 	useEffect(() => {
 
 		const getProjects = async () => {
@@ -148,7 +129,6 @@ export default function Projects() {
 										</Avatar.Fallback>
 									</Avatar.Root>
 								))}
-						
 						</div>
 					</div>
 				</Link>

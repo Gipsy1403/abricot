@@ -1,7 +1,7 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown, faChevronUp, faListCheck, faMagnifyingGlass, faCalendarDays, faArrowLeftLong, faDiamond} from "@fortawesome/free-solid-svg-icons";
-import { useState} from "react";
+import { useState, useEffect, useCallback} from "react";
 import axios from "axios";
 import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
@@ -13,49 +13,71 @@ import * as Select from "@radix-ui/react-select";
 import ContributorsSelect from "@/utils/contributorsSelect";
 import Tag from "@/utils/tags";
 import Button from "../public/Button";
+import useCurrentUser from "@/utils/hooks/useCurrentUser";
+import { useProjectTasks } from "@/utils/hooks/useProjectTasks";
 
 
-
-
-export default function TasksProject({tasks, projectId}) {
+export default function TasksProject({projectId}) {
 	const[viewMode,setViewMode]=useState("list");
 	
+	const { tasks, loading, error} = useProjectTasks(projectId);
 	const[selectStatus,setSelectStatus]=useState("");
+	const { user} = useCurrentUser();
+
 	const[commentsByTask, setCommentsByTask]=useState({});
 	const [newComments, setNewComments ]=useState({});
-
-	const fetchComments = async (taskId) => {
-		try {
-		const response = await axios.get(
-			`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
-			{withCredentials: true}
-		);
+	
+	// COMMENTAIRES - APPEL API POUR RECUPERER LES COMMENTAIRES
+	
+	const fetchComments = useCallback(
+		async (taskId) => {
+			if (commentsByTask[taskId]) return; // éviter de recharger
+			try {
+			const response = await axios.get(
+				`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
+				{ withCredentials: true }
+			);
 			if (response.data.success) {
-				setCommentsByTask(prev => ({
+				setCommentsByTask((prev) => ({
 				...prev,
-				[taskId]: response.data.data.comments
+				[taskId]: response.data.data.comments,
 				}));
-			} else {
-				console.error(response.data.message);
 			}
-		} catch (error) {
-			console.error("Erreur en récupérant les commentaires:", error);
-		}
-	};
+			} catch (err) {
+				console.error("Erreur en récupérant les commentaires :", err);
+			}
+		},
+	[projectId, commentsByTask]
+	);
 
+	
+	useEffect(() => {
+		if(!tasks)return;
+		tasks.forEach(task => {
+			fetchComments(task.id);
+		});
+	}, [tasks, fetchComments]);
+	
+	if (loading) return <p>Chargement...</p>;
+	if (error) return <p>Erreur...</p>;
+
+	if (!tasks || tasks?.length === 0) return <p>Aucune tâche pour ce projet.</p>;
+
+	// COMMENTAIRES - APPEL API POUR ECRIRE DES COMMENTAIRES
+	
 	const handleAddComment = async (taskId) => {
 		const content = newComments[taskId];
 		if (!content?.trim()) return;
 		try {
-		const response = await axios.post(
-			`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
-			{ content },
-			{withCredentials: true}
-		);
+			const response = await axios.post(
+				`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
+				{ content },
+				{withCredentials: true}
+			);
 			if (response.data.success) {
 				setCommentsByTask(prev => ({
-				...prev,
-				[taskId]: [...(prev[taskId] || []), response.data.data.comment]
+					...prev,
+					[taskId]: [...(prev[taskId] || []), response.data.data.comment]
 				}));
 				setNewComments(prev => ({ ...prev, [taskId]: "" }));
 			}
@@ -63,18 +85,31 @@ export default function TasksProject({tasks, projectId}) {
 			console.error("Erreur en ajoutant le commentaire:", error);
 		}
 	};
-
+	
 	const statusOptions = [
 		["TODO", statusLabels("TODO")],
 		["IN_PROGRESS", statusLabels("IN_PROGRESS")],
 		["DONE", statusLabels("DONE")]
 	];
+	
+	// Définir l'ordre : URGENT > HIGH > MEDIUM > LOW
+	const priorityOrder = { URGENT:1, HIGH: 2, MEDIUM: 3, LOW: 4 };
 
-	if (!tasks || tasks?.length === 0) return <p>Aucune tâche pour ce projet.</p>;
+	// Trier les tâches par priorité
+	const sortedTasks = [...tasks].sort(
+	(a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+	);
+
+	const filteredTasks = (selectStatus
+		? sortedTasks.filter(t => t.status === selectStatus)
+		: sortedTasks
+	);
 
 	return (
 		<>
+		{/* CONTAINER DE TOUTES LES TACHES DU PROJET */}
 			<div className={style.containerTasks}>
+				{/* BARRE DE RECHERCHE */}
 				<section className={style.containerBarTasks}>
 					<div className={style.tasks}>
 						<h5>Tâches</h5>
@@ -87,7 +122,7 @@ export default function TasksProject({tasks, projectId}) {
 
 						<p className={viewMode === "calendar" ? style.activeButton : ""} onClick={() => setViewMode("calendar")}>
 							<FontAwesomeIcon icon={faCalendarDays}/> Calendrier</p>
-
+						{/* SELECTION DU STATUT */}
 						<Select.Root value={selectStatus} onValueChange={setSelectStatus}>
 							<Select.Trigger className={style.trigger} aria-label="statut">
 								<Select.Value placeholder="Statut" />
@@ -121,8 +156,9 @@ export default function TasksProject({tasks, projectId}) {
 					</div>
 				</section>
 				<section>
+					{/* CARTE D UNE TACHE DU PROJET */}
 					{tasks.map((tp)=>(
-					<Link key={tp.id} href="">
+					<Link key={tp.id} href="#">
 						<div className={style.card}>
 							<div className={style.cardHeader}>
 								<h5>{tp.title}</h5>
@@ -130,23 +166,22 @@ export default function TasksProject({tasks, projectId}) {
 							</div>
 							<p className={style.description}>{tp.description}</p>
 							<p className={style.date}>Echéance : <FontAwesomeIcon icon={faCalendarDays}/> {new Date(tp.dueDate).toLocaleDateString()}</p>
-							{/* <p>Assigné à : {""} {tp.assignees.length > 0 ? tp.assignees.map((a) => a.user.name).join(", ") : "Personne"}</p> */}
 				
-							<p className={style.assignees}>
+							<div className={style.containerAssigned}>
 							Assigné à :{" "}
 							{tp.assignees?.length > 0 ? (
 							tp.assignees.map((a) => (
-								<span key={a.user.id} className={style.assignee}>
-								<Avatar.Root className={style.avatar}>
-									<Avatar.Fallback>{initialAvatar(a.user?.name)}</Avatar.Fallback>
+								<div key={a.user.id} className={style.assignedContainer}>
+								<Avatar.Root >
+									<Avatar.Fallback className={style.avatarAssigned}>{initialAvatar(a.user?.name)}</Avatar.Fallback>
 								</Avatar.Root>
-								{a.user.name}
-								</span>
+								<p className={style.nameAssigned}>{a.user.name}</p>
+								</div>
 							))
 							) : (
 							"Personne"
 							)}
-							</p>
+							</div>
 							<div className={style.accordionWrapper}>
 							<Accordion.Root className={style.accordionRoot} type="single" collapsible onValueChange={(value)=>{
 								if(value && !commentsByTask[value]){
@@ -156,7 +191,7 @@ export default function TasksProject({tasks, projectId}) {
 								<Accordion.Item className={style.accordionItem} value={tp.id}>
 									<Accordion.Header className={style.accordionHeader}>
 										<Accordion.Trigger className={style.accordionTrigger}>
-											<p>{tp.comments?.length> 1 ? "Commentaires": "Commentaire"} ({tp.comments?.length || 0})</p>
+											<p>{commentsByTask[tp.id]?.length> 1 ? "Commentaires": "Commentaire"} ({commentsByTask[tp.id]?.length || 0})</p>
 											<FontAwesomeIcon className={style.accordionChevron} icon={faChevronUp}/>
 										</Accordion.Trigger>
 									</Accordion.Header>
@@ -166,8 +201,8 @@ export default function TasksProject({tasks, projectId}) {
 												<div key={c.id} className={style.accordionContentText}>
 													<div className={style.accordionAvatarText}>{initialAvatar(c.author?.name)}</div>
 													<div className={style.accordionAuthorText}>
-														<small>{c.author?.name}</small>
-														<p>{c.content}</p>
+														<p className={style.nameAuthor} >{c.author?.name}</p>
+														<p className={style.nameContent}>{c.content}</p>
 													</div>
 												</div>
 												))
@@ -176,12 +211,12 @@ export default function TasksProject({tasks, projectId}) {
 											{commentsByTask[tp.id] ? "Aucun commentaire" : "Chargement..."}
 											</p>
 										)}
-																												<div>
+																												<div className={style.commentWrapper}>
 											<div className={style.accordionUserText}>
-												<p>{initialAvatar()}</p>
-												<input
+												<p>{initialAvatar(user?.name)}</p>
+												<textarea
 													className={style.accordionInputText}
-													type="texterea"
+													type="text"
 													placeholder="Ajouter un commentaire..."
 													value={newComments[tp.id] || ""}
 													onChange={(e) =>

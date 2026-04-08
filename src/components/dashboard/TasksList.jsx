@@ -8,11 +8,14 @@ import axios from "axios";
 import Tag from "@/utils/tags";
 import Button from "../public/Button";
 import ModalModifyTask from "../projects/tasks/modals/ModalModifyTask";
+import { useRouter } from "next/navigation";
 
 
 export default function TasksList() {
 	const [tasks, setTasks]=useState([]);
 	const [selectedTask, setSelectedTask] = useState(null);
+	const router=useRouter();
+
 	useEffect(()=>{
 
 		const getTasks = async () => {
@@ -78,27 +81,32 @@ export default function TasksList() {
 
 						{/* <span className={style.taskStatus}>{statusLabels[t.status]}</span> */}
 						{/* <Link href={`/dashboard/projects-with-tasks/${t.projet?.id}`}><button>Voir</button></Link> */}
-						<Button onClick={()=>setSelectedTask(t)} text="Voir" disabled={false}/>
+						<Button 
+							onClick={() => {
+								router.push(`/projects/${t.project?.id}/tasks/${t.id}`);
+							}} 
+							text="Voir" 
+							disabled={false}
+						/>
 					</div>
 				</div>
-
-))}
-{/* MODAL POUR MODIFIER UNE TACHE*/}
-{selectedTask && (
-	<ModalModifyTask
-		onClose={() => setSelectedTask(null)}
-projectId={selectedTask.projectId || selectedTask.project?.id}
-		// projectId={selectedTask.project?.id}
-		taskId={selectedTask.id}
-		onTaskUpdated={(updatedTask) => {
-			setTasks((prev) =>
-			prev.map((task) =>
-				task.id === updatedTask.id ? updatedTask : task
-			)
-			);
-		}}
-	/>
-)}
+			))}
+			{/* MODAL POUR MODIFIER UNE TACHE*/}
+			{selectedTask && (
+				<ModalModifyTask
+					onClose={() => setSelectedTask(null)}
+			projectId={selectedTask.projectId || selectedTask.project?.id}
+					// projectId={selectedTask.project?.id}
+					taskId={selectedTask.id}
+					onTaskUpdated={(updatedTask) => {
+						setTasks((prev) =>
+						prev.map((task) =>
+							task.id === updatedTask.id ? updatedTask : task
+						)
+						);
+					}}
+				/>
+			)}
 		</section>
 	)
 }

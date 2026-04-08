@@ -11,31 +11,18 @@ import Dashboard from "@/app/(main)/dashboard/page";
 import Projects from "@/app/(main)/projects/page";
 import { usePathname } from "next/navigation";
 import axios from "axios";
+import useCurrentUser from "@/utils/hooks/useCurrentUser";
 
 
 export default function Header() {
-	 const pathname=usePathname();
-	const [user, setUser] = useState(); 
+	const pathname=usePathname();
+	// const [user, setUser] = useState(); 
 	const pageProfile=pathname==="/profile";
+	const { user, loading, error } = useCurrentUser();
 
+	if (loading) return <p>Chargement...</p>;
+	if (error) return <p>Erreur...</p>;
 
-	 useEffect(()=>{
-			const getUser = async () => {
-				try {
-					const response = await axios.get(
-						"http://localhost:8000/auth/profile",
-						{withCredentials:true}
-					);
-	 
-					// récupération des projets
-					setUser(response.data.data.user);
-	 
-				} catch (error) {
-					console.error("Erreur :", error);
-				}
-			};
-			getUser();
-		}, []);
 	return (
 		<header>
 			<nav className={style.nav}>

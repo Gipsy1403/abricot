@@ -21,7 +21,6 @@ export default function ViewProject() {
 	const [loading, setLoading] = useState(true); // affiche un chargement
 	const [tasks, setTasks] = useState([]); // affiche toutes les taches du projet
 
-
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
 	
@@ -38,8 +37,7 @@ export default function ViewProject() {
 				...response.data.data.project,
 				tasks: response.data.data.project.tasks || [],
 			});
-			// setProject(response.data.data.project);
-			// setTasks(response.data.data.project.tasks || []) // initialise les taches
+
 			} catch (error) {
 				console.error("Erreur lors de la récupération du projet :", error);
 			}finally {
@@ -124,8 +122,7 @@ export default function ViewProject() {
 				})}
 				</div>
 			</div>
-			<TasksProject tasks={project.tasks} projectId={projectId}/>
-
+			<TasksProject tasks={project?.tasks || []} projectId={projectId}/>
 		</>
 	)
 }

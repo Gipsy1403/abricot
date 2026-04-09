@@ -11,10 +11,16 @@ import Link from "next/link";
 import ModalCreateProject from "@/components/projects/modals/ModalCreateProject";
 import { faUserGroup } from "@fortawesome/free-solid-svg-icons";
 import Button from "@/components/public/Button";
+import ModalModifyProject from "@/components/projects/modals/ModalModifyProject";
+import { usePathname } from "next/navigation";
 
 export default function Projects() {
+
 	const [openModal, setOpenModal]=useState(false)
 	const [projects, setProjects]=useState([]);
+	// const [selectedProjects, setSelectedProjects]=useState([]);
+	// va permetre de relancer la page à chaque rendu
+	const pathname = usePathname();
 
 	useEffect(() => {
 
@@ -26,7 +32,7 @@ export default function Projects() {
 			"http://localhost:8000/projects",
 			{ withCredentials: true }
 			);
-
+console.log("📦 DATA BRUTE API :", response.data.data.projects);
 			const projectsData = response.data.data.projects;
 
 			// 2️⃣ pour chaque projet → récupérer ses tâches
@@ -63,7 +69,7 @@ export default function Projects() {
 				};
 			})
 			);
-
+console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 			// 5️⃣ on stocke
 			setProjects(projectsWithProgress);
 
@@ -74,12 +80,18 @@ export default function Projects() {
 
 		getProjects();
 
-	}, []);
+	}, [pathname]);
+
 	const handleProjectCreated=(newProject)=>{
 		console.log("NEW PROJECT :", newProject);
 		setProjects((prev)=>[...prev, newProject])
 	}
 
+	// const handleProjectUpdated = (updatedProject) => {
+	// setProjects(prev =>
+	// prev.map(p => p.id === updatedProject.id ? updatedProject : p)
+	// );
+	// };
 	
 	return (
 		<>
@@ -134,6 +146,17 @@ export default function Projects() {
 				</Link>
 				))}
 			</div>
+						{/* MODALE POUR MODIFIER UN PROJET */}
+			{/* {openModal && selectedProject && (
+				<ModalModifyProject
+					project={selectedProject}
+					onClose={() => {
+						setOpenModal(false);
+						setSelectedProject(null);
+					}}
+					onProjectUpdated={handleProjectUpdated} // 🔹 on met à jour la liste globale
+				/>
+			)} */}
 		</>
 	)
 }

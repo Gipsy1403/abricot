@@ -14,6 +14,7 @@ import style from "@/app/styles/task/task.module.css";
 import { initialAvatar } from "@/utils/initialAvatar";
 import useCurrentUser from "@/utils/hooks/useCurrentUser";
 import { useComments } from "@/utils/hooks/useComments";
+import { useEffect } from "react";
 
 export default function TaskPage() {
   const params = useParams();
@@ -33,6 +34,12 @@ export default function TaskPage() {
     error: errorComments
   } = useComments(projectId);
 
+    const tp = task;
+useEffect(() => {
+  if (tp?.id) {
+    fetchComments(tp.id);
+  }
+}, [tp?.id]);
   // 🔹 Fonction pour ajouter un commentaire
   const handleAddComment = (taskId) => {
     addComment(taskId);
@@ -44,7 +51,6 @@ export default function TaskPage() {
   if (errorUser) return <p>Erreur utilisateur : {errorUser}</p>;
   if (!task) return <p>Aucune tâche trouvée</p>;
 
-  const tp = task;
 
 	return (
 		<section className={style.containerTask}>

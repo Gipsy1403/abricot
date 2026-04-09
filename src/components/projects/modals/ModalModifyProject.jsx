@@ -13,11 +13,23 @@ export default function ModalModifyProject({onClose, project, onProjectUpdated})
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  useEffect(() => {
+//   useEffect(() => {
+//   if (project) {
+//     setTitle(project.name || "");
+//     setDescription(project.description || "");
+//     setContributors(project.members?.map((m) => ({ id: m.user.id, name: m.user.name })) || []);
+//   }
+// }, [project]);
+useEffect(() => {
   if (project) {
     setTitle(project.name || "");
     setDescription(project.description || "");
-    setContributors(project.members?.map((m) => ({ id: m.user.id, name: m.user.name })) || []);
+    setContributors(
+      project.members?.map((m) => ({
+        value: m.user.email,
+        label: `${m.user.name} — ${m.user.email}`
+      })) || []
+    );
   }
 }, [project]);
 
@@ -31,14 +43,27 @@ export default function ModalModifyProject({onClose, project, onProjectUpdated})
       const response = await axios.put(`http://localhost:8000/projects/${project.id}`, {
         name:title,
         description,
-        contributors,
+        contributors:contributors.map(c => c.value),
       }, { withCredentials: true });
 
-      console.log("Projet modifié :", response.data);
+  
 	//  Mise à jour du projet dans le parent
-      if (onProjectUpdated) {
-        onProjectUpdated(response.data.data.project);
-      }
+     if (onProjectUpdated) {
+		// reconstruire le tableau members pour le front
+      const updatedProject = {
+        ...response.data.data.project,
+        members: contributors.map(c => ({
+          user: {
+            id: c.value, // optionnel, sinon tu peux garder l'id original si tu l'as
+            name: c.label.split(" — ")[0], // extraire le nom du label
+            email: c.value
+          }
+        }))
+      };
+	   onProjectUpdated(updatedProject);
+     //    onProjectUpdated(response.data.data.project);
+	console.log("projet modifié: ", updatedProject)
+	  }
      onClose();
 
     } catch (err) {

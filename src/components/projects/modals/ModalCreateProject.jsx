@@ -20,15 +20,16 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
     setError("");
 
     try {
+	console.log("contributors envoyés :", contributors);
       const response = await axios.post("http://localhost:8000/projects", {
         name:title,
         description,
-        contributors,
+        contributors:contributors.map(c => c.email),
       }, { withCredentials: true });
 
+      console.log("reponse API :", response.data);
 	 onProjectCreated(response.data.data.project)
 
-      console.log("Projet créé :", response.data);
       //reset du formulaire
       setTitle("");
       setDescription("");

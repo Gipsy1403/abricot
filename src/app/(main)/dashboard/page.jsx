@@ -12,6 +12,8 @@ import axios from "axios";
 
 export default function Dashboard() {
 	 const [user, setUser] = useState(); 
+	 const [projects, setProjects] = useState([]); 
+
 	 const [openModal, setOpenModal]=useState(false)
 
 	 useEffect(()=>{
@@ -34,7 +36,7 @@ export default function Dashboard() {
 
 	const handleProjectCreated=(newProject)=>{
 		console.log("NEW PROJECT :", newProject);
-		setProjects((prev)=>[...prev, newProject])
+		setProjects(prev=>[...prev, newProject]);
 	}
 
 	return (

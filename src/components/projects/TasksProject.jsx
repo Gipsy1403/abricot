@@ -18,11 +18,11 @@ import { useProjectTasks } from "@/utils/hooks/useProjectTasks";
 
 
 export default function TasksProject({projectId}) {
-	const[viewMode,setViewMode]=useState("list");
-	
 	const { tasks, loading, error} = useProjectTasks(projectId);
-	const[selectStatus,setSelectStatus]=useState("");
 	const { user} = useCurrentUser();
+	
+	const[viewMode,setViewMode]=useState("list");
+	const[selectStatus,setSelectStatus]=useState("");
 
 	const[commentsByTask, setCommentsByTask]=useState({});
 	const [newComments, setNewComments ]=useState({});

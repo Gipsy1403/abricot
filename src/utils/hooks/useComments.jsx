@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
-export const useComments = (projectId, tasks) => {
+export const useComments = (projectId) => {
   const [commentsByTask, setCommentsByTask] = useState({});
   const [newComments, setNewComments] = useState({});
   const [loading, setLoading] = useState(true);
@@ -11,6 +11,7 @@ export const useComments = (projectId, tasks) => {
   const fetchComments = useCallback(
     async (taskId) => {
       if (commentsByTask[taskId]) return; // éviter de recharger
+	  setLoading(true);
       try {
         const response = await axios.get(
           `http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
@@ -25,28 +26,30 @@ export const useComments = (projectId, tasks) => {
       } catch (err) {
         console.error("Erreur en récupérant les commentaires :", err);
         setError(err);
-      }
+      }finally {
+      setLoading(false); // 🔹 fin chargement
+    }
     },
-    [projectId, commentsByTask]
+    [projectId]
   );
 
   // 🔹 Charger tous les commentaires au montage
-  useEffect(() => {
-    if (!tasks) return;
+//   useEffect(() => {
+//     if (!tasks) return;
 
-    const loadAllComments = async () => {
-      setLoading(true);
-      try {
-        await Promise.all(tasks.map(task => fetchComments(task.id)));
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+//     const loadAllComments = async () => {
+//       setLoading(true);
+//       try {
+//         await Promise.all(tasks.map(task => fetchComments(task.id)));
+//       } catch (err) {
+//         setError(err);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-    loadAllComments();
-  }, [tasks, fetchComments]);
+//     loadAllComments();
+//   }, [tasks, fetchComments]);
 
   // 🔹 Ajouter un commentaire
   const addComment = async (taskId) => {

@@ -11,10 +11,13 @@ import axios from "axios";
 import { initialAvatar } from "@/utils/initialAvatar";
 import ModalModifyProject from "@/components/projects/modals/ModalModifyProject";
 import ModalCreateTask from "@/components/projects/tasks/modals/ModalCreateTask";
+import { useRouter } from "next/navigation";
 
 
 
 export default function ViewProject() {
+	const router=useRouter();
+
 	const {projectId} = useParams();
 
 	const [project, setProject] = useState(null); //stocke le projet
@@ -24,7 +27,13 @@ export default function ViewProject() {
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
 	
-
+	  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await axios.get(`http://localhost:8000/projects/${projectId}/tasks`, { withCredentials: true });
+      if (response.data.success) setTasks(response.data.data.tasks);
+    };
+    fetchTasks();
+  }, [projectId]);
 
 	useEffect(() => {
 		const fetchProject = async () => {
@@ -33,6 +42,7 @@ export default function ViewProject() {
 			const response = await axios.get(`http://localhost:8000/projects/${projectId}`, {
 				withCredentials: true,
 			});
+			console.log("📥 API PROJECT :", response.data.data.project); 
 			setProject({
 				...response.data.data.project,
 				tasks: response.data.data.project.tasks || [],
@@ -61,20 +71,23 @@ export default function ViewProject() {
 	}
 
 	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
-
+console.log("🧠 STATE PROJECT :", project);
 	return (
 		<>
 			<div className={style.container}>
-				<Link  href="/projects">
-					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}/>
-				</Link>
+				{/* <Link  href="/projects"> */}
+					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}  onClick={() => router.push("/projects")}/>
+				{/* </Link> */}
 				<div className={style.containerTitle}>
 					<div className={style.titleProject}>
 						<h4>{project?.name}</h4>
 						<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
 						{/* MODAL POUR MODIFIER UN PROJET */}
 						{openModalModify && (
-							<ModalModifyProject onClose={()=>setOpenModalModify(false)} project={project} onProjectUpdated={(updatedProject) => setProject(updatedProject)}/>
+							<ModalModifyProject 
+							onClose={()=>setOpenModalModify(false)} 
+							project={project} 
+							onProjectUpdated={(updatedProject) => setProject(updatedProject)}/>
 						)}
 					</div>
 					<p>{project?.description}</p>
@@ -83,7 +96,10 @@ export default function ViewProject() {
 					<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
 					{/* MODAL POUR CREER UNE TACHE */}
 					{openModalCreate && (
-						<ModalCreateTask onClose={()=>setOpenModalCreate(false)} onTaskCreated={handleTaskCreated} projectId={projectId}/>
+						<ModalCreateTask 
+						onClose={()=>setOpenModalCreate(false)} 
+						onTaskCreated={handleTaskCreated} 
+						projectId={projectId}/>
 					)}
 					<p><FontAwesomeIcon icon={faDiamond}/> IA</p>
 				</div>

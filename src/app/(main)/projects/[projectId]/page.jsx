@@ -12,6 +12,7 @@ import { initialAvatar } from "@/utils/initialAvatar";
 import ModalModifyProject from "@/components/projects/modals/ModalModifyProject";
 import ModalCreateTask from "@/components/projects/tasks/modals/ModalCreateTask";
 import { useRouter } from "next/navigation";
+import ModalAICreateTask from "@/components/projects/tasks/modals/ModalAICreateTask";
 
 
 
@@ -26,6 +27,11 @@ export default function ViewProject() {
 
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
+
+	// concerne l'IA
+	const [openAIModal, setOpenAIModal] = useState(false);
+	const [iaTask, setIaTask] = useState(null);
+	const [iaLoading, setIaLoading] = useState(false);
 	
 	  useEffect(() => {
     const fetchTasks = async () => {
@@ -72,6 +78,20 @@ export default function ViewProject() {
 
 	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
 console.log("🧠 STATE PROJECT :", project);
+
+	const generateIATask = async () => {
+		try {
+			setIaLoading(true);
+
+			const res = await axios.post("http://localhost:8000/api/generateTask");
+			setIaTask(res.data.task);
+		} catch (error) {
+			console.error("Erreur IA :", error);
+		} finally {
+			setIaLoading(false);
+		}
+	};
+
 	return (
 		<>
 			<div className={style.container}>
@@ -101,7 +121,24 @@ console.log("🧠 STATE PROJECT :", project);
 						onTaskCreated={handleTaskCreated} 
 						projectId={projectId}/>
 					)}
-					<p><FontAwesomeIcon icon={faDiamond}/> IA</p>
+					{/* <p><FontAwesomeIcon icon={faDiamond}/> IA</p> */}
+					<button
+						onClick={() => setOpenAIModal(true)}
+						className={style.iaButton}
+					>
+						<FontAwesomeIcon icon={faDiamond} /> IA
+					</button>
+					{/* MODAL POUR CREER UNE TACHE AVEC IA */}
+					{openAIModal && (
+						<ModalAICreateTask
+							onClose={() => setOpenAIModal(false)}
+							iaTask={iaTask}
+							setIaTask={setIaTask}
+							generateIATask={generateIATask}
+							iaLoading={iaLoading}
+							onTaskCreated={handleTaskCreated}
+						/>
+					)}
 				</div>
 			</div>
 			<div className={style.containerContributors}>

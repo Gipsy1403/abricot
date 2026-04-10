@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
-import style from "@/app/styles/auth/logAndSign.module.css"
+import style from "../../../styles/auth/logAndSign.module.css";
 import { useRouter } from "next/navigation";
 
 export default function Register() {

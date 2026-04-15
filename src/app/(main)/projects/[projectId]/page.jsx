@@ -23,24 +23,16 @@ export default function ViewProject() {
 
 	const [project, setProject] = useState(null); //stocke le projet
 	const [loading, setLoading] = useState(true); // affiche un chargement
-	const [tasks, setTasks] = useState([]); // affiche toutes les taches du projet
+	// const [tasks, setTasks] = useState([]); // affiche toutes les taches du projet
 
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
 
 	// concerne l'IA
 	const [openAIModal, setOpenAIModal] = useState(false);
-	const [iaTask, setIaTask] = useState(null);
+	const [iaTask, setIaTask] = useState([]);
 	const [iaLoading, setIaLoading] = useState(false);
 	
-	  useEffect(() => {
-    const fetchTasks = async () => {
-      const response = await axios.get(`http://localhost:8000/projects/${projectId}/tasks`, { withCredentials: true });
-      if (response.data.success) setTasks(response.data.data.tasks);
-    };
-    fetchTasks();
-  }, [projectId]);
-
 	useEffect(() => {
 		const fetchProject = async () => {
 			try {
@@ -48,7 +40,7 @@ export default function ViewProject() {
 			const response = await axios.get(`http://localhost:8000/projects/${projectId}`, {
 				withCredentials: true,
 			});
-			console.log("📥 API PROJECT :", response.data.data.project); 
+			// console.log("📥 API PROJECT :", response.data.data.project); 
 			setProject({
 				...response.data.data.project,
 				tasks: response.data.data.project.tasks || [],
@@ -63,34 +55,44 @@ export default function ViewProject() {
 		fetchProject();
 	}, [projectId]);
 
+
 	  // Fonction pour ajouter une tâche créée
 	const handleTaskCreated = (newTask) => {
 		setProject((prevProject) => ({
 			...prevProject,
-			tasks: [...prevProject.tasks, newTask], // ajoute la nouvelle tâche
+			tasks: [...(prevProject.tasks || []), newTask], // ajoute la nouvelle tâche
 		}));
 		
 	};
 
-	if (loading) {
-		return <p>Chargement...</p>;
-	}
 
-	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
-console.log("🧠 STATE PROJECT :", project);
+	const generateIATask = async (message) => {
+		if (!message || message.trim() === "") return;
 
-	const generateIATask = async () => {
 		try {
 			setIaLoading(true);
 
-			const res = await axios.post("http://localhost:8000/api/generateTask");
-			setIaTask(res.data.task);
+			const res = await axios.post(
+			"http://localhost:8000/api/generateTask",
+			{ message }
+			);
+
+			setIaTask(res.data.tasks);
 		} catch (error) {
 			console.error("Erreur IA :", error);
 		} finally {
 			setIaLoading(false);
 		}
-	};
+  	};
+
+	
+	if (loading) {
+		return <p>Chargement du projet...</p>;
+	}
+
+	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
+	
+	// console.log("🧠 STATE PROJECT :", project);
 
 	return (
 		<>
@@ -131,12 +133,16 @@ console.log("🧠 STATE PROJECT :", project);
 					{/* MODAL POUR CREER UNE TACHE AVEC IA */}
 					{openAIModal && (
 						<ModalAICreateTask
-							onClose={() => setOpenAIModal(false)}
+							onClose={() => {
+								setOpenAIModal(false);
+								setIaTask([]);
+							}}
 							iaTask={iaTask}
 							setIaTask={setIaTask}
 							generateIATask={generateIATask}
 							iaLoading={iaLoading}
 							onTaskCreated={handleTaskCreated}
+							projectId={projectId}
 						/>
 					)}
 				</div>

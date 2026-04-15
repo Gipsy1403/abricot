@@ -18,6 +18,8 @@
   width: 90%;
   z-index: 101;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  max-height: calc(100vh - 4rem);
 }
 .closeButton{
 	font-size: 25px;
@@ -47,4 +49,89 @@
   color: var(--textGrey);
   border: 1px solid var(--tagGrey);
   border-radius: 4px;
+}
+
+/* MODAL IA */
+/* ******** */
+.responseIA{
+	margin-bottom: 1rem;
+}
+.titleIA{
+	margin-bottom: 10rem;
+}
+.chat{
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	border-radius: 50px;
+	width: 100%;
+	height: 3rem;
+	background-color: var(--background);
+	gap: 10px;
+	margin-top: 3rem;
+	
+}
+
+.chat textarea{
+	background-color: var(--background);
+	width: 80%;
+	color: black;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.taskIA{
+	border: 1px solid var(--tagGrey);
+	padding: 2rem;
+	border-radius: 10px;
+	margin-bottom: 1rem;
+
+}
+.taskIA h5{
+	margin-bottom: 0.5rem;
+
+}
+.taskIA a{
+	cursor: pointer;
+}
+.taskIA p, .taskIA a{
+	margin-bottom: 0.5rem;
+	color: var(--textGrey);
+	font-size: 12px;
+}
+
+.taskIA a:last-child{
+	border-left: 1px solid var(--textGrey);
+	margin-left: 1rem;
+	padding-left: 1rem;
+}
+.link{
+	margin-top: 1.5rem;
+
+}
+.btnTaskIA{
+	margin-top: 2rem;
+	margin-bottom: 10rem;
+}
+
+/* MODIFICATION D UN TACHE IA*/
+/* ************************* */
+
+.modifyTaskIA{
+	display: flex;
+	justify-content: space-between;
+	align-items: start;
+	flex-direction: column;
+}
+.modifyTaskIA textarea{
+	width: 100%;
+	margin: 1rem 0;
+	height: 100px;
+}
+
+.modifyTitleTaskIA{
+	font-size: 22px;
+	font-weight: 700;
 }

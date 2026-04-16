@@ -1,6 +1,7 @@
 // Définition des styles par type
 const tagStyles = {
-  "À faire": { background: "var(--tagRed)", color: "var(--textRed)" }, // rouge pâle
+  "À faire": { background: "var(--tagRed)", color: "var(--textRed)" },
+  "A faire": { background: "var(--tagRed)", color: "var(--textRed)" }, // rouge pâle
   "En cours": { background: "var(--tagYellow)", color: "var(--textYellow)" }, // jaune/orange
   "Terminée": { background: "var(--tagGreen)", color: "var(--textGreen)" }, // vert
 };

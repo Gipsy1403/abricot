@@ -386,11 +386,54 @@ background-color: var(--secondary);
   width: 90%;
   margin-bottom: 1rem;
 }
+.headerCard{
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
 
+/* bouton modifier et supprimer */
+.headerCard button{
+	all:unset;
+}
 .cardHeader {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+.etc{
+	padding: 1rem;
+	font-size: 15px;
+	border: 1px solid var(--tagGrey);
+	border-radius:10px ;
+	background-color: white;
+}
+/* Menu */
+.contentMenu {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 5px;
+  min-width: 120px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+/* Item (Modifier / Supprimer) */
+.itemMenu {
+  padding: 8px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+/* Hover */
+.itemMenu:hover {
+  background: var(--secondary);
+}
+/* Variante supprimer */
+.deleteMenu {
+  color: red;
+}
+/* Hover supprimer */
+.deleteMenu:hover {
+  background: #ffe5e5;
 }
 
 .description {

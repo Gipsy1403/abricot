@@ -1,6 +1,5 @@
 import style from "@/app/styles/button.module.css";
 
-// Component bouton
 export default function Button({ text, onClick, disabled, variant }) {
   return (
      <button

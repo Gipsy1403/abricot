@@ -1,11 +1,12 @@
 "use client"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronDown, faChevronUp, faListCheck, faMagnifyingGlass, faCalendarDays, faArrowLeftLong, faDiamond} from "@fortawesome/free-solid-svg-icons";
+import { faChevronDown, faChevronUp, faListCheck, faMagnifyingGlass, faCalendarDays, faArrowLeftLong, faDiamond, faEllipsis} from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect, useCallback} from "react";
 import axios from "axios";
 import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
 import * as Avatar from "@radix-ui/react-avatar";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { initialAvatar } from "@/utils/initialAvatar";
 import * as Accordion from "@radix-ui/react-accordion";
 import style from "@/app/styles/projects/projects.module.css"
@@ -15,10 +16,11 @@ import Tag from "@/utils/tags";
 import Button from "../public/Button";
 import useCurrentUser from "@/utils/hooks/useCurrentUser";
 import { useProjectTasks } from "@/utils/hooks/useProjectTasks";
+import ModalModifyTask from "./tasks/modals/ModalModifyTask";
 
 
 export default function TasksProject({projectId}) {
-	const { tasks, loading, error} = useProjectTasks(projectId);
+	const { tasks, loading, error,refetch} = useProjectTasks(projectId);
 	const { user} = useCurrentUser();
 	
 	const[viewMode,setViewMode]=useState("list");
@@ -26,9 +28,18 @@ export default function TasksProject({projectId}) {
 
 	const[commentsByTask, setCommentsByTask]=useState({});
 	const [newComments, setNewComments ]=useState({});
+
+	// Etat permettant d'ouvrir la modale pour modifier la tâche
+	const [isOpen, setIsOpen] = useState(false);
+	// Etat permettant de récupérer les données de la tâche à modifier
+	const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+	
+	const handleTaskUpdated = async () => {
+  		await refetch();
+	};
 	
 	// COMMENTAIRES - APPEL API POUR RECUPERER LES COMMENTAIRES
-	
 	const fetchComments = useCallback(
 		async (taskId) => {
 			if (commentsByTask[taskId]) return; // éviter de recharger
@@ -107,8 +118,9 @@ export default function TasksProject({projectId}) {
 
 	return (
 		<>
-		{/* CONTAINER DE TOUTES LES TACHES DU PROJET */}
+		{/* CONTAINER DE TOUTES LES TACHES D UN PROJET */}
 			<div className={style.containerTasks}>
+
 				{/* BARRE DE RECHERCHE */}
 				<section className={style.containerBarTasks}>
 					<div className={style.tasks}>
@@ -116,13 +128,16 @@ export default function TasksProject({projectId}) {
 						<p>Par ordre de priorité</p>
 					</div>
 
+					{/* par liste */}
 					<div className={style.bar}>
 						<p className={viewMode === "list" ? style.activeButton : ""} onClick={() => setViewMode("list")}>
 							<FontAwesomeIcon icon={faListCheck}/> Liste</p>
 
+						{/* par date */}
 						<p className={viewMode === "calendar" ? style.activeButton : ""} onClick={() => setViewMode("calendar")}>
 							<FontAwesomeIcon icon={faCalendarDays}/> Calendrier</p>
-						{/* SELECTION DU STATUT */}
+
+						{/*par statut*/}
 						<Select.Root value={selectStatus} onValueChange={setSelectStatus}>
 							<Select.Trigger className={style.trigger} aria-label="statut">
 								<Select.Value placeholder="Statut" />
@@ -152,17 +167,46 @@ export default function TasksProject({projectId}) {
 								</Select.Content>
 							</Select.Portal>
 						</Select.Root>
+
+						{/* par recherche */}
 						<div className={style.taskSearch}>Rechercher une tâche <FontAwesomeIcon icon={faMagnifyingGlass}/></div>
 					</div>
 				</section>
+
 				<section>
 					{/* CARTE D UNE TACHE DU PROJET */}
 					{tasks.map((tp)=>(
 					<Link key={tp.id} href="#">
 						<div className={style.card}>
-							<div className={style.cardHeader}>
-								<h5>{tp.title}</h5>
-								<Tag className={style.status} type={statusLabels(tp.status)}/>
+							<div className={style.headerCard}>
+								<div className={style.cardHeader}>
+									<h5>{tp.title}</h5>
+									<Tag className={style.status} type={statusLabels(tp.status)}/>
+								</div>
+
+								{/* BOUTON POUR MODIFIER OU SUPPRIMER UNE TACHE */}
+								<DropdownMenu.Root>
+      								{/* Le bouton*/}
+									<DropdownMenu.Trigger asChild>
+										<button>
+											<FontAwesomeIcon className={style.etc} icon={faEllipsis}/>
+										</button>
+									</DropdownMenu.Trigger>
+									{/* Le menu*/}
+									<DropdownMenu.Portal>
+										<DropdownMenu.Content className={style.contentMenu}>
+											<DropdownMenu.Item className={style.itemMenu} onSelect={() => {
+												setSelectedTaskId(tp.id);
+												setIsOpen(true);
+											}}>
+											Modifier
+											</DropdownMenu.Item>
+											<DropdownMenu.Item className={`${style.itemMenu} ${style.deleteMenu}`} onClick={() => console.log("supprimer")}>
+											Supprimer
+											</DropdownMenu.Item>
+										</DropdownMenu.Content>
+									</DropdownMenu.Portal>
+								</DropdownMenu.Root>
 							</div>
 							<p className={style.description}>{tp.description}</p>
 							<p className={style.date}>Echéance : <FontAwesomeIcon icon={faCalendarDays}/> {new Date(tp.dueDate).toLocaleDateString()}</p>
@@ -233,6 +277,16 @@ export default function TasksProject({projectId}) {
 						</div>
 					</Link>
 					))}
+					{/* MODAL MODIFIER UNE TACHE */}
+					{isOpen && (
+						<ModalModifyTask
+							open={isOpen}
+							onClose={() => setIsOpen(false)}
+							projectId={projectId}
+							taskId={selectedTaskId}
+							onTaskUpdated={handleTaskUpdated}
+						/>
+					)}
 				</section>
 			</div>
 		</>

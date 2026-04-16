@@ -31,7 +31,7 @@ export default function ContributorsSelect({ value, onChange }) {
   cacheOptions
   defaultOptions={[]} 
   loadOptions={loadOptions}
-  value={value} // maintenant un tableau d'objets {value, label}
+  value={value || []} // maintenant un tableau d'objets {value, label}
   onChange={(selected) =>
     // on renvoie uniquement les emails au parent
 //     onChange(selected ? selected.map((s) => s.value) : [])

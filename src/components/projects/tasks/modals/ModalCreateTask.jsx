@@ -20,65 +20,6 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 	
-// 	const handleSubmit = async (e) => {
-// 		e.preventDefault();
-// 		setLoading(true);
-// 		setError("");
-
-// 		try {
-// 			const dueDateISO=formatDateToISO(dueDate); 
-// 			const infoNewTask={
-// 				title,
-// 				description,
-// 				dueDate: dueDateISO,
-// 				assigneeIds:contributors.map(c => c.value) // <-- CORRECTION
-// 			};
-// 			console.log("💾 DATA À ENVOYER :", infoNewTask);
-// 			const response = await axios.post(`http://localhost:8000/projects/${projectId}/tasks`,
-// 				infoNewTask,
-// 				{ withCredentials: true }
-// 			);
-// 			// -----------------------------------------------------
-// // BLOC MIS POUR AVOIR LES PERSONNES ASSIGNEES DANS LES TACHES OR PROBLEME COTE BACK !! A VOIR
-// 			// récupère le nouvel ID de la tâche
-// 			const taskId = response.data?.data?.task?.id || response.data?.task?.id;
-// 			if (!taskId) throw new Error("Impossible de récupérer l'ID de la tâche");
-
-// 			// Re-fetch de la tâche complète avec assignees
-// 			const fullTaskResponse = await axios.get(`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
-// 				{ withCredentials: true }
-// 			);
-// 			console.log("Réponse GET tâche :", fullTaskResponse);
-// 			const allTask = fullTaskResponse.data?.data?.task || fullTaskResponse.data?.task || fullTaskResponse.data;
-// 			// const allTask = fullTaskResponse.data.data.task;
-
-// 			console.log("Tâche complète avec assignés :", allTask);
-// 			onTaskCreated(allTask)
-// 			// ------------------------------------------------------------
-// 			// onTaskCreated(response.data.data.task)
-
-// 			// reset du formulaire
-// 			setTitle("");
-// 			setDescription("");
-// 			setDueDate("");
-// 			setContributors([]);
-// 			onClose();
-
-// 		} catch (err) {
-//   console.log("Erreur complète :", err);
-
-//   const message =
-//     err?.response?.data?.details?.[0]?.message || // validation backend
-//     err?.response?.data?.message ||               // message simple backend
-//     err?.message ||                               // erreur JS
-//     "Erreur serveur";
-
-//   setError(message);
-
-// 		}finally {
-// 			setLoading(false);
-// 		}
-// 	};
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
@@ -87,11 +28,17 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 		try {
 			const dueDateISO = formatDateToISO(dueDate);
 
+			// Transformation des contributors → ids
+			const assigneeIds = contributors
+				.filter(c => c && c.value) // sécurité
+				.map(c => c.value);
+
 			const infoNewTask = {
 				title,
 				description,
 				dueDate: dueDateISO,
-				assigneeIds: contributors.map(c => c.id), // ✅ on envoie juste les emails
+				assigneeIds,
+				// assigneeIds: contributors.map(c => c.id), // ✅ on envoie juste les emails
 			};
 
 			console.log("💾 DATA À ENVOYER :", infoNewTask);

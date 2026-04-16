@@ -27,6 +27,7 @@ export default function ViewProject() {
 
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
+	
 
 	// concerne l'IA
 	const [openAIModal, setOpenAIModal] = useState(false);
@@ -64,8 +65,7 @@ export default function ViewProject() {
 		}));
 		
 	};
-
-
+	
 	const generateIATask = async (message) => {
 		if (!message || message.trim() === "") return;
 
@@ -96,6 +96,7 @@ export default function ViewProject() {
 
 	return (
 		<>
+			{/* DESCRIPTIF D UN PROJET SPECIFIQUE */}
 			<div className={style.container}>
 				{/* <Link  href="/projects"> */}
 					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}  onClick={() => router.push("/projects")}/>
@@ -114,6 +115,8 @@ export default function ViewProject() {
 					</div>
 					<p>{project?.description}</p>
 				</div>
+
+				{/* BOUTONS POUR CREER UNE TACHE */}
 				<div className={style.containerBtns}>
 					<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
 					{/* MODAL POUR CREER UNE TACHE */}
@@ -147,6 +150,8 @@ export default function ViewProject() {
 					)}
 				</div>
 			</div>
+
+			{/* CONTAINER DES CONTRIBUTEURS */}
 			<div className={style.containerContributors}>
 				<div className={style.leftSide}>
 					<h5>Contributeurs</h5>
@@ -181,6 +186,8 @@ export default function ViewProject() {
 				})}
 				</div>
 			</div>
+
+			{/* TACHES DU PROJET */}
 			<TasksProject tasks={project?.tasks || []} projectId={projectId}/>
 		</>
 	)

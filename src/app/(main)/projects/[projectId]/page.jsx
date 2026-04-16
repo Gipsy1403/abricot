@@ -28,6 +28,7 @@ export default function ViewProject() {
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
 	
+	const [tasks, setTasks] = useState([]);
 
 	// concerne l'IA
 	const [openAIModal, setOpenAIModal] = useState(false);
@@ -42,10 +43,14 @@ export default function ViewProject() {
 				withCredentials: true,
 			});
 			// console.log("📥 API PROJECT :", response.data.data.project); 
-			setProject({
-				...response.data.data.project,
-				tasks: response.data.data.project.tasks || [],
-			});
+			// setProject({
+			// 	...response.data.data.project,
+			// 	tasks: response.data.data.project.tasks || [],
+			// });
+			const projectData = response.data.data.project;
+
+			setProject(projectData);
+			setTasks(projectData.tasks || []);
 
 			} catch (error) {
 				console.error("Erreur lors de la récupération du projet :", error);
@@ -58,13 +63,36 @@ export default function ViewProject() {
 
 
 	  // Fonction pour ajouter une tâche créée
-	const handleTaskCreated = (newTask) => {
-		setProject((prevProject) => ({
-			...prevProject,
-			tasks: [...(prevProject.tasks || []), newTask], // ajoute la nouvelle tâche
-		}));
+	// const handleTaskCreated = (newTask) => {
+	// 	setProject((prevProject) => ({
+	// 		...prevProject,
+	// 		tasks: [...(prevProject.tasks || []), newTask], // ajoute la nouvelle tâche
+	// 	}));
+
+	// const handleTaskUpdated = (updatedTask) => {
+	// 	setTasks((prev) =>
+	// 		prev.map((t) =>
+	// 			t.id === updatedTask.id ? updatedTask : t
+	// 		)
+	// 	);
+	// };
+	const handleTaskUpdated = (payload, action) => {
+  if (action === "delete") {
+    setTasks((prev) => prev.filter((t) => t.id !== payload));
+    return;
+  }
+
+  setTasks((prev) =>
+    prev.map((t) =>
+      t.id === payload.id ? payload : t
+    )
+  );
+};
 		
-	};
+	// };
+	const handleTaskCreated = (newTask) => {
+  setTasks((prev) => [...prev, newTask]);
+};
 	
 	const generateIATask = async (message) => {
 		if (!message || message.trim() === "") return;
@@ -188,7 +216,13 @@ export default function ViewProject() {
 			</div>
 
 			{/* TACHES DU PROJET */}
-			<TasksProject tasks={project?.tasks || []} projectId={projectId}/>
+			{/* <TasksProject tasks={project?.tasks || []} projectId={projectId}/> */}
+			<TasksProject
+  tasks={tasks}
+  setTasks={setTasks}
+  projectId={projectId}
+  onTaskUpdated={handleTaskUpdated}
+/>
 		</>
 	)
 }

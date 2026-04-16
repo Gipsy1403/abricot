@@ -19,8 +19,8 @@ import { useProjectTasks } from "@/utils/hooks/useProjectTasks";
 import ModalModifyTask from "./tasks/modals/ModalModifyTask";
 
 
-export default function TasksProject({projectId}) {
-	const { tasks, loading, error,refetch} = useProjectTasks(projectId);
+export default function TasksProject({projectId, tasks, onTaskUpdated}) {
+	// const { tasks, loading, error,refetch} = useProjectTasks(projectId);
 	const { user} = useCurrentUser();
 	
 	const[viewMode,setViewMode]=useState("list");
@@ -35,9 +35,9 @@ export default function TasksProject({projectId}) {
 	const [selectedTaskId, setSelectedTaskId] = useState(null);
 
 	
-	const handleTaskUpdated = async () => {
-  		await refetch();
-	};
+	// const handleTaskUpdated = async () => {
+  	// 	await refetch();
+	// };
 	
 	// COMMENTAIRES - APPEL API POUR RECUPERER LES COMMENTAIRES
 	const fetchComments = useCallback(
@@ -69,8 +69,8 @@ export default function TasksProject({projectId}) {
 		});
 	}, [tasks, fetchComments]);
 	
-	if (loading) return <p>Chargement...</p>;
-	if (error) return <p>Erreur...</p>;
+	// if (loading) return <p>Chargement...</p>;
+	// if (error) return <p>Erreur...</p>;
 
 	if (!tasks || tasks?.length === 0) return <p>Aucune tâche pour ce projet.</p>;
 
@@ -96,6 +96,24 @@ export default function TasksProject({projectId}) {
 			console.error("Erreur en ajoutant le commentaire:", error);
 		}
 	};
+
+	const handleDeleteTask = async (taskId) => {
+		try {
+		await axios.delete(
+			`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
+			{ withCredentials: true }
+		);
+
+		// mise à jour UI après suppression
+		if (onTaskUpdated) {
+			onTaskUpdated(taskId, "delete");
+		}
+
+		} catch (error) {
+			console.error("Erreur suppression tâche :", error);
+		}
+	};
+
 	
 	const statusOptions = [
 		["TODO", statusLabels("TODO")],
@@ -201,7 +219,7 @@ export default function TasksProject({projectId}) {
 											}}>
 											Modifier
 											</DropdownMenu.Item>
-											<DropdownMenu.Item className={`${style.itemMenu} ${style.deleteMenu}`} onClick={() => console.log("supprimer")}>
+											<DropdownMenu.Item className={`${style.itemMenu} ${style.deleteMenu}`} onClick={() => handleDeleteTask(tp.id)}>
 											Supprimer
 											</DropdownMenu.Item>
 										</DropdownMenu.Content>
@@ -284,7 +302,7 @@ export default function TasksProject({projectId}) {
 							onClose={() => setIsOpen(false)}
 							projectId={projectId}
 							taskId={selectedTaskId}
-							onTaskUpdated={handleTaskUpdated}
+							onTaskUpdated={onTaskUpdated}
 						/>
 					)}
 				</section>

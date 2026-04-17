@@ -85,6 +85,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 				{ content },
 				{withCredentials: true}
 			);
+			
 			if (response.data.success) {
 				setCommentsByTask(prev => ({
 					...prev,
@@ -194,8 +195,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 				<section>
 					{/* CARTE D UNE TACHE DU PROJET */}
 					{tasks.map((tp)=>(
-					<Link key={tp.id} href="#">
-						<div className={style.card}>
+						<div key={tp.id} className={style.card}>
 							<div className={style.headerCard}>
 								<div className={style.cardHeader}>
 									<h5>{tp.title}</h5>
@@ -293,7 +293,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 							</Accordion.Root>
 							</div>
 						</div>
-					</Link>
+
 					))}
 					{/* MODAL MODIFIER UNE TACHE */}
 					{isOpen && (

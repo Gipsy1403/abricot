@@ -99,15 +99,20 @@ export default function ViewProject() {
 
 		try {
 			setIaLoading(true);
-
+    console.log("PROJECT ID:", projectId);
+    console.log("PROMPT:", message);
 			const res = await axios.post(
-			"http://localhost:8000/api/generateTask",
-			{ message }
+			`http://localhost:8000/projects/${projectId}/tasks/generate-rag`,
+			{ prompt: message,
+			  projectId,
+			 },
+			 {withCredentials: true}
 			);
-
+console.log("REPONSE IA:", res.data);
 			setIaTask(res.data.tasks);
 		} catch (error) {
-			console.error("Erreur IA :", error);
+			// console.error("Erreur IA :", error);
+			console.error("Erreur IA :", error.response?.data || error.message);
 		} finally {
 			setIaLoading(false);
 		}

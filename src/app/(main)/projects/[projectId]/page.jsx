@@ -77,30 +77,29 @@ export default function ViewProject() {
 	// 	);
 	// };
 	const handleTaskUpdated = (payload, action) => {
-  if (action === "delete") {
-    setTasks((prev) => prev.filter((t) => t.id !== payload));
-    return;
-  }
-
-  setTasks((prev) =>
-    prev.map((t) =>
-      t.id === payload.id ? payload : t
-    )
-  );
-};
+		if (action === "delete") {
+			setTasks((prev) => prev.filter((t) => t.id !== payload));
+			return;
+		}
+		setTasks((prev) =>
+			prev.map((t) =>
+				t.id === payload.id ? payload : t
+			)
+		);
+	};
 		
-	// };
+
 	const handleTaskCreated = (newTask) => {
-  setTasks((prev) => [...prev, newTask]);
-};
+		setTasks((prev) => [...prev, newTask]);
+	};
 	
 	const generateIATask = async (message) => {
 		if (!message || message.trim() === "") return;
 
 		try {
 			setIaLoading(true);
-    console.log("PROJECT ID:", projectId);
-    console.log("PROMPT:", message);
+//     console.log("PROJECT ID:", projectId);
+//     console.log("PROMPT:", message);
 			const res = await axios.post(
 			`http://localhost:8000/projects/${projectId}/tasks/generate-rag`,
 			{ prompt: message,
@@ -108,8 +107,16 @@ export default function ViewProject() {
 			 },
 			 {withCredentials: true}
 			);
-console.log("REPONSE IA:", res.data);
-			setIaTask(res.data.tasks);
+			// console.log("REPONSE IA:", res.data);
+			// setIaTask(res.data.tasks);
+// 			const newTasks = res.data.tasks.filter(
+//   (t) => t?.title && t?.description
+// );
+			const newTasks = (res.data.tasks || []).filter(
+				t => t.title && t.description
+			);
+			// pour afficher dans la modale (optionnel)
+			setIaTask(newTasks);
 		} catch (error) {
 			// console.error("Erreur IA :", error);
 			console.error("Erreur IA :", error.response?.data || error.message);
@@ -117,8 +124,14 @@ console.log("REPONSE IA:", res.data);
 			setIaLoading(false);
 		}
   	};
-
-	
+	const refetchProject = async () => {
+		const res = await axios.get(
+			`http://localhost:8000/projects/${projectId}`,
+			{ withCredentials: true }
+		);
+		setProject(res.data.data.project);
+		setTasks(res.data.data.project.tasks || []);
+	};
 	if (loading) {
 		return <p>Chargement du projet...</p>;
 	}
@@ -178,6 +191,7 @@ console.log("REPONSE IA:", res.data);
 							generateIATask={generateIATask}
 							iaLoading={iaLoading}
 							onTaskCreated={handleTaskCreated}
+							onProjectRefresh={refetchProject}
 							projectId={projectId}
 						/>
 					)}

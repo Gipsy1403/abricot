@@ -14,6 +14,7 @@ export default function ModalAICreateTask({
 	iaLoading,
 	generateIATask,
 	onTaskCreated,
+	onProjectRefresh,
 	projectId }) {
 
 	const [input, setInput] = useState("");
@@ -25,52 +26,108 @@ export default function ModalAICreateTask({
 		description: "",
 	});
 	const isEditingTask = currentIndexTaskIA !== null;
-
 	const handleCreateTasksBulk = async () => {
-		//  console.log("📦 iaTask AVANT envoi :", iaTask);
 		try {
-			// console.log("🔎 Type iaTask :", typeof iaTask);
-			// console.log("🔎 Est tableau ?", Array.isArray(iaTask));
+			if (!iaTask || iaTask.length === 0) return;
+			onClose?.();
+			// 1️⃣ On envoie toutes les tâches au backend
+			const requests = iaTask.map((task) =>
+				axios.post(
+				`http://localhost:8000/projects/${projectId}/tasks`,
+				{
+					title: task.title,
+					description: task.description,
+					priority: task.priority?.toUpperCase() || "MEDIUM",
+					dueDate: task.dueDate || null,
+				},
+				{ withCredentials: true }
+				)
+			);
 
-			const requests = iaTask.map((task, index) => {
-			// console.log(`📤 Task ${index}`, task);
-
-				return axios.post(
-					`http://localhost:8000/projects/${projectId}/tasks`,
-					{
-						title: task.title,
-						description: task.description,
-						priority: task.priority?.toUpperCase(),
-						dueDate: task.dueDate,
-					},
-					{ withCredentials: true }
-				);
-			});
 			const responses = await Promise.allSettled(requests);
-				// console.log("✅ Réponses API :", responses.map(r => r.data));
-				// console.log("📊 Résultat brut :", responses);
-				// const createdTasks = responses.map((r) => r.data);
+
+			// Récupère les tâches valides
 			const createdTasks = responses
-				.filter(r => r.status === "fulfilled")
-				.map(r => r.value.data);
+				.filter((r) => r.status === "fulfilled")
+				.map((r) => {
+				const data = r.value.data;
+				return data?.data?.task || data; // sécurité backend
+				})
+				.filter((t) => t && t.title && t.description);
 
-				createdTasks.forEach((task) => {
-					onTaskCreated?.(task);
-				});
-				setIaTask([]);
-				onClose();
+			// Mise à jour immédiate de l’UI 
+			createdTasks.forEach((task) => {
+				onTaskCreated?.(task);
+			});
 
+			// 4️⃣ 🔥 RESYNC AVEC BACKEND (important pour éviter ton bug de refresh)
+			//     const refreshedProject = await axios.get(
+			//       `http://localhost:8000/projects/${projectId}`,
+			//       { withCredentials: true }
+			//     );
+
+			//     setTasks(refreshedProject.data.data.project.tasks || []);
+			// onProjectRefresh?.()
+
+			await onProjectRefresh?.();
+			// 5️⃣ reset UI IA
+			setIaTask([]);
+			
 		} catch (error) {
-			console.error("Erreur création tâches :", error);
+		console.error("Erreur création tâches :", error);
+
 			if (error.response) {
-				console.log("📨 Status :", error.response.status);
-				console.log("📨 Data backend :", error.response.data);
-				console.log("📨 Détail erreur backend :", error.response.data.data);
-			} else {
-				console.log("⚠️ Pas de réponse serveur :", error.message);
+				console.log("Status:", error.response.status);
+				console.log("Backend:", error.response.data);
 			}
 		}
 	};
+	// const handleCreateTasksBulk = async () => {
+	// 	//  console.log("📦 iaTask AVANT envoi :", iaTask);
+	// 	try {
+	// 		// console.log("🔎 Type iaTask :", typeof iaTask);
+	// 		// console.log("🔎 Est tableau ?", Array.isArray(iaTask));
+
+	// 		const requests = iaTask.map((task, index) => {
+	// 		// console.log(`📤 Task ${index}`, task);
+
+	// 			return axios.post(
+	// 				`http://localhost:8000/projects/${projectId}/tasks`,
+	// 				{
+	// 					title: task.title,
+	// 					description: task.description,
+	// 					priority: task.priority?.toUpperCase(),
+	// 					dueDate: task.dueDate,
+	// 				},
+	// 				{ withCredentials: true }
+	// 			);
+	// 		});
+	// 		const responses = await Promise.allSettled(requests);
+	// 			// console.log("✅ Réponses API :", responses.map(r => r.data));
+	// 			// console.log("📊 Résultat brut :", responses);
+	// 			// const createdTasks = responses.map((r) => r.data);
+	// 		const createdTasks = responses
+	// 			.filter(r => r.status === "fulfilled")
+	// 			// .map(r => r.value.data);
+	// 			.map(r => r.value.data?.data?.task ?? r.value.data);
+
+	// 			createdTasks.forEach((task) => {
+	// 				onTaskCreated?.(task);
+	// 			});
+	// 			setIaTask([]);
+	// 			onClose();
+
+	// 	} catch (error) {
+	// 		console.error("Erreur création tâches :", error);
+	// 		if (error.response) {
+	// 			console.log("📨 Status :", error.response.status);
+	// 			console.log("📨 Data backend :", error.response.data);
+	// 			console.log("📨 Détail erreur backend :", error.response.data.data);
+	// 		} else {
+	// 			console.log("⚠️ Pas de réponse serveur :", error.message);
+	// 		}
+	// 	}
+	// };
 
 	const handleEditTask = (index, newTask) => {
 		const updatedTasks = [...iaTask]; // copie du tableau

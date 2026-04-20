@@ -26,7 +26,8 @@ useEffect(() => {
     setDescription(project.description || "");
     setContributors(
       project.members?.map((m) => ({
-        value: m.user.email,
+     //    value: m.user.email,
+	   value: m.user.id,
         label: `${m.user.name} — ${m.user.email}`
       })) || []
     );

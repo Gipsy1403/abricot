@@ -18,6 +18,7 @@ export default function Projects() {
 
 	const [openModal, setOpenModal]=useState(false)
 	const [projects, setProjects]=useState([]);
+	
 	// const [selectedProjects, setSelectedProjects]=useState([]);
 	// va permetre de relancer la page à chaque rendu
 	const pathname = usePathname();
@@ -37,39 +38,36 @@ console.log("📦 DATA BRUTE API :", response.data.data.projects);
 
 			// 2️⃣ pour chaque projet → récupérer ses tâches
 			const projectsWithProgress = await Promise.all(
+  projectsData.map(async (p) => {
 
-			projectsData.map(async (p) => {
+    const [tasksRes, projectRes] = await Promise.all([
+      axios.get(`http://localhost:8000/projects/${p.id}/tasks`, { withCredentials: true }),
+      axios.get(`http://localhost:8000/projects/${p.id}`, { withCredentials: true })
+    ]);
 
-				// 🔥 appel API pour les tâches du projet
-				const resTasks = await axios.get(
-				`http://localhost:8000/projects/${p.id}/tasks`,
-				{ withCredentials: true }
-				);
+    const tasks = tasksRes.data.data.tasks;
+    const project = projectRes.data.data.project;
 
-				const tasks = resTasks.data.data.tasks;
+    const total = tasks.length;
+    const done = tasks.filter(t => t.status === "DONE").length;
 
-				// 3️⃣ calcul progression
+    const progress = total > 0
+      ? Math.round((done / total) * 100)
+      : 0;
 
-				const total = tasks.length;
+    return {
+      ...p,
+      progress,
+      done,
+      total,
+      members: project.members // ⭐ toujours version complète
+    };
+  })
+);
 
-				const done = tasks.filter(
-				(t) => t.status === "DONE"
-				).length;
-
-				const progress = total > 0
-				? Math.round((done / total) * 100)
-				: 0;
-
-				// 4️⃣ on retourne le projet enrichi
-				return {
-				...p,
-				progress,
-				done,
-				total
-				};
-			})
-			);
 console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
+
+
 			// 5️⃣ on stocke
 			setProjects(projectsWithProgress);
 
@@ -82,17 +80,34 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 
 	}, [pathname]);
 
-	const handleProjectCreated=(newProject)=>{
-		console.log("NEW PROJECT :", newProject);
-		setProjects((prev)=>[...prev, newProject])
-	}
+	useEffect(() => {
+  const handleFocus = () => {
+    getProjects();
+  };
 
-	// const handleProjectUpdated = (updatedProject) => {
-	// setProjects(prev =>
-	// prev.map(p => p.id === updatedProject.id ? updatedProject : p)
-	// );
-	// };
-	
+  window.addEventListener("focus", handleFocus);
+
+  return () => window.removeEventListener("focus", handleFocus);
+
+}, []);
+
+
+
+	const handleProjectCreated = (newProject) => {
+  console.log("NEW PROJECT :", newProject);
+
+  const projectWithProgress = {
+    ...newProject,
+    progress: 0,
+    done: 0,
+    total: 0
+  };
+
+  // 🔥 mettre en PREMIER
+  setProjects((prev) => [projectWithProgress, ...prev]);
+};
+
+
 	return (
 		<>
 			<div className={style.projectsHeader}>
@@ -134,13 +149,20 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 								</div>
 							)}
 							
-								{p.members?.filter((m) => m.user?.id !== p.owner?.id).map((m, index) => (
+								{/* {p.members?.filter((m) => m.user?.id !== p.owner?.id).map((m, index) => (
 									<Avatar.Root key={index} className={style.avatarGroupProject}>
 										<Avatar.Fallback className={style.nameAvatarProject}>
 											{initialAvatar(m.user?.name)}
 										</Avatar.Fallback>
 									</Avatar.Root>
-								))}
+								))} */}
+								{p.members?.map((m) => (
+  <Avatar.Root key={m.id}>
+    <Avatar.Fallback>
+      {initialAvatar(m.user?.name)}
+    </Avatar.Fallback>
+  </Avatar.Root>
+))}
 						</div>
 					</div>
 				</Link>

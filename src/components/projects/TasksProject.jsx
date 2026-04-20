@@ -72,8 +72,8 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 	// if (loading) return <p>Chargement...</p>;
 	// if (error) return <p>Erreur...</p>;
 
-	if (!tasks || tasks?.length === 0) return <p>Aucune tâche pour ce projet.</p>;
-
+	if (!tasks || tasks?.length === 0) return <p>Actuellement, aucune tâche pour ce projet.</p>;
+console.log("TASKS :", tasks);
 	// COMMENTAIRES - APPEL API POUR ECRIRE DES COMMENTAIRES
 	
 	const handleAddComment = async (taskId) => {
@@ -233,7 +233,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 							Assigné à :{" "}
 							{tp.assignees?.length > 0 ? (
 							tp.assignees.map((a) => (
-								<div key={a.user.id} className={style.assignedContainer}>
+								<div key={a.user?.id} className={style.assignedContainer}>
 								<Avatar.Root >
 									<Avatar.Fallback className={style.avatarAssigned}>{initialAvatar(a.user?.name)}</Avatar.Fallback>
 								</Avatar.Root>

@@ -55,6 +55,10 @@ main {
   margin: 0 7rem;
 }
 
+.background_login {
+  justify-content: flex-end;
+}
+
 /* tablette */
 @media (max-width: 1024px) {
   main {

@@ -60,7 +60,7 @@ console.log("📦 DATA BRUTE API :", response.data.data.projects);
       progress,
       done,
       total,
-      members: project.members // ⭐ toujours version complète
+      members: p.members
     };
   })
 );
@@ -121,7 +121,7 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 					<ModalCreateProject onClose={()=>setOpenModal(false)} onProjectCreated={handleProjectCreated}/>
 				)}
 			</div>
-			<div  className={style.container_card}>
+			<div  className={style.containerCard}>
 				{projects.map((p) => (
 				<Link key={p.id} href={`/projects/${p.id}`}>
 					<div  className={style.card}>
@@ -157,12 +157,12 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 									</Avatar.Root>
 								))} */}
 								{p.members?.map((m) => (
-  <Avatar.Root key={m.id}>
-    <Avatar.Fallback>
-      {initialAvatar(m.user?.name)}
-    </Avatar.Fallback>
-  </Avatar.Root>
-))}
+									<Avatar.Root key={m.id} className={style.avatarGroupProject}>
+										<Avatar.Fallback className={style.nameAvatarProject}>
+											{initialAvatar(m.user?.name)}
+										</Avatar.Fallback>
+									</Avatar.Root>
+								))}
 						</div>
 					</div>
 				</Link>

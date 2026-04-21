@@ -56,3 +56,69 @@
 	height: 68px;
 	background-color: var(--third);
 }
+
+
+/* RESPONSIVITE */
+/* ************ */
+
+
+/* Tablette */
+/* ******** */
+@media (max-width: 768px) {
+
+  .nav {
+    flex-direction: column;
+    height: auto;
+    padding: 1rem 0;
+    gap: 15px;
+  }
+
+  .nav ul {
+    gap: 20px;
+  }
+
+  .nav a.active {
+    padding: 10px 20px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+    .footer {
+    flex-direction: column;
+    gap: 10px;
+    padding: 1rem;
+    height: auto;
+    text-align: center;
+  }
+}
+
+
+/* Mobile */
+/* ****** */
+@media (max-width: 400px) {
+
+  .nav ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav li {
+    font-size: 14px;
+  }
+
+  .icon {
+    font-size: 18px;
+  }
+
+  .nav a.active {
+    padding: 8px 12px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+  }
+}

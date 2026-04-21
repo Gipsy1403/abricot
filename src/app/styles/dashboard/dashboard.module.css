@@ -59,14 +59,17 @@
 }
 
 /* --- Section Mes tâches --- */
-.sectionTasks{
+.sectionTasks, .sectionProjects{
   background-color: white;
   padding: 2rem;
   border-radius:10px ;
   border: solid 1px var(--tagGrey);
 
 }
-.tasksHeader {
+.sectionProjects{
+	margin-top: 3rem;
+}
+.tasksHeader, .projectsHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -74,13 +77,13 @@
 
 }
 
-.tasksHeader h5 {
+.tasksHeader h5, .projectsHeader h5 {
   font-weight: 600;
   font-size: 1.1rem;
   margin-bottom: 3px;
 }
 
-.tasksHeader p {
+.tasksHeader p, .projectsHeader p{
   font-size: 0.85rem;
   color:var(--textGrey);
 }
@@ -96,12 +99,13 @@
   border-radius: 8px;
   font-size: 14px;
   color:var(--textGrey);
-  width: 357px;
+  width: 100%;
+  max-width: 357px;
   margin-bottom: 2rem;
 }
 
 /* --- Carte de tâche --- */
-.taskCard {
+.taskCard, .projectCard {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -112,19 +116,19 @@
 }
 
 /* --- Partie gauche de la tâche --- */
-.taskLeft {
+.taskLeft, .projectLeft {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.taskLeft .designation h5 {
+.taskLeft .designation h5, .projectLeft .designation h5{
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
-.taskLeft .designation p {
+.taskLeft .designation p, .projectLeft .designation p {
   font-size: 14px;
   color:var(--textGrey);
 }
@@ -152,14 +156,19 @@
 
 }
 /* --- Partie droite de la tâche (status + bouton) --- */
-.taskRight {
+.taskRight{
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 30px;
 }
+.projectRight {
+	display: flex;
+  	align-items: flex-end;
+	justify-content: center;
 
-.taskRight button {
+}
+.taskRight button, .projectRight button{
   background-color: var(--btnBackground);
   color:white;
   border: none;
@@ -268,4 +277,97 @@
 .detail p:first-child {
   padding-left: 0;
 
+}
+
+
+/* RESPONSIVITE */
+/* ************ */
+
+/* Tablette */
+/* **************** */
+@media (max-width: 768px) {
+
+  .dashboardHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .tasksHeader, .projectsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .taskSearch {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .taskCard, .projectCard {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .taskRight, .projectRight {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .taskRight button, .projectRight button {
+    width: 100%;
+    padding: 10px;
+
+  }
+
+  .taskLeft .detail {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .kanbanContainer {
+    flex-direction: column;
+  }
+}
+
+/* Mobile */
+/* ********/
+@media (max-width: 400px) {
+
+  .dashboardHeader h4 {
+    font-size: 1.2rem;
+  }
+
+  .dashboardHeader p {
+    font-size: 0.8rem;
+  }
+
+  .taskLeft .designation h5,
+  .projectLeft .designation h5 {
+    font-size: 16px;
+  }
+
+  .taskLeft .designation p,
+  .projectLeft .designation p {
+    font-size: 12px;
+  }
+
+  .taskRight button, .projectRight button {
+    font-size: 14px;
+  }
+
+  .taskSearch {
+    font-size: 12px;
+  }
+
+  .detail {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .detail p {
+    border-right: none;
+    padding: 0;
+  }
 }

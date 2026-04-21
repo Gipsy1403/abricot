@@ -21,13 +21,14 @@
 /* CARTES */
 /* ****** */
 
-.container_card{
+.containerCard{
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-	gap: 10px;
+	gap: 20px;
 }
 .card {
-  width: 380px;
+  width: 100%;
+  /* width: 380px; */
   background: white;
   padding: 16px;
   border-radius: 10px;
@@ -128,11 +129,56 @@
 	border: 1px solid white;
 
 }
+/* RESPONSIVITE */
+/* ************ */
+
+/* Tablette */
+
+@media (max-width: 1024px) {
+  .containerCard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .projectsHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+/* Mobile */
+
+@media (max-width: 600px) {
+  .containerCard {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 400px) {
+  .teams {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .ownerNameProject {
+    font-size: 12px;
+  }
+}
 
 /* ******************************* */
 /* VUE D UN PROJET AVEC SES TACHES */
 /* ******************************* */
 
+.container{
+	display: flex;
+	align-items: center;
+	width: 100%;
+	margin-top: 3rem;
+
+}
+.modifyProject{
+	cursor: pointer;
+}
 .iconReturn{
 	padding: 25px;
 	background-color: white;
@@ -140,12 +186,8 @@
 	border: 1px solid var(--tagGrey);
 	margin-left: -80px;
 }
-.container{
-	display: flex;
-	align-items: center;
-	width: 100%;
-	margin-top: 3rem;
-
+.containerTitle{
+	padding-left: 20px;
 }
 .containerTitle p{
 	color: var(--textGrey);
@@ -271,6 +313,71 @@
 	border-radius: 50px;
 
 }
+/* RESPONSIVITE */
+/* ************ */
+
+/* Tablette */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+    .iconReturn {
+    padding: 10px;
+  }
+  .containerBtns {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    margin-left: 0;
+  }
+
+  .containerBtns button {
+    width: 100%;
+  }
+    .containerContributors {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .team {
+    margin-left: 0;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .member {
+    margin-right: 0;
+  }
+}
+
+/* Mobile */
+@media (max-width: 400px) {
+  .titleProject {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  .containerTitle h4 {
+    font-size: 1.2rem;
+  }
+
+  .containerTitle p {
+    font-size: 0.85rem;
+  }
+
+  .containerBtns button {
+    font-size: 14px;
+    height: auto;
+    padding: 10px;
+  }
+
+  .memberName {
+    font-size: 12px;
+  }
+}
 
 
 /* ***************************************** */
@@ -372,7 +479,60 @@ background-color: var(--secondary);
   font-size: 14px;
   color: var(--textGrey);
 }
+/* RESPONSIVITE */
+/* ************ */
 
+/* Tablette */
+@media (max-width: 768px) {
+  .containerBarTasks {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+    .bar {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+    .bar p {
+    flex: 1;
+    text-align: center;
+  }
+    .trigger {
+    width: 100%;
+    justify-content: space-between;
+  }
+    .taskSearch {
+    width: 100%;
+  }
+}
+
+/* Mobile */
+@media (max-width: 400px) {
+
+  .tasks h5 {
+    font-size: 1rem;
+  }
+
+  .tasks p {
+    font-size: 0.8rem;
+  }
+
+  .bar p {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .trigger {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .taskSearch {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
 /* ************************** */
 /* CARTE TACHE dans un projet */
 /* ************************** */

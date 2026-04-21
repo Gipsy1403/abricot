@@ -55,6 +55,26 @@ main {
   margin: 0 7rem;
 }
 
+/* tablette */
+@media (max-width: 1024px) {
+  main {
+    margin: 0 3rem;
+  }
+}
+
+/* mobile */
+@media (max-width: 768px) {
+  main {
+    margin: 0 1rem;
+  }
+}
+
+/* petit mobile (350px) */
+@media (max-width: 400px) {
+  main {
+    margin: 0 0.5rem;
+  }
+}
 /* -------------------------------------------------
    Liens
 ------------------------------------------------- */

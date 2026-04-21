@@ -7,6 +7,8 @@ import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
 import * as Avatar from "@radix-ui/react-avatar";
 import { initialAvatar } from "@/utils/initialAvatar";
+import Button from "../public/Button";
+import style from "@/app/styles/dashboard/dashboard.module.css"
 
 
 export default function DashboardProjectsWithTasks() {
@@ -41,46 +43,25 @@ export default function DashboardProjectsWithTasks() {
 	return (
 		<>
 
-			<section>
-				{/* <Link href="/dashboard/assigned-tasks"><button>Mes tâches assignées</button></Link>
-				<Link href="/dashboard/projects-with-tasks"><button>Mes projets assignés</button></Link> */}
-				<div>
-					<h5>Mes projets assignés</h5>
-					<p>Par ordre de priorité</p>
+			<section className={style.sectionProjects}>
+				<div className={style.projectsHeader}>
+					<div>
+						<h5>Les projets dans lesquels j'ai des tâches assignées</h5>
+						<p>Par ordre de priorité</p>
+					</div>
 				</div>
 				{projectsWithTasks.map((pt)=>(
-				// <Link  href="">
-					<div key={pt.id}>
-						<div >
-							<h5>{pt.name}</h5>
-							<p>{statusLabels(pt.status)}</p>
+					<div key={pt.id} className={style.projectCard}>
+						<div className={style.projectLeft}>
+							<div className={style.designation}>
+								<h5>{pt.name}</h5>
+								<p>{pt.description}</p>
+							</div>
 						</div>
-						<p>{pt.description}</p>
-						<p>Echéance : <FontAwesomeIcon icon={faCalendarDays}/> {new Date(pt.dueDate).toLocaleDateString()}</p>
-
-					
-						{/* <p>
-						Assigné à :{" "}
-						{pt.assignees.length > 0 ? (
-						pt.assignees.map((a) => (
-							<span key={a.user.id}>
-							<Avatar.Root>
-								<Avatar.Fallback>{initialAvatar(a.user?.name)}</Avatar.Fallback>
-							</Avatar.Root>
-							{a.user.name}
-							</span>
-						))
-						) : (
-						"Personne"
-						)}
-						</p> */}
-						<div>
-							<p>Commentaires({pt.comments?.length})</p>
-							<FontAwesomeIcon icon={faChevronUp}/>
-						</div>
+						<Link className={style.projectRight} href={`/projects/${pt.id}`}>
+							<button>Voir</button>
+						</Link>
 					</div>
-				// </Link>
-
 				))}
 			</section>
 

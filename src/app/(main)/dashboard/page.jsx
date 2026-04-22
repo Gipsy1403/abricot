@@ -43,10 +43,10 @@ export default function Dashboard() {
 		<>
 			<div className={style.dashboardHeader}>
 				<div>
-					<h4>Tableau de bord</h4>
+					<h1>Tableau de bord</h1>
 					<p>Bonjour {user?.name}, voici un aperçu de vos projets et tâches</p>
 				</div>
-				<Button  onClick={()=>setOpenModal(true)} text="+ Créer un projet" disabled={false}/>
+				<Button  onClick={()=>setOpenModal(true)} text="+ Créer un projet" disabled={false} aria-label="créer un projet"/>
 				{/* MODAL POUR CREER UN PROJET*/}
 				{openModal && (
 					<ModalCreateProject onClose={()=>setOpenModal(false)} onProjectCreated={handleProjectCreated}/>

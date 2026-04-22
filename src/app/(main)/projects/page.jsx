@@ -23,7 +23,7 @@ export default function Projects() {
 	// va permetre de relancer la page à chaque rendu
 	const pathname = usePathname();
 
-	useEffect(() => {
+	
 
 		const getProjects = async () => {
 		try {
@@ -75,7 +75,7 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 			console.error("Erreur :", error);
 		}
 		};
-
+useEffect(() => {
 		getProjects();
 
 	}, [pathname]);

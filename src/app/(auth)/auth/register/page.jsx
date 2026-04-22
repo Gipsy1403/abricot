@@ -68,6 +68,7 @@ export default function Register() {
 				<div className={style.email}>
 					<label htmlFor="email">Email</label>
 					<input
+						id="email"
 						type="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
@@ -76,6 +77,7 @@ export default function Register() {
 				<div className={style.password}>
 					<label htmlFor="passeword">Mot de passe</label>
 					<input
+						id="password"
 						type="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}

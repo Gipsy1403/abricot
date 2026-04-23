@@ -58,9 +58,9 @@ export default function DashboardProjectsWithTasks() {
 								<p>{pt.description}</p>
 							</div>
 						</div>
-						<Link className={style.projectRight} href={`/projects/${pt.id}`}>
+						{/* <Link className={style.projectRight} href={`/projects/${pt.id}`}>
 							<button>Voir</button>
-						</Link>
+						</Link> */}
 					</div>
 				))}
 			</section>

@@ -1,13 +1,14 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 import { useParams } from "next/navigation";
 import { formatDateToISO } from "@/utils/formatDateToIso";
 import Button from "@/components/public/Button";
+import useCurrentUser from "@/utils/hooks/useCurrentUser";
 
 
 export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
@@ -19,6 +20,20 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
+	
+	const { user } = useCurrentUser();
+
+	// Initialiser l'utilisateur connecté comme assigné par défaut
+	useEffect(() => {
+		if (user) {
+			setContributors([{
+				value: user.id,
+				label: `${user.name} — ${user.email}`,
+				email: user.email,
+				id: user.id
+			}]);
+		}
+	}, [user]);
 	
 	const handleSubmit = async (e) => {
 		e.preventDefault();

@@ -13,11 +13,14 @@ import ModalModifyProject from "@/components/projects/modals/ModalModifyProject"
 import ModalCreateTask from "@/components/projects/tasks/modals/ModalCreateTask";
 import { useRouter } from "next/navigation";
 import ModalAICreateTask from "@/components/projects/tasks/modals/ModalAICreateTask";
+import { useProjectTasks } from "@/utils/hooks/useProjectTasks";
+import useCurrentUser from "@/utils/hooks/useCurrentUser";
 
 
 
 export default function ViewProject() {
 	const router=useRouter();
+	const {user} = useCurrentUser();
 
 	const {projectId} = useParams();
 
@@ -28,7 +31,7 @@ export default function ViewProject() {
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
 	
-	const [tasks, setTasks] = useState([]);
+	const { tasks, loading: tasksLoading, error, refetch } =useProjectTasks(projectId);
 
 	// concerne l'IA
 	const [openAIModal, setOpenAIModal] = useState(false);
@@ -43,14 +46,10 @@ export default function ViewProject() {
 				withCredentials: true,
 			});
 			// console.log("📥 API PROJECT :", response.data.data.project); 
-			// setProject({
-			// 	...response.data.data.project,
-			// 	tasks: response.data.data.project.tasks || [],
-			// });
 			const projectData = response.data.data.project;
 
 			setProject(projectData);
-			setTasks(projectData.tasks || []);
+			// setTasks(projectData.tasks || []);
 
 			} catch (error) {
 				console.error("Erreur lors de la récupération du projet :", error);
@@ -76,22 +75,24 @@ export default function ViewProject() {
 	// 		)
 	// 	);
 	// };
-	const handleTaskUpdated = (payload, action) => {
-		if (action === "delete") {
-			setTasks((prev) => prev.filter((t) => t.id !== payload));
-			return;
-		}
-		setTasks((prev) =>
-			prev.map((t) =>
-				t.id === payload.id ? payload : t
-			)
-		);
+	const handleTaskCreated = async (newTask) => {
+		// setTasks((prev) => [...prev, newTask]);
+		await refetch(); // rafraîchit les tâches après création d'une nouvelle tâche
+	};
+	const handleTaskUpdated = async (payload, action) => {
+		// if (action === "delete") {
+		// 	setTasks((prev) => prev.filter((t) => t.id !== payload));
+		// 	return;
+		// }
+		// setTasks((prev) =>
+		// 	prev.map((t) =>
+		// 		t.id === payload.id ? payload : t
+		// 	)
+		// );
+		await refetch(); // rafraîchit les tâches après une mise à jour ou suppression
 	};
 		
 
-	const handleTaskCreated = (newTask) => {
-		setTasks((prev) => [...prev, newTask]);
-	};
 	
 	const generateIATask = async (message) => {
 		if (!message || message.trim() === "") return;
@@ -102,9 +103,7 @@ export default function ViewProject() {
 //     console.log("PROMPT:", message);
 			const res = await axios.post(
 			`http://localhost:8000/projects/${projectId}/tasks/generate-rag`,
-			{ prompt: message,
-			  projectId,
-			 },
+			{ prompt: message,projectId},
 			 {withCredentials: true}
 			);
 			// console.log("REPONSE IA:", res.data);
@@ -124,20 +123,33 @@ export default function ViewProject() {
 			setIaLoading(false);
 		}
   	};
-	const refetchProject = async () => {
-		const res = await axios.get(
-			`http://localhost:8000/projects/${projectId}`,
-			{ withCredentials: true }
-		);
-		setProject(res.data.data.project);
-		setTasks(res.data.data.project.tasks || []);
-	};
-	if (loading) {
-		return <p>Chargement du projet...</p>;
-	}
-
+	if(loading) return <p>Chargement du projet...</p>;
+	// const refetchProject = async () => {
+	// 	const res = await axios.get(
+	// 		`http://localhost:8000/projects/${projectId}`,
+	// 		{ withCredentials: true }
+	// 	);
+	// 	setProject(res.data.data.project);
+	// 	setTasks(res.data.data.project.tasks || []);
+	// };
+	// if (loading) {
+	// 	return <p>Chargement du projet...</p>;
+	// }
+// Ajoute la fonction de suppression
+const handleDeleteProject = async () => {
+  if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
+  try {
+    await axios.delete(`http://localhost:8000/projects/${projectId}`, {
+      withCredentials: true,
+    });
+    router.push("/projects");
+  } catch (error) {
+    console.error("Erreur lors de la suppression du projet :", error);
+  }
+};
 	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
 	
+	const isOwner=project?.owner?.id===user?.id;
 	// console.log("🧠 STATE PROJECT :", project);
 
 	return (
@@ -150,9 +162,14 @@ export default function ViewProject() {
 				<div className={style.containerTitle}>
 					<div className={style.titleProject}>
 						<h4>{project?.name}</h4>
-						<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
+						{isOwner && (
+							<div>
+								<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
+								<a onClick={handleDeleteProject} className={style.deleteProject}>Supprimer</a>
+							</div>
+						)}
 						{/* MODAL POUR MODIFIER UN PROJET */}
-						{openModalModify && (
+						{isOwner &&openModalModify && (
 							<ModalModifyProject 
 							onClose={()=>setOpenModalModify(false)} 
 							project={project} 
@@ -191,7 +208,7 @@ export default function ViewProject() {
 							generateIATask={generateIATask}
 							iaLoading={iaLoading}
 							onTaskCreated={handleTaskCreated}
-							onProjectRefresh={refetchProject}
+							// onProjectRefresh={refetchProject}
 							projectId={projectId}
 						/>
 					)}
@@ -238,7 +255,7 @@ export default function ViewProject() {
 			{/* <TasksProject tasks={project?.tasks || []} projectId={projectId}/> */}
 			<TasksProject
   tasks={tasks}
-  setTasks={setTasks}
+//   setTasks={setTasks}
   projectId={projectId}
   onTaskUpdated={handleTaskUpdated}
 />

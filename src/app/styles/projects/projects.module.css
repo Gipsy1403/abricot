@@ -178,7 +178,20 @@
 }
 .modifyProject{
 	cursor: pointer;
+	margin: 0 1rem;
+	display: inline-block;
+
 }
+.deleteProject{
+	cursor: pointer;
+	color: red !important;
+	display: inline-block;
+
+}
+.modifyProject:hover, .deleteProject:hover{
+	transform: scale(1.2);
+}
+
 .iconReturn{
 	padding: 25px;
 	background-color: white;

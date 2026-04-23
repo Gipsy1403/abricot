@@ -82,8 +82,9 @@ export default function TasksList() {
 						{/* <span className={style.taskStatus}>{statusLabels[t.status]}</span> */}
 						{/* <Link href={`/dashboard/projects-with-tasks/${t.projet?.id}`}><button>Voir</button></Link> */}
 						<Button 
+
 							onClick={() => {
-								router.push(`/projects/${t.project?.id}/tasks/${t.id}`);
+								router.push(`/projects/${t.project?.id}`);
 							}} 
 							text="Voir" 
 							disabled={false}

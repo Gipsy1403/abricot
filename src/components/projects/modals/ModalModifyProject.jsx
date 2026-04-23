@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
+import Button from "@/components/public/Button";
+
 
 export default function ModalModifyProject({onClose, project, onProjectUpdated}) {
   const [title, setTitle] = useState("");
@@ -13,13 +15,6 @@ export default function ModalModifyProject({onClose, project, onProjectUpdated})
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-//   useEffect(() => {
-//   if (project) {
-//     setTitle(project.name || "");
-//     setDescription(project.description || "");
-//     setContributors(project.members?.map((m) => ({ id: m.user.id, name: m.user.name })) || []);
-//   }
-// }, [project]);
 useEffect(() => {
   if (project) {
     setTitle(project.name || "");
@@ -40,32 +35,23 @@ useEffect(() => {
     setError("");
 
     try {
-
       const response = await axios.put(`http://localhost:8000/projects/${project.id}`, {
         name:title,
         description,
-        contributors:contributors.map(c => c.value),
+        members:contributors.map(c => c.value),
       }, { withCredentials: true });
 
-  
+  console.log("reponse:",response);
 	//  Mise à jour du projet dans le parent
-     if (onProjectUpdated) {
-		// reconstruire le tableau members pour le front
-      const updatedProject = {
-        ...response.data.data.project,
-        members: contributors.map(c => ({
-          user: {
-            id: c.value, // optionnel, sinon tu peux garder l'id original si tu l'as
-            name: c.label.split(" — ")[0], // extraire le nom du label
-            email: c.value
-          }
-        }))
-      };
-	   onProjectUpdated(updatedProject);
-     //    onProjectUpdated(response.data.data.project);
-	console.log("projet modifié: ", updatedProject)
-	  }
-     onClose();
+if (onProjectUpdated) {
+  // Refetch le projet complet pour avoir les membres avec leurs données
+  const refreshed = await axios.get(
+    `http://localhost:8000/projects/${project.id}`,
+    { withCredentials: true }
+  );
+  onProjectUpdated(refreshed.data.data.project);
+}
+onClose();
 
     } catch (err) {
      //  console.error(err);
@@ -90,6 +76,7 @@ useEffect(() => {
 		<Dialog.Portal>
 		<Dialog.Overlay className={style.overlay} onClick={onClose} />
 		<Dialog.Content className={style.content}>
+			<p className={style.closeButton} aria-label="Close" onClick={onClose}>X</p>
 			<Dialog.Title>Modifier le projet</Dialog.Title>
 
 			{error && <p style={{ color: "red" }}>{error}</p>}
@@ -126,14 +113,11 @@ useEffect(() => {
 						onChange={setContributors}
 					/>
 				</div>
-				<button type="submit" disabled={loading}>
-					{loading ? "Modification..." : "Enregistrer"}
-				</button>
+				<Button type="submit" disabled={loading} text="Enregistrer"
+				/>
 			</form>
 
-			<Dialog.Close asChild>
-			<button className={style.closeButton} aria-label="Close" onClick={onClose}>X</button>
-			</Dialog.Close>
+			<Dialog.Close asChild></Dialog.Close>
 		</Dialog.Content>
 		</Dialog.Portal>
 	</Dialog.Root>

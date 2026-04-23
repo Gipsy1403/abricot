@@ -194,7 +194,11 @@ console.log("TASKS :", tasks);
 
 				<section>
 					{/* CARTE D UNE TACHE DU PROJET */}
-					{tasks.map((tp)=>(
+					{filteredTasks.map((tp)=>{
+						// Vérifie si l'utilisateur est le créateur ou assigné à la tâche
+						const canModify = tp.creatorId === user?.id || tp.assignees?.some((a) => a.user?.id === user?.id);
+						
+						return (
 						<div key={tp.id} className={style.card}>
 							<div className={style.headerCard}>
 								<div className={style.cardHeader}>
@@ -203,7 +207,7 @@ console.log("TASKS :", tasks);
 								</div>
 
 								{/* BOUTON POUR MODIFIER OU SUPPRIMER UNE TACHE */}
-								<DropdownMenu.Root>
+								{canModify && (<DropdownMenu.Root>
       								{/* Le bouton*/}
 									<DropdownMenu.Trigger asChild>
 										<button>
@@ -213,7 +217,7 @@ console.log("TASKS :", tasks);
 									{/* Le menu*/}
 									<DropdownMenu.Portal>
 										<DropdownMenu.Content className={style.contentMenu}>
-											<DropdownMenu.Item className={style.itemMenu} onSelect={() => {
+											<DropdownMenu.Item className={style.itemMenu} onClick={() => {
 												setSelectedTaskId(tp.id);
 												setIsOpen(true);
 											}}>
@@ -224,7 +228,7 @@ console.log("TASKS :", tasks);
 											</DropdownMenu.Item>
 										</DropdownMenu.Content>
 									</DropdownMenu.Portal>
-								</DropdownMenu.Root>
+								</DropdownMenu.Root>)}
 							</div>
 							<p className={style.description}>{tp.description}</p>
 							<p className={style.date}>Echéance : <FontAwesomeIcon icon={faCalendarDays}/> {new Date(tp.dueDate).toLocaleDateString()}</p>
@@ -233,6 +237,7 @@ console.log("TASKS :", tasks);
 							Assigné à :{" "}
 							{tp.assignees?.length > 0 ? (
 							tp.assignees.map((a) => (
+								
 								<div key={a.user?.id} className={style.assignedContainer}>
 								<Avatar.Root >
 									<Avatar.Fallback className={style.avatarAssigned}>{initialAvatar(a.user?.name)}</Avatar.Fallback>
@@ -293,8 +298,8 @@ console.log("TASKS :", tasks);
 							</Accordion.Root>
 							</div>
 						</div>
-
-					))}
+						);
+					})}
 					{/* MODAL MODIFIER UNE TACHE */}
 					{isOpen && (
 						<ModalModifyTask

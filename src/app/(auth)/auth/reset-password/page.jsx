@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, use } from "react";
+import React, { useState} from "react";
 import axios from "axios";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,13 +9,19 @@ import { useSearchParams } from "next/navigation";
 
 export default function ResetPassword({ searchParams }) {
   const router = useRouter();
+// ********************************
+//   Vercel casse le prerender avec useSearchParams()
+// const searchParamsHook = useSearchParams();
+// const token = searchParamsHook.get("token");
 
-  // Next.js 15 : searchParams est une Promise, il faut l'unwrapper avec React.use()
-//   const resolvedParams = use(searchParams);
-//   const token = resolvedParams?.token || null;
+//  du coup useEffect est exécuté côté client et récupère le token depuis l'URL
+const [token, setToken] = useState(null);
 
-const searchParamsHook = useSearchParams();
-const token = searchParamsHook.get("token");
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  setToken(params.get("token"));
+}, []);
+// ********************************
 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");

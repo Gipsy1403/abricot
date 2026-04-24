@@ -1,4 +1,5 @@
 "use client"
+
 import { useEffect, useState } from "react";
 import style from "@/app/styles/auth/profile.module.css"
 import axios from "axios";
@@ -6,108 +7,162 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/public/Button";
 
 export default function Profile() {
-	const router=useRouter()
+	const router = useRouter();
+
+	// profil
 	const [firstName, setFirstName] = useState("");
 	const [name, setName] = useState("");
 	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+
+	// password update
+	const [currentPassword, setCurrentPassword] = useState("");
+	const [newPassword, setNewPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+
 	const [message, setMessage] = useState("");
 
-	useEffect(()=>{
-		const fetchProfile=async()=>{
-			try{
-				const response=await axios.get(
+	useEffect(() => {
+		const fetchProfile = async () => {
+			try {
+				const response = await axios.get(
 					"http://localhost:8000/auth/profile",
-					{withCredentials:true}
+					{ withCredentials: true }
 				);
-				const user=response.data.data.user;
-				if(user.name) {
-					const parts=user.name.split(" ");
+
+				const user = response.data.data.user;
+
+				if (user.name) {
+					const parts = user.name.split(" ");
 					setFirstName(parts[0]);
 					setName(parts.slice(1).join(" "));
 				}
+
 				setEmail(user.email || "");
-			}catch(error){
-				console.error("Erreur lors de la récupération du profil :", error);
+			} catch (error) {
 				setMessage(
 					error.response?.data?.message || "Impossible de récupérer le profil"
 				);
 			}
 		};
+
 		fetchProfile();
-	},[])
+	}, []);
 
 	const handleProfile = async (e) => {
-	e.preventDefault();
-		
-		try {
-			const allName=`${firstName} ${name}`.trim();
+		e.preventDefault();
 
-			const response = await axios.put(
+		try {
+			const allName = `${firstName} ${name}`.trim();
+
+			// 1. update profil
+			await axios.put(
 				"http://localhost:8000/auth/profile",
-				{name: allName, email},
-				{withCredentials: true}
+				{ name: allName, email },
+				{ withCredentials: true }
 			);
-	
-			setMessage(response.data.message);
-			
-			router.push("/dashboard")
+
+			// 2. update password si rempli
+			if (currentPassword || newPassword) {
+
+				if (newPassword !== confirmPassword) {
+					setMessage("Les mots de passe ne correspondent pas");
+					return;
+				}
+
+				await axios.put(
+					"http://localhost:8000/auth/password",
+					{
+						currentPassword,
+						newPassword
+					},
+					{ withCredentials: true }
+				);
+			}
+
+			window.location.href = "/dashboard";
+
 		} catch (error) {
-		// On récupère les erreurs venant du back
 			const errors = error.response?.data?.data?.errors;
 
 			if (errors && errors.length > 0) {
-				// Affiche toutes les erreurs détaillées
 				setMessage(errors.map(err => `${err.field}: ${err.message}`).join(" | "));
 			} else {
-				// Sinon, affiche le message général
 				setMessage(
 					error.response?.data?.message || "Erreur lors de la modification du compte"
 				);
 			}
 		}
 	};
+
 	return (
-		<>
-			<section className={style.containerProfile}>
-				<h5>Mon compte</h5>
-				<p>{firstName} {name}</p>
-				<form onSubmit={handleProfile} >
-					<div className={style.field}>
-						<label htmlFor="firstname" id="firstname">Prénom</label>
-						<input
-							type="text"
-							value={firstName}
-							onChange={(e) => setFirstName(e.target.value)}
-						/>
-					</div>
-					<div className={style.field}>
-						<label htmlFor="name" id="name">Nom</label>
-						<input
-							type="text"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					</div>
-					<div className={style.field}>
-						<label htmlFor="email" id="email">Email</label>
-						<input
-							type="email"
-							value={email}
-							onChange={(e) => setEmail(e.target.value)}
-						/>
-					</div>
-					<div className={style.field}>
-						<label htmlFor="password" id="password">Mot de passe</label>
-						<input
-							type="password"
-							value={password}
-							onChange={(e) => setPassword(e.target.value)}
-						/>
-					</div>
-					<Button text="Modifier les informations" disabled={false}/>
-				</form>
-			</section>
-		</>
-	)
+		<section className={style.containerProfile}>
+			<h5>Mon compte</h5>
+			<p>{firstName} {name}</p>
+
+			<form onSubmit={handleProfile}>
+
+				{/* 👤 PROFILE */}
+				<div className={style.field}>
+					<label>Prénom</label>
+					<input
+						type="text"
+						value={firstName}
+						onChange={(e) => setFirstName(e.target.value)}
+					/>
+				</div>
+
+				<div className={style.field}>
+					<label>Nom</label>
+					<input
+						type="text"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					/>
+				</div>
+
+				<div className={style.field}>
+					<label>Email</label>
+					<input
+						type="email"
+						value={email}
+						onChange={(e) => setEmail(e.target.value)}
+					/>
+				</div>
+
+				{/* PASSWORD */}
+				<h4 style={{ marginTop: "20px" }}>Changer le mot de passe</h4>
+
+				<div className={style.field}>
+					<label>Mot de passe actuel</label>
+					<input
+						type="password"
+						value={currentPassword}
+						onChange={(e) => setCurrentPassword(e.target.value)}
+					/>
+				</div>
+
+				<div className={style.field}>
+					<label>Nouveau mot de passe</label>
+					<input
+						type="password"
+						value={newPassword}
+						onChange={(e) => setNewPassword(e.target.value)}
+					/>
+				</div>
+
+				<div className={style.field}>
+					<label>Confirmer mot de passe</label>
+					<input
+						type="password"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+					/>
+				</div>
+
+				<Button text="Modifier les informations" disabled={false} />
+			</form>
+
+			{message && <p>{message}</p>}
+		</section>
+	);
 }

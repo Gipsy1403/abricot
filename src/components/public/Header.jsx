@@ -45,7 +45,7 @@ export default function Header() {
 				</ul>
 				<div className={style.avatar}>
 					<Link href="/profile">
-						<Avatar.Root key={user?.id} className={`${style.avatar} ${pageProfile ? style.activeAvatar : ""}`}>	
+						<Avatar.Root key={user?.name} className={`${style.avatar} ${pageProfile ? style.activeAvatar : ""}`}>	
 							<Avatar.Fallback>
 								{initialAvatar(user?.name)}
 							</Avatar.Fallback>

@@ -23,8 +23,6 @@ export default function Projects() {
 	// va permetre de relancer la page à chaque rendu
 	const pathname = usePathname();
 
-	
-
 		const getProjects = async () => {
 		try {
 
@@ -33,40 +31,38 @@ export default function Projects() {
 			"http://localhost:8000/projects",
 			{ withCredentials: true }
 			);
-console.log("📦 DATA BRUTE API :", response.data.data.projects);
+			console.log("📦 DATA BRUTE API :", response.data.data.projects);
 			const projectsData = response.data.data.projects;
 
 			// 2️⃣ pour chaque projet → récupérer ses tâches
 			const projectsWithProgress = await Promise.all(
-  projectsData.map(async (p) => {
+			projectsData.map(async (p) => {
 
-    const [tasksRes, projectRes] = await Promise.all([
-      axios.get(`http://localhost:8000/projects/${p.id}/tasks`, { withCredentials: true }),
-      axios.get(`http://localhost:8000/projects/${p.id}`, { withCredentials: true })
-    ]);
+				const [tasksRes, projectRes] = await Promise.all([
+					axios.get(`http://localhost:8000/projects/${p.id}/tasks`, { withCredentials: true }),
+					axios.get(`http://localhost:8000/projects/${p.id}`, { withCredentials: true })
+				]);
 
-    const tasks = tasksRes.data.data.tasks;
-    const project = projectRes.data.data.project;
+				const tasks = tasksRes.data.data.tasks;
+				const project = projectRes.data.data.project;
 
-    const total = tasks.length;
-    const done = tasks.filter(t => t.status === "DONE").length;
+				const total = tasks.length;
+				const done = tasks.filter(t => t.status === "DONE").length;
 
-    const progress = total > 0
-      ? Math.round((done / total) * 100)
-      : 0;
+				const progress = total > 0
+					? Math.round((done / total) * 100)
+					: 0;
+					return {
+						...p,
+						progress,
+						done,
+						total,
+						members: p.members
+					};
+			})
+			);
 
-    return {
-      ...p,
-      progress,
-      done,
-      total,
-      members: p.members
-    };
-  })
-);
-
-console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
-
+			// console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 
 			// 5️⃣ on stocke
 			setProjects(projectsWithProgress);
@@ -74,38 +70,33 @@ console.log("📦 DATA AVEC PROGRESS :", projectsWithProgress);
 		} catch (error) {
 			console.error("Erreur :", error);
 		}
-		};
-useEffect(() => {
+	};
+	useEffect(() => {
 		getProjects();
 
 	}, [pathname]);
 
 	useEffect(() => {
-  const handleFocus = () => {
-    getProjects();
-  };
-
-  window.addEventListener("focus", handleFocus);
-
-  return () => window.removeEventListener("focus", handleFocus);
-
-}, []);
-
-
+  		const handleFocus = () => {
+    			getProjects();
+  		};
+		window.addEventListener("focus", handleFocus);
+		return () => window.removeEventListener("focus", handleFocus);
+	}, []);
 
 	const handleProjectCreated = (newProject) => {
-  console.log("NEW PROJECT :", newProject);
+  	console.log("NEW PROJECT :", newProject);
 
-  const projectWithProgress = {
-    ...newProject,
-    progress: 0,
-    done: 0,
-    total: 0
-  };
+	const projectWithProgress = {
+		...newProject,
+		progress: 0,
+		done: 0,
+		total: 0
+	};
 
-  // 🔥 mettre en PREMIER
-  setProjects((prev) => [projectWithProgress, ...prev]);
-};
+	// 🔥 mettre en PREMIER
+	setProjects((prev) => [projectWithProgress, ...prev]);
+	};
 
 
 	return (
@@ -148,37 +139,18 @@ useEffect(() => {
 									<p className={style.ownerNameProject}>Propriétaire</p>
 								</div>
 							)}
-							
-								{/* {p.members?.filter((m) => m.user?.id !== p.owner?.id).map((m, index) => (
-									<Avatar.Root key={index} className={style.avatarGroupProject}>
-										<Avatar.Fallback className={style.nameAvatarProject}>
-											{initialAvatar(m.user?.name)}
-										</Avatar.Fallback>
-									</Avatar.Root>
-								))} */}
-								{p.members?.map((m) => (
-									<Avatar.Root key={m.id} className={style.avatarGroupProject}>
-										<Avatar.Fallback className={style.nameAvatarProject}>
-											{initialAvatar(m.user?.name)}
-										</Avatar.Fallback>
-									</Avatar.Root>
-								))}
+							{p.members?.map((m) => (
+								<Avatar.Root key={m.id} className={style.avatarGroupProject}>
+									<Avatar.Fallback className={style.nameAvatarProject}>
+										{initialAvatar(m.user?.name)}
+									</Avatar.Fallback>
+								</Avatar.Root>
+							))}
 						</div>
 					</div>
 				</Link>
 				))}
 			</div>
-						{/* MODALE POUR MODIFIER UN PROJET */}
-			{/* {openModal && selectedProject && (
-				<ModalModifyProject
-					project={selectedProject}
-					onClose={() => {
-						setOpenModal(false);
-						setSelectedProject(null);
-					}}
-					onProjectUpdated={handleProjectUpdated} // 🔹 on met à jour la liste globale
-				/>
-			)} */}
 		</>
 	)
 }

@@ -136,17 +136,17 @@ export default function ViewProject() {
 	// 	return <p>Chargement du projet...</p>;
 	// }
 // Ajoute la fonction de suppression
-const handleDeleteProject = async () => {
-  if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
-  try {
-    await axios.delete(`http://localhost:8000/projects/${projectId}`, {
-      withCredentials: true,
-    });
-    router.push("/projects");
-  } catch (error) {
-    console.error("Erreur lors de la suppression du projet :", error);
-  }
-};
+	const handleDeleteProject = async () => {
+		if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
+		try {
+			await axios.delete(`http://localhost:8000/projects/${projectId}`, {
+				withCredentials: true,
+			});
+			router.push("/projects");
+		} catch (error) {
+			console.error("Erreur lors de la suppression du projet :", error);
+		}
+	};
 	const filteredMembers = project?.members?.filter((m) => m?.user?.id !== project?.owner?.id);
 	
 	const isOwner=project?.owner?.id===user?.id;
@@ -254,11 +254,11 @@ const handleDeleteProject = async () => {
 			{/* TACHES DU PROJET */}
 			{/* <TasksProject tasks={project?.tasks || []} projectId={projectId}/> */}
 			<TasksProject
-  tasks={tasks}
-//   setTasks={setTasks}
-  projectId={projectId}
-  onTaskUpdated={handleTaskUpdated}
-/>
+				tasks={tasks}
+				//   setTasks={setTasks}
+				projectId={projectId}
+				onTaskUpdated={handleTaskUpdated}
+			/>
 		</>
 	)
 }

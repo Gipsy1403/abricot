@@ -15,61 +15,57 @@ export default function ModalModifyProject({onClose, project, onProjectUpdated})
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-useEffect(() => {
-  if (project) {
-    setTitle(project.name || "");
-    setDescription(project.description || "");
-    setContributors(
-      project.members?.map((m) => ({
-     //    value: m.user.email,
-	   value: m.user.id,
-        label: `${m.user.name} — ${m.user.email}`
-      })) || []
-    );
-  }
-}, [project]);
+	useEffect(() => {
+		if (project) {
+			setTitle(project.name || "");
+			setDescription(project.description || "");
+			setContributors(
+				project.members?.map((m) => ({
+				//    value: m.user.email,
+				value: m.user.id,
+				label: `${m.user.name} — ${m.user.email}`
+				})) || []
+			);
+		}
+	}, [project]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError("");
 
-    try {
-      const response = await axios.put(`http://localhost:8000/projects/${project.id}`, {
-        name:title,
-        description,
-        members:contributors.map(c => c.value),
-      }, { withCredentials: true });
+	try {
+		const response = await axios.put(`http://localhost:8000/projects/${project.id}`, {
+		name:title,
+		description,
+		members:contributors.map(c => c.value),
+		}, { withCredentials: true });
 
-  console.log("reponse:",response);
-	//  Mise à jour du projet dans le parent
-if (onProjectUpdated) {
-  // Refetch le projet complet pour avoir les membres avec leurs données
-  const refreshed = await axios.get(
-    `http://localhost:8000/projects/${project.id}`,
-    { withCredentials: true }
-  );
-  onProjectUpdated(refreshed.data.data.project);
-}
-onClose();
-
-    } catch (err) {
-     //  console.error(err);
-     //  setError("Erreur lors de la création du projet.");
-  if (err.response) {
-    console.log("DETAIL DES ERREURS :", err.response.data.data.errors);
-
-    setError(
-      err.response.data.data.errors[0]?.message ||
-      "Erreur serveur"
-    );
-  } else {
-    setError("Erreur réseau");
-  }
-    } finally {
-      setLoading(false);
-    }
-  };
+		console.log("reponse:",response);
+		//  Mise à jour du projet dans le parent
+		if (onProjectUpdated) {
+			// Refetch le projet complet pour avoir les membres avec leurs données
+			const refreshed = await axios.get(
+			`http://localhost:8000/projects/${project.id}`,
+			{ withCredentials: true }
+			);
+			onProjectUpdated(refreshed.data.data.project);
+		}
+		onClose();
+	} catch (err) {
+		if (err.response) {
+		console.log("DETAIL DES ERREURS :", err.response.data.data.errors);
+			setError(
+				err.response.data.data.errors[0]?.message ||
+				"Erreur serveur"
+			);
+		} else {
+		setError("Erreur réseau");
+		}
+	} finally {
+		setLoading(false);
+	}
+};
 
   return (
 	<Dialog.Root open={true}>

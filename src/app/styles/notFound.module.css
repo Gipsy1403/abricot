@@ -1,0 +1,20 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 20px;
+
+}
+
+.notFound a {
+  font-size: 18px;
+  text-decoration: none;
+  color: var(--primary);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.notFound a:hover {
+  transform: scale(1.1);
+}

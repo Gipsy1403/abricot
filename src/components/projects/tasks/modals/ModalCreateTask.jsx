@@ -161,28 +161,9 @@ export default function ModalCreateTask({onClose, onTaskCreated, projectId}) {
 							onChange={setContributors}
 						/>
 					</div>
-
-					{/* <div className={style.field}>
-						<label className={style.label} htmlFor="status">Statut</label>
-						{statuses.map((s) => (
-							<button
-								className={`${style.btnStatus} ${status === s ? style.active : ""}`}
-								key={s}
-								type="button"
-								// onClick={() => setStatus(s)}
-								onClick={() => {
-									console.log("Status choisi :", s); // <--- vérifie ici
-									setStatus(s);
-								}}
-							>
-							{s}
-							</button>
-						))}
-					</div> */}
 					<Button text="+ Ajouter une tâche" type="submit" disabled={loading || formInvalid}
 					/>
 				</form>
-
 				<Dialog.Close asChild></Dialog.Close>
 			</Dialog.Content>
 			</Dialog.Portal>

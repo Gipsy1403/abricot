@@ -8,80 +8,60 @@ export const useComments = (projectId) => {
   const [error, setError] = useState(null);
 
   // 🔹 Fonction pour récupérer les commentaires
-  const fetchComments = useCallback(
-    async (taskId) => {
-      if (commentsByTask[taskId]) return; // éviter de recharger
-	  setLoading(true);
-      try {
-        const response = await axios.get(
-          `http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
-          { withCredentials: true }
-        );
-        if (response.data.success) {
-          setCommentsByTask((prev) => ({
-            ...prev,
-            [taskId]: response.data.data.comments,
-          }));
-        }
-      } catch (err) {
-        console.error("Erreur en récupérant les commentaires :", err);
-        setError(err);
-      }finally {
-      setLoading(false); // 🔹 fin chargement
-    }
-    },
-    [projectId]
-  );
-
-  // 🔹 Charger tous les commentaires au montage
-//   useEffect(() => {
-//     if (!tasks) return;
-
-//     const loadAllComments = async () => {
-//       setLoading(true);
-//       try {
-//         await Promise.all(tasks.map(task => fetchComments(task.id)));
-//       } catch (err) {
-//         setError(err);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     loadAllComments();
-//   }, [tasks, fetchComments]);
+	const fetchComments = useCallback(
+		async (taskId) => {
+			if (commentsByTask[taskId]) return; // éviter de recharger
+			setLoading(true);
+			try {
+				const response = await axios.get(
+					`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
+					{ withCredentials: true }
+				);
+				if (response.data.success) {
+					setCommentsByTask((prev) => ({
+					...prev,
+					[taskId]: response.data.data.comments,
+					}));
+				}
+			} catch (err) {
+				console.error("Erreur en récupérant les commentaires :", err);
+				setError(err);
+			}finally {
+				setLoading(false); // 🔹 fin chargement
+			}
+		},[projectId]);
 
   // 🔹 Ajouter un commentaire
-  const addComment = async (taskId) => {
-    const content = newComments[taskId];
-    if (!content?.trim()) return;
+	const addComment = async (taskId) => {
+		const content = newComments[taskId];
+		if (!content?.trim()) return;
 
-    try {
-      const response = await axios.post(
-        `http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
-        { content },
-        { withCredentials: true }
-      );
-      if (response.data.success) {
-        setCommentsByTask((prev) => ({
-          ...prev,
-          [taskId]: [...(prev[taskId] || []), response.data.data.comment],
-        }));
-        setNewComments((prev) => ({ ...prev, [taskId]: "" }));
-      }
-    } catch (err) {
-      console.error("Erreur en ajoutant le commentaire:", err);
-      setError(err);
-    }
-  };
+		try {
+			const response = await axios.post(
+				`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
+				{ content },
+				{ withCredentials: true }
+			);
+			if (response.data.success) {
+				setCommentsByTask((prev) => ({
+					...prev,
+					[taskId]: [...(prev[taskId] || []), response.data.data.comment],
+				}));
+			setNewComments((prev) => ({ ...prev, [taskId]: "" }));
+			}
+		} catch (err) {
+			console.error("Erreur en ajoutant le commentaire:", err);
+			setError(err);
+		}
+	};
 
   return {
-    commentsByTask,
-    newComments,
-    setNewComments,
-    fetchComments,
-    addComment,
-    loading,
-    error
-  };
+		commentsByTask,
+		newComments,
+		setNewComments,
+		fetchComments,
+		addComment,
+		loading,
+		error
+	};
 };

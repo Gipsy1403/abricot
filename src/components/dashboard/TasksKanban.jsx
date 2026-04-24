@@ -44,189 +44,106 @@ export default function TasksKanban() {
 	
 	return (
 		<>
-		{/* <section>
-			<h5>A faire</h5>
-			{todoTasks.length}
-			{todoTasks.map((t)=>(
-				<div key={t.id}>
-					<div>
-						<h5>{t.title}</h5>
-						{statusLabels[t.status]}
-					</div>
-					<p>{t.description}</p>
-					<div className={style.detail}>
-						<p>
-							<FontAwesomeIcon icon={faFolderOpen}/>{t.project?.name}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faCalendar}/>{
-								new Date(t.dueDate).toLocaleDateString("fr-FR", {
-									day: "numeric",      // jour du mois
-									month: "long",       // mois en lettres
-								})
-							}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
-						</p>
-					</div>
-					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
-				</div>
-			))}
-		</section>
-		<section>
-			<h5>En cours</h5>
-			{inProgressTasks.length}
-			{inProgressTasks.map((t)=>(
-				<div key={t.id}>
-					<div>
-						<h5>{t.title}</h5>
-						{statusLabels[t.status]}
-					</div>
-					<p>{t.description}</p>
-					<div className={style.detail}>
-						<p>
-							<FontAwesomeIcon icon={faFolderOpen}/>{t.project?.name}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faCalendar}/>{new Date(t.dueDate).toLocaleDateString()}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
-						</p>
-					</div>
-					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
+			<div className={style.kanbanContainer}>
+
+			{/* COLONNE TODO */}
+			<section className={style.column}>
+			<h5 className={style.columnTitle}>A faire <span>{todoTasks.length}</span></h5>
+
+			{todoTasks.map((t) => (
+				<div key={t.id} className={style.card}>
+
+				<div className={style.cardHeader}>
+					<h5 className={style.cardTitle}>{t.title}</h5>
+					<Tag type={statusLabels[t.status]}/>
 
 				</div>
-			))}
-		</section>
-		<section>
-			<h5>Terminées</h5>
-			{doneTasks.length}
-			{doneTasks.map((t)=>(
-				<div key={t.id}>
-					<div>
-						<h5>{t.title}</h5>
-						{statusLabels[t.status]}
-					</div>
-					<p>{t.description}</p>
-					<div className={style.detail}>
-						<p>
-							<FontAwesomeIcon icon={faFolderOpen}/>{t.project?.name}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faCalendar}/>{new Date(t.dueDate).toLocaleDateString()}
-						</p>
-						<p>
-							<FontAwesomeIcon icon={faComment}/>{t.comments.length}
-						</p>
-					</div>
-					<Link href="/dashboard/projectswithtasks"><button>Voir</button></Link>
 
+				<p className={style.description}>{t.description}</p>
+
+				<div className={style.detail}>
+					<p>
+					<FontAwesomeIcon icon={faFolderOpen} />
+					{t.project?.name}
+					</p>
+					<p>
+					<FontAwesomeIcon icon={faCalendar} />
+					{new Date(t.dueDate).toLocaleDateString("fr-FR", {
+					day: "numeric",
+					month: "long",
+					})}
+					</p>
+					<p>
+					<FontAwesomeIcon icon={faComment} />
+					{t.comments.length}
+					</p>
+				</div>
+
+				<Link href="/dashboard/projectswithtasks">
+					<Button disabled={false} text="Voir"/>
+				</Link>
 				</div>
 			))}
-		</section> */}
-
-<div className={style.kanbanContainer}>
-
-  {/* COLONNE TODO */}
-  <section className={style.column}>
-    <h5 className={style.columnTitle}>A faire <span>{todoTasks.length}</span></h5>
-
-    {todoTasks.map((t) => (
-      <div key={t.id} className={style.card}>
-
-        <div className={style.cardHeader}>
-          <h5 className={style.cardTitle}>{t.title}</h5>
-          <Tag type={statusLabels[t.status]}/>
-
-        </div>
-
-        <p className={style.description}>{t.description}</p>
-
-        <div className={style.detail}>
-          <p>
-            <FontAwesomeIcon icon={faFolderOpen} />
-            {t.project?.name}
-          </p>
-          <p>
-            <FontAwesomeIcon icon={faCalendar} />
-            {new Date(t.dueDate).toLocaleDateString("fr-FR", {
-              day: "numeric",
-              month: "long",
-            })}
-          </p>
-          <p>
-            <FontAwesomeIcon icon={faComment} />
-            {t.comments.length}
-          </p>
-        </div>
-
-        <Link href="/dashboard/projectswithtasks">
-          <Button disabled={false} text="Voir"/>
-        </Link>
-      </div>
-    ))}
-  </section>
+			</section>
 
 
-  {/* COLONNE IN PROGRESS */}
-  <section className={style.column}>
-    <h5 className={style.columnTitle}>En cours <span>{inProgressTasks.length}</span></h5>
+			{/* COLONNE IN PROGRESS */}
+			<section className={style.column}>
+			<h5 className={style.columnTitle}>En cours <span>{inProgressTasks.length}</span></h5>
 
-    {inProgressTasks.map((t) => (
-      <div key={t.id} className={style.card}>
-        <div className={style.cardHeader}>
-          <h5 className={style.cardTitle}>{t.title}</h5>
-          <Tag type={statusLabels[t.status]}/>
-        </div>
+			{inProgressTasks.map((t) => (
+				<div key={t.id} className={style.card}>
+				<div className={style.cardHeader}>
+					<h5 className={style.cardTitle}>{t.title}</h5>
+					<Tag type={statusLabels[t.status]}/>
+				</div>
 
-        <p className={style.description}>{t.description}</p>
+				<p className={style.description}>{t.description}</p>
 
-        <div className={style.detail}>
-          <p><FontAwesomeIcon icon={faFolderOpen} />{t.project?.name}</p>
-          <p><FontAwesomeIcon icon={faCalendar} />{new Date(t.dueDate).toLocaleDateString()}</p>
-          <p><FontAwesomeIcon icon={faComment} />{t.comments.length}</p>
-        </div>
+				<div className={style.detail}>
+					<p><FontAwesomeIcon icon={faFolderOpen} />{t.project?.name}</p>
+					<p><FontAwesomeIcon icon={faCalendar} />{new Date(t.dueDate).toLocaleDateString()}</p>
+					<p><FontAwesomeIcon icon={faComment} />{t.comments.length}</p>
+				</div>
 
-        <Link href="/dashboard/projectswithtasks">
-     	<Button disabled={false} text="Voir"/>
+				<Link href="/dashboard/projectswithtasks">
+					<Button disabled={false} text="Voir"/>
 
-        </Link>
-      </div>
-    ))}
-  </section>
+				</Link>
+				</div>
+			))}
+			</section>
 
 
-  {/* COLONNE DONE */}
-  <section className={style.column}>
-    <h5 className={style.columnTitle}>Terminées <span>{doneTasks.length}</span></h5>
+			{/* COLONNE DONE */}
+			<section className={style.column}>
+			<h5 className={style.columnTitle}>Terminées <span>{doneTasks.length}</span></h5>
 
-    {doneTasks.map((t) => (
-      <div key={t.id} className={style.card}>
-        <div className={style.cardHeader}>
-          <h5 className={style.cardTitle}>{t.title}</h5>
-          <Tag type={statusLabels[t.status]}/>
+			{doneTasks.map((t) => (
+				<div key={t.id} className={style.card}>
+				<div className={style.cardHeader}>
+					<h5 className={style.cardTitle}>{t.title}</h5>
+					<Tag type={statusLabels[t.status]}/>
 
-        </div>
+				</div>
 
-        <p className={style.description}>{t.description}</p>
+				<p className={style.description}>{t.description}</p>
 
-        <div className={style.detail}>
-          <p><FontAwesomeIcon icon={faFolderOpen} />{t.project?.name}</p>
-          <p><FontAwesomeIcon icon={faCalendar} />{new Date(t.dueDate).toLocaleDateString()}</p>
-          <p><FontAwesomeIcon icon={faComment} />{t.comments.length}</p>
-        </div>
+				<div className={style.detail}>
+					<p><FontAwesomeIcon icon={faFolderOpen} />{t.project?.name}</p>
+					<p><FontAwesomeIcon icon={faCalendar} />{new Date(t.dueDate).toLocaleDateString()}</p>
+					<p><FontAwesomeIcon icon={faComment} />{t.comments.length}</p>
+				</div>
 
-        <Link href="/dashboard/projectswithtasks">
-          <Button disabled={false} text="Voir"/>
+				<Link href="/dashboard/projectswithtasks">
+					<Button disabled={false} text="Voir"/>
 
-        </Link>
-      </div>
-    ))}
-  </section>
+				</Link>
+				</div>
+			))}
+			</section>
 
-</div>
+			</div>
 		</>
 	)
 }

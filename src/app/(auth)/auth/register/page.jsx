@@ -7,7 +7,7 @@ import style from "../../../styles/auth/logAndSign.module.css";
 import { useRouter } from "next/navigation";
 
 export default function Register() {
-	const router=useRouter();
+  const router=useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -21,14 +21,14 @@ export default function Register() {
         "http://localhost:8000/auth/register",
         { email, password},
         {
-          withCredentials: true, // cookies
+          withCredentials: true,
         }
       );
 
       setMessage(response.data.message);
 
 	// Redirection au formulaire du profil
-	 router.push("/auth/profile")
+	 router.push("/profile")
 
 	} catch (error) {
 	// On récupère les erreurs venant du back
@@ -83,7 +83,9 @@ export default function Register() {
 						onChange={(e) => setPassword(e.target.value)}
 					/>
 				</div>
-				<button type="submit">S'inscrire</button>
+				{/* <Link href="/profile"> */}
+					<button type="submit">S&#39;inscrire</button>
+				{/* </Link> */}
 		
 				<p>Déjà inscrit ? <Link href="/">Se connecter</Link></p>
 		

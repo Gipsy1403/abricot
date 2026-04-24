@@ -7,7 +7,6 @@ import Link from "next/link";
 import { statusLabels } from "@/utils/statusLabels";
 import * as Avatar from "@radix-ui/react-avatar";
 import { initialAvatar } from "@/utils/initialAvatar";
-import Button from "../public/Button";
 import style from "@/app/styles/dashboard/dashboard.module.css"
 
 
@@ -18,14 +17,14 @@ export default function DashboardProjectsWithTasks() {
 
 		const getProjectsWithTasks = async () => {
 			try {
-				console.log("🚀 Requête envoyée...");
+				// console.log("🚀 Requête envoyée...");
 				const response = await axios.get(
 					`http://localhost:8000/dashboard/projects-with-tasks`,
 					{withCredentials:true}
 				);
-				console.log("✅ Réponse complète :", response);
+				// console.log("✅ Réponse complète :", response);
 				// récupération le projet par tâches
-				console.log("📦 Data :", response.data);
+				// console.log("📦 Data :", response.data);
 				setProjectsWithTasks(response.data.data.projects);
 
 			} catch (error) {
@@ -46,7 +45,7 @@ export default function DashboardProjectsWithTasks() {
 			<section className={style.sectionProjects}>
 				<div className={style.projectsHeader}>
 					<div>
-						<h5>Les projets dans lesquels j'ai des tâches assignées</h5>
+						<h5>Les projets dans lesquels j&#39;ai des tâches assignées</h5>
 						<p>Par ordre de priorité</p>
 					</div>
 				</div>
@@ -58,9 +57,6 @@ export default function DashboardProjectsWithTasks() {
 								<p>{pt.description}</p>
 							</div>
 						</div>
-						{/* <Link className={style.projectRight} href={`/projects/${pt.id}`}>
-							<button>Voir</button>
-						</Link> */}
 					</div>
 				))}
 			</section>

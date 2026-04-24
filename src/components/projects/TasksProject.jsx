@@ -34,33 +34,25 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 	// Etat permettant de récupérer les données de la tâche à modifier
 	const [selectedTaskId, setSelectedTaskId] = useState(null);
 
-	
-	// const handleTaskUpdated = async () => {
-  	// 	await refetch();
-	// };
-	
 	// COMMENTAIRES - APPEL API POUR RECUPERER LES COMMENTAIRES
 	const fetchComments = useCallback(
 		async (taskId) => {
 			if (commentsByTask[taskId]) return; // éviter de recharger
 			try {
-			const response = await axios.get(
-				`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
-				{ withCredentials: true }
-			);
-			if (response.data.success) {
-				setCommentsByTask((prev) => ({
-				...prev,
-				[taskId]: response.data.data.comments,
-				}));
-			}
+				const response = await axios.get(
+					`http://localhost:8000/projects/${projectId}/tasks/${taskId}/comments`,
+					{ withCredentials: true }
+				);
+				if (response.data.success) {
+					setCommentsByTask((prev) => ({
+					...prev,
+					[taskId]: response.data.data.comments,
+					}));
+				}
 			} catch (err) {
 				console.error("Erreur en récupérant les commentaires :", err);
 			}
-		},
-	[projectId, commentsByTask]
-	);
-
+		},[projectId, commentsByTask]);
 	
 	useEffect(() => {
 		if(!tasks)return;
@@ -69,13 +61,10 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 		});
 	}, [tasks, fetchComments]);
 	
-	// if (loading) return <p>Chargement...</p>;
-	// if (error) return <p>Erreur...</p>;
-
 	if (!tasks || tasks?.length === 0) return <p>Actuellement, aucune tâche pour ce projet.</p>;
-console.log("TASKS :", tasks);
+	// console.log("TASKS :", tasks);
+
 	// COMMENTAIRES - APPEL API POUR ECRIRE DES COMMENTAIRES
-	
 	const handleAddComment = async (taskId) => {
 		const content = newComments[taskId];
 		if (!content?.trim()) return;
@@ -100,16 +89,15 @@ console.log("TASKS :", tasks);
 
 	const handleDeleteTask = async (taskId) => {
 		try {
-		await axios.delete(
-			`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
-			{ withCredentials: true }
-		);
+			await axios.delete(
+				`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
+				{ withCredentials: true }
+			);
 
-		// mise à jour UI après suppression
-		if (onTaskUpdated) {
-			onTaskUpdated(taskId, "delete");
-		}
-
+			// mise à jour UI après suppression
+			if (onTaskUpdated) {
+				onTaskUpdated(taskId, "delete");
+			}
 		} catch (error) {
 			console.error("Erreur suppression tâche :", error);
 		}
@@ -127,7 +115,7 @@ console.log("TASKS :", tasks);
 
 	// Trier les tâches par priorité
 	const sortedTasks = [...tasks].sort(
-	(a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+		(a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
 	);
 
 	const filteredTasks = (selectStatus

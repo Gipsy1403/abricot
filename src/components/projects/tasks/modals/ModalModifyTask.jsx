@@ -10,148 +10,104 @@ import Tag from "@/utils/tags";
 import Button from "@/components/public/Button";
 
 export default function ModalModifyTask({ open, onClose, projectId, taskId, onTaskUpdated}) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [contributors, setContributors] = useState([]);
-  const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+	const [title, setTitle] = useState("");
+	const [description, setDescription] = useState("");
+	const [dueDate, setDueDate] = useState("");
+	const [contributors, setContributors] = useState([]);
+	const [status, setStatus] = useState("");
+	const [loading, setLoading] = useState(false);
+	const [error, setError] = useState("");
 
-  const statuses = ["A faire","En cours","Terminée"];
-  	const statusMap = {
-		"À faire": "TODO",
-		"En cours": "IN_PROGRESS",
-		"Terminée": "DONE"
-	};
-useEffect(() => {
-	const reverseStatusMap = {
-  "TODO": "À faire",
-  "IN_PROGRESS": "En cours",
-  "DONE": "Terminée"
-};
+	const statuses = ["A faire","En cours","Terminée"];
+		const statusMap = {
+			"À faire": "TODO",
+			"En cours": "IN_PROGRESS",
+			"Terminée": "DONE"
+		};
 
-const fetchTask = async () => {
-	if (!projectId || !taskId) return;
-	console.log("Fetch task", projectId, taskId);
-	try {
-		const res = await axios.get(
+	useEffect(() => {
+		const reverseStatusMap = {
+			"TODO": "À faire",
+			"IN_PROGRESS": "En cours",
+			"DONE": "Terminée"
+		};
+
+		const fetchTask = async () => {
+			if (!projectId || !taskId) return;
+			console.log("Fetch task", projectId, taskId);
+			try {
+				const res = await axios.get(
+					`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
+					{ withCredentials: true }
+				);
+				
+				const task = res.data?.data?.task;
+				
+				setTitle(task.title || "");
+				setDescription(task.description || "");
+				setDueDate(task.dueDate?.split("T")[0] || "");
+				// setContributors(task.assignees?.map(a => a.user?.id) || []);
+				setContributors(
+					task.assignees?.map(a => ({
+						value: a.user?.id || a.userId,
+						label: `${a.user?.name || ""} — ${a.user?.email || ""}`,
+						id: a.user?.id || a.userId,
+						email: a.user?.email || "",
+					})) || []
+				);
+				setStatus(reverseStatusMap[task.status] || "");
+			} catch (err) {
+				console.error("Erreur chargement tâche", err);
+			}
+		};
+		fetchTask();
+	}, [projectId, taskId]);
+
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		setLoading(true);
+		setError("");
+
+		try {
+		const dueDateISO = formatDateToISO(dueDate);
+
+		const payload = {
+			title,
+			description,
+			dueDate: dueDateISO,
+			assigneeIds: contributors
+			.map(c => c?.id)
+			.filter(Boolean),
+			status: statusMap[status],
+		};
+
+		console.log("payload final :", payload);
+
+		const response = await axios.put(
 			`http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
+			payload,
 			{ withCredentials: true }
 		);
-		
-		const task = res.data?.data?.task;
-		
-		setTitle(task.title || "");
-		setDescription(task.description || "");
-		setDueDate(task.dueDate?.split("T")[0] || "");
-		// setContributors(task.assignees?.map(a => a.user?.id) || []);
-		setContributors(
-			task.assignees?.map(a => ({
-				value: a.user?.id || a.userId,
-				label: `${a.user?.name || ""} — ${a.user?.email || ""}`,
-				id: a.user?.id || a.userId,
-				email: a.user?.email || "",
-			})) || []
-		);
-		setStatus(reverseStatusMap[task.status] || "");
 
+		onTaskUpdated?.(response.data.data.task);
+		onClose();
 
-    } catch (err) {
-      console.error("Erreur chargement tâche", err);
-    }
-  };
+		} catch (err) {
+			const message =
+				err?.response?.data?.details?.[0]?.message ||
+				err?.response?.data?.message ||
+				err?.message ||
+				"Erreur serveur";
 
-  fetchTask();
-}, [projectId, taskId]);
+			console.error(err);
+			setError(message);
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setLoading(true);
-//     setError("");
+		} finally {
+			setLoading(false);
+		}
+	};
 
-//     try {
-// 	const dueDateISO=formatDateToISO(dueDate); 
-// console.log("payload final :", {
-//   title,
-//   description,
-//   dueDate: dueDateISO,
-//   assigneeIds: contributors,
-//   status: statusMap[status],
-// });
-
-//       const response = await axios.put(`http://localhost:8000/projects/${projectId}/tasks/${taskId}`, {
-//         title,
-//         description,
-// 	   dueDate:dueDateISO,
-//         assigneeIds:contributors.map(c => c.id),
-// 	   status:statusMap[status],
-//       }, { withCredentials: true });
-
-//       console.log("tache modifiée :", response.data);
-// 	//  onTaskUpdated(response.data.data.task);
-// 	 onTaskUpdated?.(response.data.data.task);
-	
-//      onClose();
-
-//     } catch (err) {
-//     const message =
-//       err?.response?.data?.details?.[0]?.message ||
-//       err?.response?.data?.message ||
-//       err?.message ||
-//       "Erreur serveur";
-
-//     console.error(err);
-//     setError(message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError("");
-
-  try {
-    const dueDateISO = formatDateToISO(dueDate);
-
-    const payload = {
-      title,
-      description,
-      dueDate: dueDateISO,
-      assigneeIds: contributors
-        .map(c => c?.id)
-        .filter(Boolean),
-      status: statusMap[status],
-    };
-
-    console.log("payload final :", payload);
-
-    const response = await axios.put(
-      `http://localhost:8000/projects/${projectId}/tasks/${taskId}`,
-      payload,
-      { withCredentials: true }
-    );
-
-    onTaskUpdated?.(response.data.data.task);
-    onClose();
-
-  } catch (err) {
-    const message =
-      err?.response?.data?.details?.[0]?.message ||
-      err?.response?.data?.message ||
-      err?.message ||
-      "Erreur serveur";
-
-    console.error(err);
-    setError(message);
-
-  } finally {
-    setLoading(false);
-  }
-};
-  return (
+  	return (
 		<Dialog.Root open={true} onOpenChange={onClose}>
 			<Dialog.Portal>
 			{/* <Dialog.Overlay className={style.overlay} /> */}
@@ -217,10 +173,6 @@ const handleSubmit = async (e) => {
 									key={s}
 									type="button"
 									onClick={() => setStatus(s)}
-									// onClick={() => {
-									// 	console.log("Status choisi :", s); // <--- vérifie ici
-									// 	setStatus(s);
-									// }}
 								>
 									<Tag type={s} />
 								</button>
@@ -230,7 +182,6 @@ const handleSubmit = async (e) => {
 					< Button type="submit" disabled={loading} text="Enregistrer"
 					/>
 				</form>
-
 				<Dialog.Close asChild></Dialog.Close>
 			</Dialog.Content>
 			</Dialog.Portal>

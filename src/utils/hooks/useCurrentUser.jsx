@@ -8,28 +8,33 @@ export default function useCurrentUser() {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
 
-	useEffect(() => {
-		const fetchUser = async () => {
-			try {
-				const response = await axios.get(
-					"http://localhost:8000/auth/profile",
-					{ withCredentials: true }
-				);
+	// fonction réutilisable
+	const fetchUser = async () => {
+		try {
+			setLoading(true);
 
-				if (response.data.success) {
-					setUser(response.data.data.user);
-				} else {
-					setError("Erreur API");
-				}
-			} catch (err) {
-				setError(err);
-			} finally {
-				setLoading(false);
+			const response = await axios.get(
+				"http://localhost:8000/auth/profile",
+				{ withCredentials: true }
+			);
+
+			if (response.data.success) {
+				setUser(response.data.data.user);
+			} else {
+				setError("Erreur API");
 			}
-		};
+		} catch (err) {
+			setError(err);
+		} finally {
+			setLoading(false);
+		}
+	};
 
+	// appelé au début
+	useEffect(() => {
 		fetchUser();
 	}, []);
 
-	return { user, loading, error };
+	// on expose la fonction
+	return { user, loading, error, refreshUser: fetchUser };
 }

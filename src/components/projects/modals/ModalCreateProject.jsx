@@ -1,11 +1,12 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import style from "@/app/styles/modals.module.css";
 import ContributorsSelect from "@/utils/contributorsSelect";
 import Button from "@/components/public/Button";
+import useCurrentUser from "@/utils/hooks/useCurrentUser";
 
 export default function ModalCreateProject({onClose, onProjectCreated}) {
   const [title, setTitle] = useState("");
@@ -13,47 +14,65 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { user} = useCurrentUser();
+  
+  useEffect(() => {
+    	if (!user || !user.email) return;
+	if (user) {
+		setContributors([
+			{
+			value: user.id, // important
+			label: `${user.name} — ${user.email}`, // affichage
+			email: user.email,
+			id: user.id,
+			},
+		]);
+	}
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    try {
-	console.log("contributors envoyés :", contributors);
-      const response = await axios.post("http://localhost:8000/projects", {
-        name:title,
-        description,
-        contributors:contributors.map(c => c.email),
-      }, { withCredentials: true });
+	try {
+		console.log("DATA ENVOYÉE :", {
+		  name:title,
+		  description,
+		contributors:contributors.map(c => c.email),
+		});
+		const response = await axios.post("http://localhost:8000/projects", {
+			name:title,
+			description,
+			contributors:contributors.map(c => c.email),
+			}, { withCredentials: true });
 
-      console.log("reponse API :", response.data);
-	 onProjectCreated(response.data.data.project)
+		console.log("reponse API :", response.data);
+		onProjectCreated(response.data.data.project)
 
-      //reset du formulaire
-      setTitle("");
-      setDescription("");
-      setContributors([]);
-     onClose();
+		//reset du formulaire
+		setTitle("");
+		setDescription("");
+		setContributors([]);
+		onClose();
+	} catch (err) {
+		//  console.error(err);
+		if (err.response) {
+			console.log("DETAIL DES ERREURS :", err.response.data.data.errors);
 
-    } catch (err) {
-     //  console.error(err);
-     //  setError("Erreur lors de la création du projet.");
-  if (err.response) {
-    console.log("DETAIL DES ERREURS :", err.response.data.data.errors);
-
-    setError(
-      err.response.data.data.errors[0]?.message ||
-      "Erreur serveur"
-    );
-  } else {
-    setError("Erreur réseau");
-  }
-    } finally {
-      setLoading(false);
-    }
+			setError(
+				err.response.data.data.errors[0]?.message ||
+				"Erreur serveur"
+			);
+		} else {
+		setError("Erreur réseau");
+		}
+	} finally {
+		setLoading(false);
+	}
   };
-const formInvalid = title.trim() === "" || description.trim() === "";
+  const formInvalid = title.trim() === "" || description.trim() === "";
+
   return (
 	<Dialog.Root open={true}>
 		<Dialog.Portal>

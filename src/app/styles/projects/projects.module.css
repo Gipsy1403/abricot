@@ -193,7 +193,7 @@
 }
 
 .iconReturn{
-	padding: 25px;
+	padding: 20px;
 	background-color: white;
 	border-radius: 10px;
 	border: 1px solid var(--tagGrey);
@@ -408,6 +408,12 @@
   color:var(--primary);
   border: none;
   border-radius: 5px;
+  padding: 6px 12px	;
+}
+.noActive {
+  background: none;
+  border: none;
+  padding: 0;
 }
 .bar {
   display: flex;
@@ -491,6 +497,11 @@ background-color: var(--secondary);
   border: 1px solid var(--tagGrey);
   font-size: 14px;
   color: var(--textGrey);
+}
+.taskSearch input {
+  border: none;
+  outline: none;
+  width: 80%;
 }
 /* RESPONSIVITE */
 /* ************ */

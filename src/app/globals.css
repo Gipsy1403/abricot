@@ -3,7 +3,7 @@
 ------------------------------------------------- */
 :root {
   --background: #f9fafb;
-  --primary: #d3590b;
+  --primary: #B24C0B;
   --secondary: #ffe8d9;
   --third: #ffffff;
   
@@ -14,12 +14,12 @@
   --tagOrange: #ffe8d9;       
   --tagGrey: #e5e7eb;
 
-  --textGreen: #27ae60;
-  --textRed: #ef4444;
-  --textYellow: #e08d00;
-  --textBlue: #3b82f6;
-  --textOrange: #d3590b;
-  --textGrey: #6b7280;
+  --textGreen: #1C8249;
+  --textRed: #CB1010;
+  --textYellow: #996200;
+  --textBlue: #095EE7;
+  --textOrange: #B24C0B;
+  --textGrey: #606771;
 
   --btnBackground: #1f1f1f;
   --btnFocus: #0f0f0f;
@@ -106,9 +106,10 @@ a {
   }
 
   /* Tailles des titres */
-  h1 { font-size: 40px; }
-  h2 { font-size: 32px; }
-  h3 { font-size: 28px; }
-  h4 { font-size: 24px; }
-  h5 { font-size: 18px; }
+  /* h1 { font-size: 40px; } */
+  /* h2 { font-size: 32px; } */
+  /* h3 { font-size: 28px; } */
+  h1 { font-size: 24px; }
+  h2 { font-size: 18px; }
+
 }

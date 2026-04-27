@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 export default function TasksList() {
 	const [tasks, setTasks]=useState([]);
 	const [selectedTask, setSelectedTask] = useState(null);
+	const [searchQuery, setSearchQuery] = useState("");
 	const router=useRouter();
 
 	useEffect(()=>{
@@ -42,20 +43,36 @@ export default function TasksList() {
 		DONE: "Terminée",
 	};
 
+	// Filtrer les tâches en fonction du titre (à partir de 2 caractères)
+	const filteredTasks = searchQuery.length >= 2
+		? tasks.filter((t) =>
+				t.title.toLowerCase().includes(searchQuery.toLowerCase())
+			)
+		: tasks;
+
 	return (
 		<section className={style.sectionTasks}>
 			<div className={style.tasksHeader}>
 				<div>
-					<h5>Mes tâches assignées</h5>
+					<h2>Mes tâches assignées</h2>
 					<p>Par ordre de priorité</p>
 				</div>
-				<div className={style.taskSearch}>rechercher une tâche <FontAwesomeIcon icon={faMagnifyingGlass}/></div>
+				<div className={style.taskSearch}>
+					<input
+						type="text"
+						placeholder="Rechercher une tâche"
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						aria-label="Rechercher une tâche par titre"
+					/>
+					<FontAwesomeIcon icon={faMagnifyingGlass}/>
+				</div>
 			</div>
-			{tasks.map((t)=>(
+			{filteredTasks.map((t)=>(
 				<div key={t.id} className={style.taskCard}>
 					<div className={style.taskLeft}>
 						<div className={style.designation}>
-							<h5>{t.title}</h5>
+							<h2>{t.title}</h2>
 							<p>{t.description}</p>
 						</div>
 						<div className={style.detail}>

@@ -25,14 +25,14 @@ export default function Login() {
 					withCredentials: true, // cookies
 				}
 			);
-			console.log(response.data);
+			// console.log(response.data);
 			setMessage(response.data.message);
 		
 		//rediction vers le dasboard
 			router.push("/dashboard")
 
 		} catch (error) {
-		// On récupère les erreurs venant du back
+		// Récupération des erreurs venant du back
 			const errors = error.response?.data?.data?.errors;
 
 			if (errors && errors.length > 0) {
@@ -58,16 +58,18 @@ export default function Login() {
 				/>
 				<h1>Connexion</h1>
 				<div className={style.email}>
-					<label htmlFor="email" id="email">Email</label>
+					<label htmlFor="email" >Email</label>
 					<input
+						id="email"
 						type="email"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
 				</div>
 				<div className={style.password}>
-					<label htmlFor="password" id="password">Mot de passe</label>
+					<label htmlFor="password" >Mot de passe</label>
 					<input
+						id="password"
 						type="password"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}

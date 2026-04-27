@@ -123,7 +123,7 @@ export default function Projects() {
 								<span >Progression</span>
 								<span className={style.score}>{p.progress}%</span>
 							</div>
-							<Progress.Root className={style.progressRoot} value={p.progress}>
+							<Progress.Root className={style.progressRoot} value={p.progress} aria-label="Progression du projet">
 								<Progress.Indicator
 									className={style.progressIndicator}
 									style={{ transform: `translateX(-${100 - (p.progress)}%)` }}

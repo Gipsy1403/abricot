@@ -57,14 +57,7 @@ export default function Register() {
 				height={32}
 			/>
 			<h1>Inscription</h1>
-				{/* <div className={style.name}>
-					<label htmlFor="name">Nom Prénom</label>
-					<input
-						type="text"
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-				</div> */}
+
 				<div className={style.email}>
 					<label htmlFor="email">Email</label>
 					<input
@@ -75,7 +68,7 @@ export default function Register() {
 					/>
 				</div>
 				<div className={style.password}>
-					<label htmlFor="passeword">Mot de passe</label>
+					<label htmlFor="password">Mot de passe</label>
 					<input
 						id="password"
 						type="password"

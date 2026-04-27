@@ -64,6 +64,7 @@
   padding: 2rem;
   border-radius:10px ;
   border: solid 1px var(--tagGrey);
+  /* box-shadow: 5px 5px 10px rgba(0,0,0,0.05); */
 
 }
 .sectionProjects{
@@ -103,7 +104,12 @@
   max-width: 357px;
   margin-bottom: 2rem;
 }
-
+.taskSearch input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 14px;
+}
 /* --- Carte de tâche --- */
 .taskCard, .projectCard {
   display: flex;
@@ -113,6 +119,8 @@
   padding: 25px 40px;
   margin-bottom: 15px;
   border: solid 1px var(--tagGrey);
+  /* box-shadow: 5px 5px 10px rgba(0,0,0,0.2); */
+
 }
 
 /* --- Partie gauche de la tâche --- */
@@ -143,7 +151,7 @@
 .taskLeft .detail p {
   border-right: 1px solid #9ca3af;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--textGrey);
   display: flex;
   align-items: center;
   gap: 5px;

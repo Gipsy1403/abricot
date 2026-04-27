@@ -26,7 +26,6 @@ export default function ViewProject() {
 
 	const [project, setProject] = useState(null); //stocke le projet
 	const [loading, setLoading] = useState(true); // affiche un chargement
-	// const [tasks, setTasks] = useState([]); // affiche toutes les taches du projet
 
 	const [openModalModify, setOpenModalModify] = useState(false);
 	const [openModalCreate, setOpenModalCreate] = useState(false);
@@ -60,35 +59,11 @@ export default function ViewProject() {
 		fetchProject();
 	}, [projectId]);
 
-
-	  // Fonction pour ajouter une tâche créée
-	// const handleTaskCreated = (newTask) => {
-	// 	setProject((prevProject) => ({
-	// 		...prevProject,
-	// 		tasks: [...(prevProject.tasks || []), newTask], // ajoute la nouvelle tâche
-	// 	}));
-
-	// const handleTaskUpdated = (updatedTask) => {
-	// 	setTasks((prev) =>
-	// 		prev.map((t) =>
-	// 			t.id === updatedTask.id ? updatedTask : t
-	// 		)
-	// 	);
-	// };
 	const handleTaskCreated = async (newTask) => {
 		// setTasks((prev) => [...prev, newTask]);
 		await refetch(); // rafraîchit les tâches après création d'une nouvelle tâche
 	};
 	const handleTaskUpdated = async (payload, action) => {
-		// if (action === "delete") {
-		// 	setTasks((prev) => prev.filter((t) => t.id !== payload));
-		// 	return;
-		// }
-		// setTasks((prev) =>
-		// 	prev.map((t) =>
-		// 		t.id === payload.id ? payload : t
-		// 	)
-		// );
 		await refetch(); // rafraîchit les tâches après une mise à jour ou suppression
 	};
 		
@@ -124,17 +99,7 @@ export default function ViewProject() {
 		}
   	};
 	if(loading) return <p>Chargement du projet...</p>;
-	// const refetchProject = async () => {
-	// 	const res = await axios.get(
-	// 		`http://localhost:8000/projects/${projectId}`,
-	// 		{ withCredentials: true }
-	// 	);
-	// 	setProject(res.data.data.project);
-	// 	setTasks(res.data.data.project.tasks || []);
-	// };
-	// if (loading) {
-	// 	return <p>Chargement du projet...</p>;
-	// }
+
 // Ajoute la fonction de suppression
 	const handleDeleteProject = async () => {
 		if (!confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) return;
@@ -156,12 +121,12 @@ export default function ViewProject() {
 		<>
 			{/* DESCRIPTIF D UN PROJET SPECIFIQUE */}
 			<div className={style.container}>
-				{/* <Link  href="/projects"> */}
-					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}  onClick={() => router.push("/projects")}/>
-				{/* </Link> */}
+				<button  href="/projects">
+					<FontAwesomeIcon className={style.iconReturn} icon={faArrowLeftLong}  onClick={() => router.push("/projects")} aria-label="Retour aux projets"/>
+				</button>
 				<div className={style.containerTitle}>
 					<div className={style.titleProject}>
-						<h4>{project?.name}</h4>
+						<h1>{project?.name}</h1>
 						{isOwner && (
 							<div>
 								<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
@@ -218,7 +183,7 @@ export default function ViewProject() {
 			{/* CONTAINER DES CONTRIBUTEURS */}
 			<div className={style.containerContributors}>
 				<div className={style.leftSide}>
-					<h5>Contributeurs</h5>
+					<h2>Contributeurs</h2>
 					<p>{project?.members?.length || 0} {project?.members?.length === 0
 			       			?"aucune personne"
 						: project?.members?.length >1

@@ -48,13 +48,13 @@ export default function TasksKanban() {
 
 			{/* COLONNE TODO */}
 			<section className={style.column}>
-			<h5 className={style.columnTitle}>A faire <span>{todoTasks.length}</span></h5>
+			<h2 className={style.columnTitle}>A faire <span>{todoTasks.length}</span></h2>
 
 			{todoTasks.map((t) => (
 				<div key={t.id} className={style.card}>
 
 				<div className={style.cardHeader}>
-					<h5 className={style.cardTitle}>{t.title}</h5>
+					<h2 className={style.cardTitle}>{t.title}</h2>
 					<Tag type={statusLabels[t.status]}/>
 
 				</div>
@@ -89,12 +89,12 @@ export default function TasksKanban() {
 
 			{/* COLONNE IN PROGRESS */}
 			<section className={style.column}>
-			<h5 className={style.columnTitle}>En cours <span>{inProgressTasks.length}</span></h5>
+			<h2 className={style.columnTitle}>En cours <span>{inProgressTasks.length}</span></h2>
 
 			{inProgressTasks.map((t) => (
 				<div key={t.id} className={style.card}>
 				<div className={style.cardHeader}>
-					<h5 className={style.cardTitle}>{t.title}</h5>
+					<h2 className={style.cardTitle}>{t.title}</h2>
 					<Tag type={statusLabels[t.status]}/>
 				</div>
 
@@ -117,12 +117,12 @@ export default function TasksKanban() {
 
 			{/* COLONNE DONE */}
 			<section className={style.column}>
-			<h5 className={style.columnTitle}>Terminées <span>{doneTasks.length}</span></h5>
+			<h2 className={style.columnTitle}>Terminées <span>{doneTasks.length}</span></h2>
 
 			{doneTasks.map((t) => (
 				<div key={t.id} className={style.card}>
 				<div className={style.cardHeader}>
-					<h5 className={style.cardTitle}>{t.title}</h5>
+					<h2 className={style.cardTitle}>{t.title}</h2>
 					<Tag type={statusLabels[t.status]}/>
 
 				</div>

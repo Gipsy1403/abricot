@@ -45,7 +45,7 @@ export default function DashboardProjectsWithTasks() {
 			<section className={style.sectionProjects}>
 				<div className={style.projectsHeader}>
 					<div>
-						<h5>Les projets dans lesquels j&#39;ai des tâches assignées</h5>
+						<h2>Les projets dans lesquels j&#39;ai des tâches assignées</h2>
 						<p>Par ordre de priorité</p>
 					</div>
 				</div>
@@ -53,7 +53,7 @@ export default function DashboardProjectsWithTasks() {
 					<div key={pt.id} className={style.projectCard}>
 						<div className={style.projectLeft}>
 							<div className={style.designation}>
-								<h5>{pt.name}</h5>
+								<h2>{pt.name}</h2>
 								<p>{pt.description}</p>
 							</div>
 						</div>

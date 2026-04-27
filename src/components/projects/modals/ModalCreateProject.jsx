@@ -78,7 +78,7 @@ export default function ModalCreateProject({onClose, onProjectCreated}) {
 		<Dialog.Portal>
 		<Dialog.Overlay className={style.overlay} onClick={onClose} />
 		<Dialog.Content className={style.content}>
-			<p className={style.closeButton} aria-label="Close" onClick={onClose}>X</p>
+			<p className={style.closeButton} aria-label="Fermer" onClick={onClose}>X</p>
 
 			<Dialog.Title className={style.title}>Créer un projet</Dialog.Title>
 

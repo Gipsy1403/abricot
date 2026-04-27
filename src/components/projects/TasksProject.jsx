@@ -24,7 +24,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 	const { user} = useCurrentUser();
 	
 	const[viewMode,setViewMode]=useState("list");
-	const[selectStatus,setSelectStatus]=useState("");
+	const[selectStatus,setSelectStatus]=useState("ALL");
 
 	const[commentsByTask, setCommentsByTask]=useState({});
 	const [newComments, setNewComments ]=useState({});
@@ -33,6 +33,9 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 	const [isOpen, setIsOpen] = useState(false);
 	// Etat permettant de récupérer les données de la tâche à modifier
 	const [selectedTaskId, setSelectedTaskId] = useState(null);
+
+	const [searchQuery, setSearchQuery] = useState("");
+
 
 	// COMMENTAIRES - APPEL API POUR RECUPERER LES COMMENTAIRES
 	const fetchComments = useCallback(
@@ -103,8 +106,12 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 		}
 	};
 
-	
+	const sortByDueDate = (a, b) => {
+		return new Date(a.dueDate) - new Date(b.dueDate);
+	};
+
 	const statusOptions = [
+		["ALL", "Tous"],
 		["TODO", statusLabels("TODO")],
 		["IN_PROGRESS", statusLabels("IN_PROGRESS")],
 		["DONE", statusLabels("DONE")]
@@ -114,14 +121,31 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 	const priorityOrder = { URGENT:1, HIGH: 2, MEDIUM: 3, LOW: 4 };
 
 	// Trier les tâches par priorité
-	const sortedTasks = [...tasks].sort(
-		(a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
-	);
+	// const sortedTasks = [...tasks].sort(
+	// 	(a, b) => priorityOrder[a.priority] - priorityOrder[b.priority]
+	// );
+	const sortedTasks = [...tasks].sort((a, b) => {
+		if (viewMode === "calendar") {
+			return new Date(a.dueDate) - new Date(b.dueDate);
+		}
 
-	const filteredTasks = (selectStatus
-		? sortedTasks.filter(t => t.status === selectStatus)
-		: sortedTasks
-	);
+		// mode list = priorité
+		return priorityOrder[a.priority] - priorityOrder[b.priority];
+	});
+	// Appliquer les filtres de statut et de recherche
+	const filteredTasks = sortedTasks
+		.filter(t => {
+			// filtre statut
+			const matchStatus = selectStatus === "ALL" || t.status === selectStatus;
+
+			// filtre recherche
+			const matchSearch =
+				searchQuery.length >= 2
+					? t.title.toLowerCase().includes(searchQuery.toLowerCase())
+					: true;
+
+			return matchStatus && matchSearch;
+		});
 
 	return (
 		<>
@@ -131,23 +155,28 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 				{/* BARRE DE RECHERCHE */}
 				<section className={style.containerBarTasks}>
 					<div className={style.tasks}>
-						<h5>Tâches</h5>
+						<h2>Tâches</h2>
 						<p>Par ordre de priorité</p>
 					</div>
 
 					{/* par liste */}
-					<div className={style.bar}>
-						<p className={viewMode === "list" ? style.activeButton : ""} onClick={() => setViewMode("list")}>
-							<FontAwesomeIcon icon={faListCheck}/> Liste</p>
+					<div className={style.bar} role="group" aria-label="Mode d’affichage">
+						<button type="button" className={viewMode === "list" ? style.activeButton : `${style.noActive}`} onClick={() => setViewMode("list")} aria-pressed={viewMode === "list"}>
+							<FontAwesomeIcon icon={faListCheck}/> Liste</button>
 
 						{/* par date */}
-						<p className={viewMode === "calendar" ? style.activeButton : ""} onClick={() => setViewMode("calendar")}>
-							<FontAwesomeIcon icon={faCalendarDays}/> Calendrier</p>
+						<button type="button" className={viewMode === "calendar" ? style.activeButton : `${style.noActive}`} onClick={() => setViewMode("calendar")} aria-pressed={viewMode === "calendar"}>
+							<FontAwesomeIcon icon={faCalendarDays}/> Calendrier</button>
 
 						{/*par statut*/}
 						<Select.Root value={selectStatus} onValueChange={setSelectStatus}>
 							<Select.Trigger className={style.trigger} aria-label="statut">
-								<Select.Value placeholder="Statut" />
+								<Select.Value>
+									{selectStatus === "ALL"
+									? "Statut"
+									: statusOptions.find(([value]) => value === selectStatus)?.[1]}
+									
+								</Select.Value>
 								<Select.Icon className={style.icon}>
 									<FontAwesomeIcon icon={faChevronDown}/>
 								</Select.Icon>
@@ -161,7 +190,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 										<Select.Group>
 											<Select.Label className={style.label}></Select.Label>
 											{statusOptions.map(([value, label]) => (
-												<Select.Item key={value} value={value} className={style.item}>
+											<Select.Item key={value || 'all'} value={value} className={style.item}>
 													<Select.ItemText>{label}</Select.ItemText>
 													<Select.ItemIndicator />
 												</Select.Item>
@@ -176,7 +205,16 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 						</Select.Root>
 
 						{/* par recherche */}
-						<div className={style.taskSearch}>Rechercher une tâche <FontAwesomeIcon icon={faMagnifyingGlass}/></div>
+						<div className={style.taskSearch}>
+							<input
+								type="text"
+								placeholder="Rechercher une tâche"
+								value={searchQuery}
+								onChange={(e) => setSearchQuery(e.target.value)}
+								aria-label="Rechercher une tâche par titre"
+							/>
+							<FontAwesomeIcon icon={faMagnifyingGlass}/>
+						</div>
 					</div>
 				</section>
 
@@ -190,7 +228,7 @@ export default function TasksProject({projectId, tasks, onTaskUpdated}) {
 						<div key={tp.id} className={style.card}>
 							<div className={style.headerCard}>
 								<div className={style.cardHeader}>
-									<h5>{tp.title}</h5>
+									<h2>{tp.title}</h2>
 									<Tag className={style.status} type={statusLabels(tp.status)}/>
 								</div>
 

@@ -176,20 +176,33 @@
 	margin-top: 3rem;
 
 }
-.modifyProject{
+.modifyProject, .deleteProject{
+	all: unset;
 	cursor: pointer;
-	margin: 0 1rem;
+	margin-right: 1rem;
 	display: inline-block;
+	text-decoration: underline;
+	font-size: 14px;
+	
+}
+.modifyProject{
+	color: var(--primary);
 
 }
 .deleteProject{
-	cursor: pointer;
 	color: red !important;
-	display: inline-block;
 
 }
+.modifyProject:focus, .deleteProject:focus{
+	outline: 2px solid black;
+}
+
 .modifyProject:hover, .deleteProject:hover{
 	transform: scale(1.2);
+}
+.iaButton{
+	border: none;
+	background-color: var(--primary) !important;
 }
 
 .iconReturn{
@@ -239,6 +252,13 @@
 .containerBtns button:hover{
 	background-color: var(--btnFocus);
 }
+.createTaskBtn:focus{
+	outline: 2px solid var(--primary);
+}
+.iaButton:focus{
+	outline: 2px solid black;
+}
+
 .containerBtns p{
 	padding: 10px 15px;
 	background-color: var(--primary);
@@ -408,7 +428,7 @@
   color:var(--primary);
   border: none;
   border-radius: 5px;
-  padding: 6px 12px	;
+  padding: 10px 12px	;
 }
 .noActive {
   background: none;
@@ -578,7 +598,10 @@ background-color: var(--secondary);
 
 /* bouton modifier et supprimer */
 .headerCard button{
-	all:unset;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
 }
 .cardHeader {
   display: flex;
@@ -591,6 +614,9 @@ background-color: var(--secondary);
 	border: 1px solid var(--tagGrey);
 	border-radius:10px ;
 	background-color: white;
+}
+.etc:focus{
+	outline: 2px solid black;
 }
 /* Menu */
 .contentMenu {
@@ -780,181 +806,3 @@ background-color: var(--secondary);
 	transform: rotate(180deg);
 }
 
-
-
-/*
-
-.accordionItem {
-  padding-top: 10px;
-  width: 100%;
-
-}
-
-.accordionHeader {
-  display: flex;
-}
-
-.accordionTrigger {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  background: none;
-  border: none;
-  width: 100%;
-
-}
-
-.accordionChevron {
-  transition: transform 0.2s;
-
-} */
-/* ******************************************** */
-
-
-/* selection du statut */
-
-/* .trigger {
-	all: unset;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 4px;
-	padding: 0 15px;
-	font-size: 13px;
-	line-height: 1;
-	height: 35px;
-	gap: 5px;
-
-}
-
-
-.content {
-	overflow: hidden;
-	background-color: white;
-	border-radius: 6px;
-	box-shadow:
-		0px 10px 38px -10px rgba(22, 23, 24, 0.35),
-		0px 10px 20px -15px rgba(22, 23, 24, 0.2);
-}
-
-.viewport {
-	padding: 5px;
-}
-
-.item {
-	font-size: 13px;
-	line-height: 1;
-	border-radius: 3px;
-	display: flex;
-	align-items: center;
-	height: 25px;
-	padding: 0 35px 0 25px;
-	position: relative;
-	user-select: none;
-
-}
-
-.label {
-	padding: 0 25px;
-	font-size: 12px;
-	line-height: 25px;
-}
-
-.scrollButton {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	height: 25px;
-	cursor: default;
-} */
-
-/* ********************************************
-
-/* ********************************************
- */
-/* menu accordeon des commentaires */
-
-
-
-/* BARRE DES TACHES */
-/* .containerTasks{
-	padding: 2rem;
-	background-color: white;
-	border-radius: 10px;
-	border: 1px solid var(--tagGrey);
-	margin: 2rem 0;
-
-}
-.containerBarTasks{
-	display: flex;
-	
-}
-.tasks p{
-	color: var(--textGrey);
-}
-.bar{
-	margin-left: auto;
-
-}
-.bar button{
-	color: var(--primary);
-	border: none;
-	background-color: none;
-}
-.taskSearch {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid var(--tagGrey);
-  padding: 23px 25px;
-  border-radius: 8px;
-  font-size: 14px;
-  color:var(--textGrey);
-  width: 250px;
-  margin-bottom: 2rem;
-} */
-
-.containerTasks {
- 	padding: 2rem;
-	background-color: white;
-	border-radius: 10px;
-	border: 1px solid var(--tagGrey);
-	margin: 2rem 0;
-}
-
-
-
-/* SELECTION/*/
-
-
-
-
-
-/* .progressHeader {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  margin-bottom: 4px;
-}
-
-.progressRoot {
-  position: relative;
-  width: 100%;
-  height: 6px;
-  background-color: #e5e7eb;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.progressIndicator {
-  height: 100%;
-  background-color: #3b82f6;
-  transition: transform 0.3s ease;
-}
-
-.progressText {
-  font-size: 12px;
-  color: #6b7280;
-  margin-top: 4px;
-} */

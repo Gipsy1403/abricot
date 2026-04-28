@@ -129,8 +129,8 @@ export default function ViewProject() {
 						<h1>{project?.name}</h1>
 						{isOwner && (
 							<div>
-								<a onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</a>
-								<a onClick={handleDeleteProject} className={style.deleteProject}>Supprimer</a>
+								<button onClick={()=>setOpenModalModify(true)} className={style.modifyProject}>Modifier</button>
+								<button onClick={handleDeleteProject} className={style.deleteProject}>Supprimer</button>
 							</div>
 						)}
 						{/* MODAL POUR MODIFIER UN PROJET */}
@@ -146,11 +146,11 @@ export default function ViewProject() {
 
 				{/* BOUTONS POUR CREER UNE TACHE */}
 				<div className={style.containerBtns}>
-					<button onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
+					<button className={style.createTaskBtn} onClick={()=>setOpenModalCreate(true)}>Créer une tâche</button>
 					{/* MODAL POUR CREER UNE TACHE */}
 					{openModalCreate && (
 						<ModalCreateTask 
-						onClose={()=>setOpenModalCreate(false)} 
+			c			onClose={()=>setOpenModalCreate(false)} 
 						onTaskCreated={handleTaskCreated} 
 						projectId={projectId}/>
 					)}
